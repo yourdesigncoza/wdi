@@ -115,50 +115,50 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| AUTH-01 | TBD | Pending |
-| AUTH-02 | TBD | Pending |
-| AUTH-03 | TBD | Pending |
-| AUTH-04 | TBD | Pending |
-| AUTH-05 | TBD | Pending |
-| AUTH-06 | TBD | Pending |
-| WILL-01 | TBD | Pending |
-| WILL-02 | TBD | Pending |
-| WILL-03 | TBD | Pending |
-| WILL-04 | TBD | Pending |
-| WILL-05 | TBD | Pending |
-| WILL-06 | TBD | Pending |
-| WILL-07 | TBD | Pending |
-| WILL-08 | TBD | Pending |
-| DOC-01 | TBD | Pending |
-| DOC-02 | TBD | Pending |
-| DOC-03 | TBD | Pending |
-| DOC-04 | TBD | Pending |
-| DOC-05 | TBD | Pending |
-| DOC-06 | TBD | Pending |
-| COMP-01 | TBD | Pending |
-| COMP-02 | TBD | Pending |
-| COMP-03 | TBD | Pending |
-| COMP-04 | TBD | Pending |
-| COMP-05 | TBD | Pending |
-| COMP-06 | TBD | Pending |
-| AI-01 | TBD | Pending |
-| AI-02 | TBD | Pending |
-| AI-03 | TBD | Pending |
-| AI-04 | TBD | Pending |
-| AI-05 | TBD | Pending |
-| CMPLX-01 | TBD | Pending |
-| CMPLX-02 | TBD | Pending |
-| CMPLX-03 | TBD | Pending |
-| CMPLX-04 | TBD | Pending |
-| CMPLX-05 | TBD | Pending |
-| ADOC-01 | TBD | Pending |
-| ADOC-02 | TBD | Pending |
+| AUTH-01 | Phase 2 | Pending |
+| AUTH-02 | Phase 2 | Pending |
+| AUTH-03 | Phase 2 | Pending |
+| AUTH-04 | Phase 2 | Pending |
+| AUTH-05 | Phase 8 | Pending |
+| AUTH-06 | Phase 8 | Pending |
+| WILL-01 | Phase 3 | Pending |
+| WILL-02 | Phase 3 | Pending |
+| WILL-03 | Phase 3 | Pending |
+| WILL-04 | Phase 3 | Pending |
+| WILL-05 | Phase 3 | Pending |
+| WILL-06 | Phase 3 | Pending |
+| WILL-07 | Phase 3 | Pending |
+| WILL-08 | Phase 3 | Pending |
+| DOC-01 | Phase 6 | Pending |
+| DOC-02 | Phase 6 | Pending |
+| DOC-03 | Phase 6 | Pending |
+| DOC-04 | Phase 7 | Pending |
+| DOC-05 | Phase 7 | Pending |
+| DOC-06 | Phase 7 | Pending |
+| COMP-01 | Phase 1 | Pending |
+| COMP-02 | Phase 1 | Pending |
+| COMP-03 | Phase 1 | Pending |
+| COMP-04 | Phase 1 | Pending |
+| COMP-05 | Phase 6 | Pending |
+| COMP-06 | Phase 6 | Pending |
+| AI-01 | Phase 3 | Pending |
+| AI-02 | Phase 3 | Pending |
+| AI-03 | Phase 3 | Pending |
+| AI-04 | Phase 3 | Pending |
+| AI-05 | Phase 5 | Pending |
+| CMPLX-01 | Phase 4 | Pending |
+| CMPLX-02 | Phase 4 | Pending |
+| CMPLX-03 | Phase 4 | Pending |
+| CMPLX-04 | Phase 4 | Pending |
+| CMPLX-05 | Phase 4 | Pending |
+| ADOC-01 | Phase 9 | Pending |
+| ADOC-02 | Phase 9 | Pending |
 
 **Coverage:**
 - v1 requirements: 35 total
-- Mapped to phases: 0
-- Unmapped: 35
+- Mapped to phases: 35
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-02-05*
-*Last updated: 2026-02-05 after initial definition*
+*Last updated: 2026-02-05 after roadmap creation*
