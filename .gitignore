@@ -1,2 +1,50 @@
-# Folders to ignore
+# Legacy codebase
 legacy/
+
+# OS files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# IDE / Editor
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+.project
+.settings/
+
+# Environment & secrets
+.env
+.env.*
+!.env.example
+
+# Dependencies
+node_modules/
+vendor/
+composer.lock
+
+# Build artifacts
+dist/
+build/
+*.map
+
+# Logs
+*.log
+debug.log
+error.log
+
+# WordPress uploads & cache (if applicable)
+wp-content/uploads/
+wp-content/cache/
+wp-content/upgrade/
+
+# PHP
+*.phar
+
+# Archives
+*.zip
+*.tar.gz
+*.rar
