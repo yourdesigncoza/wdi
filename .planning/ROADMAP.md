@@ -34,14 +34,14 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. User can see Information Officer contact details
   4. User can request data access, correction, or deletion through a clear process
   5. All legal text comes from attorney-approved clause library (no freeform AI generation)
-**Plans**: TBD
+**Plans**: 5 plans in 3 waves
 
 Plans:
-- [ ] 01-01: PostgreSQL schema and migrations (users, will_sessions, clause_library, audit_log)
-- [ ] 01-02: FastAPI project structure with POPIA middleware
-- [ ] 01-03: React app shell with POPIA consent flow
-- [ ] 01-04: Clause library system with attorney-approved text
-- [ ] 01-05: UPL filter architecture for AI outputs
+- [ ] 01-01-PLAN.md — PostgreSQL schema and migrations (consent, clauses, audit)
+- [ ] 01-02-PLAN.md — FastAPI with POPIA consent middleware and endpoints
+- [ ] 01-03-PLAN.md — React app with blocking consent modal
+- [ ] 01-04-PLAN.md — Clause library service with version control
+- [ ] 01-05-PLAN.md — UPL filter for AI output compliance
 
 ### Phase 2: Authentication
 **Goal**: Users can securely create accounts and access the platform
@@ -195,7 +195,7 @@ Note: Phase 9 depends only on Phase 6, can potentially run in parallel with Phas
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation & Compliance | 0/5 | Not started | - |
+| 1. Foundation & Compliance | 0/5 | Planned | - |
 | 2. Authentication | 0/3 | Not started | - |
 | 3. Core Will Conversation | 0/6 | Not started | - |
 | 4. Complex Estate Scenarios | 0/5 | Not started | - |
