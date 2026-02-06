@@ -15,7 +15,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 1: Foundation & Compliance** - Database, POPIA infrastructure, UPL prevention architecture, clause library
 - [ ] **Phase 2: Authentication** - User registration, email verification, login, password reset via Clerk
 - [x] **Phase 02.1: DaisyUI Integration** - Install DaisyUI v5, configure themes, migrate existing components (INSERTED)
-- [ ] **Phase 3: Core Will Conversation** - Basic will questionnaire with AI guidance, data collection, real-time explanations
+- [x] **Phase 3: Core Will Conversation** - Basic will questionnaire with AI guidance, data collection, real-time explanations
 - [ ] **Phase 4: Complex Estate Scenarios** - Blended families, trusts, usufruct, business assets, joint wills
 - [ ] **Phase 5: AI Verification** - Dual-LLM verification layer (Gemini checks OpenAI), estate logic validation
 - [ ] **Phase 6: Document Generation** - PDF generation with WeasyPrint, witness instructions, preview, disclaimers
@@ -92,14 +92,14 @@ Plans:
 **Plans**: 8 plans in 4 waves
 
 Plans:
-- [ ] 03-01-PLAN.md — Will data model, Pydantic schemas, Alembic migration 003
-- [ ] 03-02-PLAN.md — OpenAI service with system prompts and extraction schemas (TDD)
-- [ ] 03-03-PLAN.md — Frontend foundation: Zustand store, types, Zod schemas, dependencies
-- [ ] 03-04-PLAN.md — Will CRUD service and API endpoints
-- [ ] 03-05-PLAN.md — Conversation service with SSE streaming and UPL filtering
-- [ ] 03-06-PLAN.md — Wizard shell, step indicator, personal/marital forms
-- [ ] 03-07-PLAN.md — Chat UI with SSE streaming hook and DaisyUI chat bubbles
-- [ ] 03-08-PLAN.md — Section review, will preview, mobile verification (checkpoint)
+- [x] 03-01-PLAN.md — Will data model, Pydantic schemas, Alembic migration 003
+- [x] 03-02-PLAN.md — OpenAI service with system prompts and extraction schemas (TDD)
+- [x] 03-03-PLAN.md — Frontend foundation: Zustand store, types, Zod schemas, dependencies
+- [x] 03-04-PLAN.md — Will CRUD service and API endpoints
+- [x] 03-05-PLAN.md — Conversation service with SSE streaming and UPL filtering
+- [x] 03-06-PLAN.md — Wizard shell, step indicator, personal/marital forms
+- [x] 03-07-PLAN.md — Chat UI with SSE streaming hook and DaisyUI chat bubbles
+- [x] 03-08-PLAN.md — Section review, will preview, mobile verification (checkpoint)
 
 ### Phase 4: Complex Estate Scenarios
 **Goal**: Users can handle advanced estate planning situations
@@ -217,7 +217,7 @@ Note: Phase 9 depends only on Phase 6, can potentially run in parallel with Phas
 | 1. Foundation & Compliance | 5/5 | Complete | 2026-02-06 |
 | 2. Authentication | 1/2 | In progress | - |
 | 02.1 DaisyUI Integration | 3/3 | Complete | 2026-02-06 |
-| 3. Core Will Conversation | 0/8 | Not started | - |
+| 3. Core Will Conversation | 8/8 | Complete | 2026-02-06 |
 | 4. Complex Estate Scenarios | 0/5 | Not started | - |
 | 5. AI Verification | 0/4 | Not started | - |
 | 6. Document Generation | 0/5 | Not started | - |

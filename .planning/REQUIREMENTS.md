@@ -18,14 +18,14 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Will Creation
 
-- [ ] **WILL-01**: User can create a basic will through guided questionnaire
-- [ ] **WILL-02**: User can designate beneficiaries (individuals or charities)
-- [ ] **WILL-03**: User can inventory assets (property, vehicles, bank accounts, investments)
-- [ ] **WILL-04**: User can nominate primary and backup guardians for minor children
-- [ ] **WILL-05**: User can nominate executor(s) for estate administration
-- [ ] **WILL-06**: User can specify alternate beneficiaries (if primary predeceases)
-- [ ] **WILL-07**: User can specify specific bequests (particular items to particular people)
-- [ ] **WILL-08**: User can designate residual estate beneficiaries
+- [x] **WILL-01**: User can create a basic will through guided questionnaire
+- [x] **WILL-02**: User can designate beneficiaries (individuals or charities)
+- [x] **WILL-03**: User can inventory assets (property, vehicles, bank accounts, investments)
+- [x] **WILL-04**: User can nominate primary and backup guardians for minor children
+- [x] **WILL-05**: User can nominate executor(s) for estate administration
+- [x] **WILL-06**: User can specify alternate beneficiaries (if primary predeceases)
+- [x] **WILL-07**: User can specify specific bequests (particular items to particular people)
+- [x] **WILL-08**: User can designate residual estate beneficiaries
 
 ### Document Generation
 
@@ -47,10 +47,10 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### AI Features
 
-- [ ] **AI-01**: AI guides user through will creation conversationally
-- [ ] **AI-02**: AI provides real-time explanations of legal terms and concepts
-- [ ] **AI-03**: AI handles "I don't know" responses gracefully with follow-up questions
-- [ ] **AI-04**: AI validates inputs and catches potential errors
+- [x] **AI-01**: AI guides user through will creation conversationally
+- [x] **AI-02**: AI provides real-time explanations of legal terms and concepts
+- [x] **AI-03**: AI handles "I don't know" responses gracefully with follow-up questions
+- [x] **AI-04**: AI validates inputs and catches potential errors
 - [ ] **AI-05**: Secondary LLM verifies document completeness before generation
 
 ### Complex Scenarios
@@ -121,14 +121,14 @@ Which phases cover which requirements. Updated during roadmap creation.
 | AUTH-04 | Phase 2 | Pending |
 | AUTH-05 | Phase 8 | Pending |
 | AUTH-06 | Phase 8 | Pending |
-| WILL-01 | Phase 3 | Pending |
-| WILL-02 | Phase 3 | Pending |
-| WILL-03 | Phase 3 | Pending |
-| WILL-04 | Phase 3 | Pending |
-| WILL-05 | Phase 3 | Pending |
-| WILL-06 | Phase 3 | Pending |
-| WILL-07 | Phase 3 | Pending |
-| WILL-08 | Phase 3 | Pending |
+| WILL-01 | Phase 3 | Complete |
+| WILL-02 | Phase 3 | Complete |
+| WILL-03 | Phase 3 | Complete |
+| WILL-04 | Phase 3 | Complete |
+| WILL-05 | Phase 3 | Complete |
+| WILL-06 | Phase 3 | Complete |
+| WILL-07 | Phase 3 | Complete |
+| WILL-08 | Phase 3 | Complete |
 | DOC-01 | Phase 6 | Pending |
 | DOC-02 | Phase 6 | Pending |
 | DOC-03 | Phase 6 | Pending |
@@ -141,10 +141,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | COMP-04 | Phase 1 | Complete |
 | COMP-05 | Phase 6 | Pending |
 | COMP-06 | Phase 6 | Pending |
-| AI-01 | Phase 3 | Pending |
-| AI-02 | Phase 3 | Pending |
-| AI-03 | Phase 3 | Pending |
-| AI-04 | Phase 3 | Pending |
+| AI-01 | Phase 3 | Complete |
+| AI-02 | Phase 3 | Complete |
+| AI-03 | Phase 3 | Complete |
+| AI-04 | Phase 3 | Complete |
 | AI-05 | Phase 5 | Pending |
 | CMPLX-01 | Phase 4 | Pending |
 | CMPLX-02 | Phase 4 | Pending |
@@ -161,4 +161,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-02-05*
-*Last updated: 2026-02-05 after roadmap creation*
+*Last updated: 2026-02-06 after Phase 3 completion*
