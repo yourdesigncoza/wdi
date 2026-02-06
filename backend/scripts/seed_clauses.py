@@ -189,6 +189,126 @@ SEED_CLAUSES: list[dict] = [
         "is_required": True,
         "display_order": 100,
     },
+    # ── COMPLEX ESTATE SCENARIOS ─────────────────────────────────
+    # ── JOINT WILL ───────────────────────────────────────────────
+    {
+        "code": "JOINT-01",
+        "name": "Joint Will Mutual Bequest",
+        "category": ClauseCategory.JOINT,
+        "template_text": (
+            "We, {{ testator_1_name }}, Identity Number {{ testator_1_id }}, "
+            "and {{ testator_2_name }}, Identity Number {{ testator_2_id }}, "
+            "being husband and wife, do hereby jointly declare this to be our "
+            "joint last will and testament. Upon the death of the first-dying, "
+            "the survivor shall inherit the entire estate of the first-dying. "
+            "Upon the death of the survivor, the combined estate shall be "
+            "distributed as set out in this will."
+        ),
+        "variables_schema": {
+            "testator_1_name": {"type": "string", "required": True, "label": "First testator full name"},
+            "testator_1_id": {"type": "string", "required": True, "label": "First testator SA ID number"},
+            "testator_2_name": {"type": "string", "required": True, "label": "Second testator full name"},
+            "testator_2_id": {"type": "string", "required": True, "label": "Second testator SA ID number"},
+        },
+        "will_types": [WillType.JOINT.value],
+        "is_required": True,
+        "display_order": 15,
+    },
+    # ── BUSINESS ─────────────────────────────────────────────────
+    {
+        "code": "BUS-01",
+        "name": "Bequest of Close Corporation Member Interest",
+        "category": ClauseCategory.BUSINESS,
+        "template_text": (
+            "I bequeath my member's interest of {{ percentage_held }}% in "
+            "{{ business_name }}, registration number {{ registration_number }}, "
+            "to {{ heir_name }}. This bequest is subject to the consent of the "
+            "remaining members of the close corporation in terms of Section 35 "
+            "of the Close Corporations Act 69 of 1984. Should such consent not "
+            "be obtained, I direct my Executor to dispose of my member's interest "
+            "in such manner as may be required by law."
+        ),
+        "variables_schema": {
+            "percentage_held": {"type": "number", "required": True, "label": "Percentage of member interest"},
+            "business_name": {"type": "string", "required": True, "label": "Close corporation name"},
+            "registration_number": {"type": "string", "required": True, "label": "CC registration number"},
+            "heir_name": {"type": "string", "required": True, "label": "Heir full name"},
+        },
+        "will_types": _ALL_TYPES,
+        "is_required": False,
+        "display_order": 35,
+    },
+    {
+        "code": "BUS-02",
+        "name": "Bequest of Company Shares",
+        "category": ClauseCategory.BUSINESS,
+        "template_text": (
+            "I bequeath my {{ percentage_held }}% shareholding in "
+            "{{ business_name }}, registration number {{ registration_number }}, "
+            "to {{ heir_name }}. This bequest is subject to any restrictions on "
+            "transfer contained in the company's Memorandum of Incorporation and "
+            "any applicable Shareholders Agreement."
+        ),
+        "variables_schema": {
+            "percentage_held": {"type": "number", "required": True, "label": "Percentage of shareholding"},
+            "business_name": {"type": "string", "required": True, "label": "Company name"},
+            "registration_number": {"type": "string", "required": True, "label": "Company registration number"},
+            "heir_name": {"type": "string", "required": True, "label": "Heir full name"},
+        },
+        "will_types": _ALL_TYPES,
+        "is_required": False,
+        "display_order": 36,
+    },
+    # ── TRUST ────────────────────────────────────────────────────
+    {
+        "code": "TRUST-01",
+        "name": "Testamentary Trust for Minor Children",
+        "category": ClauseCategory.TRUST,
+        "template_text": (
+            "I direct that any inheritance due to my minor children, namely "
+            "{{ children_names }}, shall be held in a testamentary trust to be "
+            "known as the {{ trust_name }}. The trust shall be administered by "
+            "{{ trustee_names }} as Trustee(s). The trust assets shall vest in "
+            "each beneficiary upon attaining the age of {{ vesting_age }} years. "
+            "Until vesting, the Trustee(s) shall have the power to apply trust "
+            "income and, if necessary, capital for the maintenance, education, "
+            "and general welfare of the beneficiaries."
+        ),
+        "variables_schema": {
+            "children_names": {"type": "string", "required": True, "label": "Names of minor children"},
+            "trust_name": {"type": "string", "required": True, "label": "Name of the trust"},
+            "trustee_names": {"type": "string", "required": True, "label": "Trustee name(s)"},
+            "vesting_age": {"type": "number", "required": True, "label": "Vesting age (18, 21, or 25)"},
+        },
+        "will_types": _BASIC_TRUST,
+        "is_required": False,
+        "display_order": 55,
+    },
+    # ── USUFRUCT ─────────────────────────────────────────────────
+    {
+        "code": "USUF-01",
+        "name": "Usufruct over Immovable Property",
+        "category": ClauseCategory.USUFRUCT,
+        "template_text": (
+            "I bequeath to {{ usufructuary_name }}, Identity Number "
+            "{{ usufructuary_id_number }}, a usufruct over the immovable "
+            "property described as {{ property_description }}, for the duration "
+            "of {{ usufructuary_name }}'s lifetime. The bare dominium of the "
+            "said property shall vest in {{ bare_dominium_holders }}. The "
+            "usufructuary shall be entitled to the use and enjoyment of the "
+            "property and shall be responsible for the maintenance thereof and "
+            "the payment of all rates and taxes."
+        ),
+        "variables_schema": {
+            "usufructuary_name": {"type": "string", "required": True, "label": "Usufructuary full name"},
+            "usufructuary_id_number": {"type": "string", "required": True, "label": "Usufructuary SA ID number"},
+            "property_description": {"type": "string", "required": True, "label": "Property description"},
+            "bare_dominium_holders": {"type": "string", "required": True, "label": "Bare dominium holder(s)"},
+        },
+        "will_types": [WillType.USUFRUCT.value],
+        "is_required": False,
+        "display_order": 57,
+    },
 ]
 
 

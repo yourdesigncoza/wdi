@@ -123,6 +123,23 @@ _ATTORNEY_REQUIRED_PATTERNS: list[tuple[str, re.Pattern]] = [
         "litigation",
         re.compile(r"litigation|court\s+order|legal\s+dispute", re.IGNORECASE),
     ),
+    # Complex estate scenario patterns
+    (
+        "trust_tax",
+        re.compile(r"trust\s+(?:tax|duty|estate\s+duty|section\s+7[cC])", re.IGNORECASE),
+    ),
+    (
+        "fideicommissum",
+        re.compile(r"fideicommiss", re.IGNORECASE),
+    ),
+    (
+        "business_valuation",
+        re.compile(r"business\s+(?:valuation|fair\s+market\s+value)", re.IGNORECASE),
+    ),
+    (
+        "complex_trust",
+        re.compile(r"(?:special|discretionary|inter\s+vivos)\s+trust", re.IGNORECASE),
+    ),
 ]
 
 FALLBACK_MESSAGE: str = (

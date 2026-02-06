@@ -19,6 +19,8 @@ class ClauseCategory(str, Enum):
     GUARDIAN = "guardian"
     TRUST = "trust"
     USUFRUCT = "usufruct"
+    BUSINESS = "business"
+    JOINT = "joint"
     RESIDUE = "residue"
     WITNESS = "witness"
     SIGNATURE = "signature"
