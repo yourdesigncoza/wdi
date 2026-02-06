@@ -29,6 +29,23 @@ logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/conversation", tags=["conversation"])
 
 
+def _extract_user_id(request: Request) -> uuid.UUID:
+    """Extract authenticated user_id from request state.
+
+    Mirrors the will API's dev-fallback pattern: when CLERK_JWKS_URL is
+    empty the auth middleware doesn't set user_id, so we use a
+    deterministic UUID for local development.
+    """
+    user_id = getattr(request.state, "user_id", None)
+    if user_id is None:
+        from app.config import settings
+
+        if not settings.CLERK_JWKS_URL:
+            return uuid.UUID("00000000-0000-0000-0000-000000000000")
+        raise HTTPException(status_code=401, detail="Authentication required")
+    return user_id
+
+
 @router.post("/stream")
 async def stream_conversation(
     request: Request,
@@ -42,21 +59,9 @@ async def stream_conversation(
     - ``filtered`` event (if UPL filter activates) carries replacement text
     - ``done`` event signals the response is complete
 
-    Requires authenticated user (set by ClerkAuthMiddleware on request.state.user).
     Verifies will ownership before allowing conversation access.
     """
-    # Extract user identity from auth middleware
-    user = getattr(request.state, "user", None)
-    if user is None:
-        raise HTTPException(status_code=401, detail="Authentication required")
-
-    user_id = user.get("id") if isinstance(user, dict) else getattr(user, "id", None)
-    if user_id is None:
-        raise HTTPException(status_code=401, detail="User identity not available")
-
-    # Ensure user_id is a UUID
-    if isinstance(user_id, str):
-        user_id = uuid.UUID(user_id)
+    user_id = _extract_user_id(request)
 
     # Verify will ownership
     will_doc = await service.get_will_for_user(body.will_id, user_id)
@@ -98,16 +103,7 @@ async def get_conversation_history(
     Returns all messages in chronological order. Used when the user
     navigates back to a previously visited section.
     """
-    user = getattr(request.state, "user", None)
-    if user is None:
-        raise HTTPException(status_code=401, detail="Authentication required")
-
-    user_id = user.get("id") if isinstance(user, dict) else getattr(user, "id", None)
-    if user_id is None:
-        raise HTTPException(status_code=401, detail="User identity not available")
-
-    if isinstance(user_id, str):
-        user_id = uuid.UUID(user_id)
+    user_id = _extract_user_id(request)
 
     # Verify will ownership
     will_doc = await service.get_will_for_user(will_id, user_id)
@@ -144,16 +140,7 @@ async def extract_will_data(
     Triggers OpenAI Structured Output parsing on the latest conversation
     messages to extract beneficiaries, assets, guardians, executor, etc.
     """
-    user = getattr(request.state, "user", None)
-    if user is None:
-        raise HTTPException(status_code=401, detail="Authentication required")
-
-    user_id = user.get("id") if isinstance(user, dict) else getattr(user, "id", None)
-    if user_id is None:
-        raise HTTPException(status_code=401, detail="User identity not available")
-
-    if isinstance(user_id, str):
-        user_id = uuid.UUID(user_id)
+    user_id = _extract_user_id(request)
 
     # Verify will ownership
     will_doc = await service.get_will_for_user(will_id, user_id)
