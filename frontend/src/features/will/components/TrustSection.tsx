@@ -3,6 +3,7 @@ import { ChatSection } from './ChatSection.tsx'
 
 interface TrustSectionProps {
   willId: string
+  onNext?: () => void
 }
 
 /** Info icon SVG for DaisyUI alerts */
@@ -31,7 +32,7 @@ function InfoIcon() {
  * shows existing trust data summary if available,
  * and renders ChatSection for AI-guided trust setup.
  */
-export function TrustSection({ willId }: TrustSectionProps) {
+export function TrustSection({ willId, onNext }: TrustSectionProps) {
   const trustProvisions = useWillStore((s) => s.trustProvisions)
 
   const hasTrustData =
@@ -82,7 +83,7 @@ export function TrustSection({ willId }: TrustSectionProps) {
       )}
 
       {/* AI-guided trust setup conversation */}
-      <ChatSection section="trust" willId={willId} />
+      <ChatSection section="trust" willId={willId} onNext={onNext} />
     </div>
   )
 }

@@ -3,6 +3,7 @@ import { ChatSection } from './ChatSection.tsx'
 
 interface UsufructSectionProps {
   willId: string
+  onNext?: () => void
 }
 
 /** Info icon SVG for DaisyUI alerts */
@@ -51,7 +52,7 @@ function WarningIcon() {
  * shows existing usufruct data summary if available,
  * and renders ChatSection for AI-guided usufruct setup.
  */
-export function UsufructSection({ willId }: UsufructSectionProps) {
+export function UsufructSection({ willId, onNext }: UsufructSectionProps) {
   const usufruct = useWillStore((s) => s.usufruct)
 
   const hasUsufructData =
@@ -110,7 +111,7 @@ export function UsufructSection({ willId }: UsufructSectionProps) {
       )}
 
       {/* AI-guided usufruct setup conversation */}
-      <ChatSection section="usufruct" willId={willId} />
+      <ChatSection section="usufruct" willId={willId} onNext={onNext} />
     </div>
   )
 }

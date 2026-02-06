@@ -3,6 +3,7 @@ import { ChatSection } from './ChatSection.tsx'
 
 interface BusinessAssetsSectionProps {
   willId: string
+  onNext?: () => void
 }
 
 /** Info icon SVG for DaisyUI alerts */
@@ -38,7 +39,7 @@ const BUSINESS_TYPE_LABELS: Record<string, string> = {
  * shows existing business assets with type badges and consent warnings,
  * and renders ChatSection for AI-guided business asset data collection.
  */
-export function BusinessAssetsSection({ willId }: BusinessAssetsSectionProps) {
+export function BusinessAssetsSection({ willId, onNext }: BusinessAssetsSectionProps) {
   const businessAssets = useWillStore((s) => s.businessAssets)
 
   return (
@@ -79,7 +80,7 @@ export function BusinessAssetsSection({ willId }: BusinessAssetsSectionProps) {
       )}
 
       {/* AI-guided business asset data collection */}
-      <ChatSection section="business" willId={willId} />
+      <ChatSection section="business" willId={willId} onNext={onNext} />
     </div>
   )
 }

@@ -268,8 +268,9 @@ def build_system_prompt(section: str, will_context: dict) -> str:
             "SECTION BOUNDARY: You ONLY discuss topics related to the CURRENT SECTION. "
             "Do NOT move on to other sections or topics. If the user says 'move on', "
             "'next', or 'done', respond with something like: "
-            "'Great, this section is complete! You can click the next step above to continue.' "
-            "NEVER start discussing executor, guardians, assets, or any other section "
+            "'Great, this section looks good! Click the Next Section button below when "
+            "you are ready to continue.' "
+            "NEVER start discussing other sections (executor, guardians, assets, etc.) "
             "unless that IS the current section.",
             "",
             f"WILL DATA COLLECTED SO FAR:\n{will_summary}",

@@ -7,6 +7,7 @@ import type { WillSection } from '../types/will.ts'
 interface ChatSectionProps {
   section: WillSection
   willId: string
+  onNext?: () => void
 }
 
 /** Section-specific AI greeting messages to initiate conversation */
@@ -23,6 +24,12 @@ const SECTION_GREETINGS: Record<string, string> = {
     "Would you like to leave any specific items to specific people? This is completely optional.",
   residue:
     "Finally, how would you like the remainder of your estate distributed?",
+  trust:
+    "Let's set up a testamentary trust to protect your minor children's inheritance. In South Africa, children under 18 cannot inherit directly. What would you like to name this trust?",
+  usufruct:
+    "Let's discuss a usufruct over your property. This allows someone to use and enjoy the property while ownership passes to other beneficiaries. Which property would you like to set this up for?",
+  business:
+    "Let's go through your business interests. What is the name and type of your business (Close Corporation, Pty Ltd, or partnership)?",
 }
 
 /** Section headings displayed at the top of the chat area */
@@ -33,6 +40,10 @@ const SECTION_HEADINGS: Record<string, string> = {
   executor: 'Executor Nomination',
   bequests: 'Specific Bequests',
   residue: 'Residual Estate',
+  trust: 'Testamentary Trust',
+  usufruct: 'Usufruct Provision',
+  business: 'Business Assets',
+  joint: 'Joint Will',
 }
 
 /**
@@ -42,7 +53,7 @@ const SECTION_HEADINGS: Record<string, string> = {
  * a sticky input area at the bottom, and auto-scrolls on new messages.
  * Uses useConversation hook for SSE streaming with the backend.
  */
-export function ChatSection({ section, willId }: ChatSectionProps) {
+export function ChatSection({ section, willId, onNext }: ChatSectionProps) {
   const [input, setInput] = useState('')
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
@@ -170,6 +181,20 @@ export function ChatSection({ section, willId }: ChatSectionProps) {
             </button>
           )}
         </div>
+
+        {/* Next Section navigation */}
+        {onNext && !isStreaming && (
+          <div className="flex justify-end mt-2">
+            <button
+              type="button"
+              className="btn btn-outline btn-sm"
+              onClick={onNext}
+            >
+              Next Section &rarr;
+            </button>
+          </div>
+        )}
+
         <p className="text-[10px] text-base-content/40 mt-1 text-center">
           Press Enter to send, Shift+Enter for new line
         </p>

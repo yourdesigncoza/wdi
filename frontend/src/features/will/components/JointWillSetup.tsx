@@ -7,6 +7,7 @@ import { ChatSection } from './ChatSection.tsx'
 
 interface JointWillSetupProps {
   willId: string
+  onNext?: () => void
 }
 
 /** Warning icon SVG for DaisyUI alerts */
@@ -35,7 +36,7 @@ function WarningIcon() {
  * with Zod validation, plus a prominent irrevocability warning and
  * explanatory ChatSection for discussing implications.
  */
-export function JointWillSetup({ willId }: JointWillSetupProps) {
+export function JointWillSetup({ willId, onNext }: JointWillSetupProps) {
   const jointWill = useWillStore((s) => s.jointWill)
   const updateJointWill = useWillStore((s) => s.updateJointWill)
 
@@ -240,7 +241,7 @@ export function JointWillSetup({ willId }: JointWillSetupProps) {
 
       {/* AI-guided explanation of joint will implications */}
       <div className="divider">Discuss Joint Will Implications</div>
-      <ChatSection section="joint" willId={willId} />
+      <ChatSection section="joint" willId={willId} onNext={onNext} />
     </div>
   )
 }

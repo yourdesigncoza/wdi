@@ -115,6 +115,18 @@ export function WillWizard() {
     [setCurrentSection],
   )
 
+  const markSectionComplete = useWillStore((s) => s.markSectionComplete)
+
+  /** Advance to the next section in the dynamic sections list */
+  const handleNextSection = useCallback(() => {
+    markSectionComplete(currentSection)
+    const currentIndex = sections.findIndex((s) => s.key === currentSection)
+    const nextIndex = currentIndex + 1
+    if (nextIndex < sections.length) {
+      setCurrentSection(sections[nextIndex].key)
+    }
+  }, [currentSection, sections, markSectionComplete, setCurrentSection])
+
   /**
    * Determine if we should show the scenario detection interstitial.
    * Triggers when user navigates past residue and detection has not run yet.
@@ -155,13 +167,13 @@ export function WillWizard() {
       }
       switch (section) {
         case 'trust':
-          return <TrustSection willId={willId} />
+          return <TrustSection willId={willId} onNext={handleNextSection} />
         case 'usufruct':
-          return <UsufructSection willId={willId} />
+          return <UsufructSection willId={willId} onNext={handleNextSection} />
         case 'business':
-          return <BusinessAssetsSection willId={willId} />
+          return <BusinessAssetsSection willId={willId} onNext={handleNextSection} />
         case 'joint':
-          return <JointWillSetup willId={willId} />
+          return <JointWillSetup willId={willId} onNext={handleNextSection} />
       }
     }
 
@@ -173,7 +185,7 @@ export function WillWizard() {
           </div>
         )
       }
-      return <ChatSection section={section} willId={willId} />
+      return <ChatSection section={section} willId={willId} onNext={handleNextSection} />
     }
 
     if (section === 'review') {
