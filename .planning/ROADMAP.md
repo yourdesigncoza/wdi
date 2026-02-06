@@ -17,7 +17,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 02.1: DaisyUI Integration** - Install DaisyUI v5, configure themes, migrate existing components (INSERTED)
 - [x] **Phase 3: Core Will Conversation** - Basic will questionnaire with AI guidance, data collection, real-time explanations
 - [x] **Phase 4: Complex Estate Scenarios** - Blended families, trusts, usufruct, business assets, joint wills
-- [ ] **Phase 5: AI Verification** - Dual-LLM verification layer (Gemini checks OpenAI), estate logic validation
+- [x] **Phase 5: AI Verification** - Dual-LLM verification layer (Gemini checks OpenAI), estate logic validation
 - [ ] **Phase 6: Document Generation** - PDF generation with WeasyPrint, witness instructions, preview, disclaimers
 - [ ] **Phase 7: Payment & Download** - PayFast integration, payment gate, download links, email backup
 - [ ] **Phase 8: Post-Purchase Features** - Save/resume functionality, unlimited will updates
@@ -132,10 +132,10 @@ Plans:
 **Plans**: 4 plans in 3 waves
 
 Plans:
-- [ ] 05-01-PLAN.md — Gemini SDK setup, config, Will model verification columns, migration 005
-- [ ] 05-02-PLAN.md — Verification Pydantic schemas and SA Wills Act rules/prompts
-- [ ] 05-03-PLAN.md — Verification service (Gemini + OpenAI fallback) and API endpoints
-- [ ] 05-04-PLAN.md — Frontend verification UI, SSE hook, wizard integration (checkpoint)
+- [x] 05-01-PLAN.md — Gemini SDK setup, config, Will model verification columns, migration 005
+- [x] 05-02-PLAN.md — Verification Pydantic schemas and SA Wills Act rules/prompts
+- [x] 05-03-PLAN.md — Verification service (Gemini + OpenAI fallback) and API endpoints
+- [x] 05-04-PLAN.md — Frontend verification UI, SSE hook, wizard integration (checkpoint)
 
 ### Phase 6: Document Generation
 **Goal**: Users can generate and preview professionally formatted PDF will documents
@@ -218,8 +218,8 @@ Note: Phase 9 depends only on Phase 6, can potentially run in parallel with Phas
 | 2. Authentication | 1/2 | In progress | - |
 | 02.1 DaisyUI Integration | 3/3 | Complete | 2026-02-06 |
 | 3. Core Will Conversation | 8/8 | Complete | 2026-02-06 |
-| 4. Complex Estate Scenarios | 0/5 | Planned | - |
-| 5. AI Verification | 0/4 | Not started | - |
+| 4. Complex Estate Scenarios | 5/5 | Complete | 2026-02-06 |
+| 5. AI Verification | 4/4 | Complete | 2026-02-06 |
 | 6. Document Generation | 0/5 | Not started | - |
 | 7. Payment & Download | 0/5 | Not started | - |
 | 8. Post-Purchase Features | 0/4 | Not started | - |
