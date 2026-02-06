@@ -1,12 +1,13 @@
-import { useState, useRef, useEffect, useCallback } from 'react'
+import { useState, useRef, useEffect, useCallback, useMemo } from 'react'
 import { useConversation } from '../hooks/useConversation.ts'
 import { ChatMessage } from './ChatMessage.tsx'
 import { SectionReview } from './SectionReview.tsx'
 import { useWillStore } from '../store/useWillStore.ts'
+import { useWillProgress } from '../hooks/useWillProgress.ts'
 import type { WillSection } from '../types/will.ts'
 
-/** Sections shown as collapsible review cards below the chat */
-const REVIEWABLE_SECTIONS: WillSection[] = [
+/** Base sections always shown in review cards */
+const BASE_REVIEWABLE_SECTIONS: WillSection[] = [
   'personal',
   'beneficiaries',
   'assets',
@@ -46,6 +47,17 @@ export function ReviewChat({ willId, onNavigateToSection }: ReviewChatProps) {
   const executor = useWillStore((s) => s.executor)
   const bequests = useWillStore((s) => s.bequests)
   const residue = useWillStore((s) => s.residue)
+  const trustProvisions = useWillStore((s) => s.trustProvisions)
+  const usufruct = useWillStore((s) => s.usufruct)
+  const businessAssets = useWillStore((s) => s.businessAssets)
+  const jointWill = useWillStore((s) => s.jointWill)
+
+  const { activeComplexSections } = useWillProgress()
+
+  // Dynamic reviewable sections: base + active complex sections
+  const reviewableSections = useMemo(() => {
+    return [...BASE_REVIEWABLE_SECTIONS, ...activeComplexSections]
+  }, [activeComplexSections])
 
   const willContext: Record<string, unknown> = {
     testator,
@@ -56,6 +68,10 @@ export function ReviewChat({ willId, onNavigateToSection }: ReviewChatProps) {
     executor,
     bequests,
     residue,
+    trustProvisions,
+    usufruct,
+    businessAssets,
+    jointWill,
   }
 
   const { messages, isStreaming, error, sendMessage, stopStreaming, setMessages } =
@@ -111,6 +127,34 @@ export function ReviewChat({ willId, onNavigateToSection }: ReviewChatProps) {
       summaryParts.push(`Residue: ${rList.join('; ')}`)
     }
 
+    // Complex section summaries
+    if (trustProvisions.trustName) {
+      const tParts = [`Trust: ${trustProvisions.trustName}`]
+      if (trustProvisions.vestingAge) tParts.push(`vesting at age ${trustProvisions.vestingAge}`)
+      if (trustProvisions.trustees?.length) {
+        tParts.push(`trustees: ${trustProvisions.trustees.map((t) => t.name).join(', ')}`)
+      }
+      summaryParts.push(`Testamentary Trust: ${tParts.join(', ')}`)
+    }
+
+    if (usufruct.propertyDescription) {
+      const uParts = [usufruct.propertyDescription]
+      if (usufruct.usufructuaryName) uParts.push(`usufructuary: ${usufruct.usufructuaryName}`)
+      if (usufruct.duration) uParts.push(`duration: ${usufruct.duration}`)
+      summaryParts.push(`Usufruct: ${uParts.join(', ')}`)
+    }
+
+    if (businessAssets.length > 0) {
+      const baList = businessAssets.map((ba) => `${ba.businessName} (${ba.businessType})`)
+      summaryParts.push(`Business Assets: ${baList.join('; ')}`)
+    }
+
+    if (jointWill.coTestatorFirstName) {
+      const jParts = [`Co-testator: ${[jointWill.coTestatorFirstName, jointWill.coTestatorLastName].filter(Boolean).join(' ')}`]
+      if (jointWill.willStructure) jParts.push(`structure: ${jointWill.willStructure}`)
+      summaryParts.push(`Joint Will: ${jParts.join(', ')}`)
+    }
+
     const summary = summaryParts.length > 0
       ? summaryParts.join('\n')
       : 'No will data collected yet.'
@@ -130,6 +174,10 @@ export function ReviewChat({ willId, onNavigateToSection }: ReviewChatProps) {
     executor,
     bequests,
     residue,
+    trustProvisions,
+    usufruct,
+    businessAssets,
+    jointWill,
   ])
 
   // Auto-scroll to bottom on new messages
@@ -226,7 +274,7 @@ export function ReviewChat({ willId, onNavigateToSection }: ReviewChatProps) {
       {/* Collapsible section review cards */}
       {showReviewCards && (
         <div className="space-y-3 py-3 border-t border-base-300 overflow-y-auto max-h-60">
-          {REVIEWABLE_SECTIONS.map((section) => (
+          {reviewableSections.map((section) => (
             <SectionReview
               key={section}
               section={section}
