@@ -75,6 +75,80 @@ class ExtractedExecutor(BaseModel):
     )
 
 
+class ExtractedTrustData(BaseModel):
+    """Testamentary trust data extracted from conversation."""
+
+    trust_name: Optional[str] = Field(
+        default=None, description="Name of the testamentary trust"
+    )
+    minor_beneficiaries: list[str] = Field(
+        default_factory=list,
+        description="Names of minor children who are trust beneficiaries",
+    )
+    vesting_age: Optional[int] = Field(
+        default=None,
+        description="Age at which beneficiaries receive assets outright (18, 21, or 25)",
+    )
+    trustees: list[dict] = Field(
+        default_factory=list,
+        description="Trustee nominations: [{name, relationship, is_independent}]",
+    )
+    income_for_maintenance: Optional[bool] = Field(
+        default=None,
+        description="Whether trust income may be used for maintenance and education",
+    )
+    capital_for_education: Optional[bool] = Field(
+        default=None,
+        description="Whether trustee may use capital for education if income insufficient",
+    )
+
+
+class ExtractedUsufructData(BaseModel):
+    """Usufruct details extracted from conversation."""
+
+    property_description: Optional[str] = Field(
+        default=None, description="Description of the property subject to usufruct"
+    )
+    usufructuary_name: Optional[str] = Field(
+        default=None, description="Name of the person who receives usage rights"
+    )
+    bare_dominium_holders: list[dict] = Field(
+        default_factory=list,
+        description="Ownership holders: [{name, share}]",
+    )
+    duration: Optional[str] = Field(
+        default=None,
+        description="Duration of usufruct (e.g. 'lifetime', '10 years')",
+    )
+
+
+class ExtractedBusinessData(BaseModel):
+    """Business asset data extracted from conversation."""
+
+    business_name: Optional[str] = Field(
+        default=None, description="Registered name of the business"
+    )
+    business_type: Optional[str] = Field(
+        default=None,
+        description="Entity type: CC, Pty Ltd, partnership, sole_proprietor",
+    )
+    registration_number: Optional[str] = Field(
+        default=None, description="Company or CC registration number"
+    )
+    percentage_held: Optional[float] = Field(
+        default=None, description="Percentage of shares or member interest held"
+    )
+    heir_name: Optional[str] = Field(
+        default=None, description="Name of person who should inherit the interest"
+    )
+    has_buy_sell_agreement: Optional[bool] = Field(
+        default=None, description="Whether a buy-sell agreement is in place"
+    )
+    has_association_agreement: Optional[bool] = Field(
+        default=None, description="Whether an Association Agreement exists (for CCs)"
+    )
+
+
 class ExtractedWillData(BaseModel):
     """Composite structured data extracted from a conversation turn.
 
@@ -94,6 +168,17 @@ class ExtractedWillData(BaseModel):
         default_factory=list,
         description="Items that need follow-up questions from the user",
     )
+    # Complex estate scenario fields
+    trust: Optional[ExtractedTrustData] = Field(
+        default=None, description="Testamentary trust provisions if discussed"
+    )
+    usufruct_data: Optional[ExtractedUsufructData] = Field(
+        default=None, description="Usufruct details if discussed"
+    )
+    business_data: list[ExtractedBusinessData] = Field(
+        default_factory=list,
+        description="Business asset information if discussed",
+    )
 
 
 EXTRACTION_SYSTEM_PROMPT: str = (
@@ -103,5 +188,9 @@ EXTRACTION_SYSTEM_PROMPT: str = (
     "If something is unclear or ambiguous, add it to needs_clarification. "
     "For South African wills, pay attention to: beneficiary names and "
     "relationships, SA ID numbers (13 digits), asset descriptions, "
-    "guardian nominations for minor children, and executor appointments."
+    "guardian nominations for minor children, and executor appointments. "
+    "Also extract trust provisions (trust name, vesting age, trustees), "
+    "usufruct details (property, usufructuary, bare dominium holders), "
+    "and business asset information (business name, type, registration "
+    "number, percentage held, heir) when discussed."
 )

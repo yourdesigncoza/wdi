@@ -77,6 +77,93 @@ SECTION_PROMPTS: dict[str, str] = {
         "which section to navigate to. "
         "Do NOT make changes yourself -- guide the user to the appropriate section."
     ),
+    # ── COMPLEX ESTATE SCENARIOS ─────────────────────────────────
+    "trust": (
+        "You are helping the user set up a testamentary trust for minor children. "
+        "In South Africa, children under 18 cannot inherit directly -- any inheritance "
+        "must be held in a testamentary trust or paid into the Guardian's Fund. "
+        "A testamentary trust is usually the preferred option as it gives the testator "
+        "control over how the funds are managed.\n\n"
+        "Ask about:\n"
+        "- Which children are minors (under 18) and their full names\n"
+        "- A name for the trust (e.g. 'The Smith Family Trust')\n"
+        "- The vesting age -- when beneficiaries receive the assets outright "
+        "(common choices: 18, 21, or 25)\n"
+        "- Who should be the trustee(s) -- at least one independent trustee is recommended\n"
+        "- Whether trust income should be available for maintenance and education "
+        "before vesting\n"
+        "- Whether the trustee may use capital for education if income is insufficient\n\n"
+        "UPL BOUNDARY: Do NOT advise on trust structures, tax implications, estate "
+        "duty planning, or whether a trust is the right vehicle. Do NOT discuss "
+        "inter vivos trusts, discretionary trusts, or Section 7C implications. "
+        "For complex trust arrangements, say: 'For detailed trust planning, "
+        "I'd recommend speaking with a qualified estate planning attorney.'"
+    ),
+    "usufruct": (
+        "You are helping the user set up a usufruct over property. "
+        "In South African law, a usufruct gives someone the right to USE and ENJOY "
+        "property that belongs to someone else. The usufructuary does not OWN the "
+        "property -- the bare dominium (ownership) passes to other beneficiaries.\n\n"
+        "This is commonly used when a testator wants their spouse to continue living "
+        "in the family home, while the ownership passes to the children.\n\n"
+        "Ask about:\n"
+        "- Which property the usufruct applies to (full description)\n"
+        "- Who gets the usage rights (the usufructuary -- usually the surviving spouse)\n"
+        "- Who gets the bare dominium / ownership (usually children)\n"
+        "- Duration of the usufruct (lifetime of the usufructuary, or a specific period)\n\n"
+        "Important distinctions:\n"
+        "- The usufructuary must MAINTAIN the property and pay rates and taxes\n"
+        "- The usufructuary CANNOT sell the property\n"
+        "- This is NOT a fideicommissum (which involves successive ownership)\n\n"
+        "UPL BOUNDARY: Do NOT confuse usufruct with fideicommissum. Do NOT advise "
+        "on the tax implications of usufruct or whether it is the best estate "
+        "planning tool. For fideicommissum or complex arrangements, say: "
+        "'This sounds like it may involve a fideicommissum rather than a usufruct "
+        "-- I'd recommend consulting an attorney for the correct structure.'"
+    ),
+    "business": (
+        "You are helping the user deal with business assets in their will. "
+        "In South Africa, the treatment of business interests depends on the "
+        "type of entity.\n\n"
+        "For Close Corporations (CCs): A member's interest requires the consent "
+        "of remaining members to transfer (Section 35 of the Close Corporations "
+        "Act 69 of 1984). If consent is not obtained, the executor must dispose "
+        "of the interest as required by law.\n\n"
+        "For Companies (Pty Ltd): Share transfers are subject to the Memorandum "
+        "of Incorporation (MOI) and any Shareholders Agreement.\n\n"
+        "Ask about:\n"
+        "- Business name and registration number\n"
+        "- Type of entity (CC, Pty Ltd, partnership, sole proprietor)\n"
+        "- Percentage or number of shares/interest held\n"
+        "- Who should inherit the business interest\n"
+        "- Whether there is a buy-sell agreement in place\n"
+        "- Whether there is an Association Agreement (for CCs)\n\n"
+        "UPL BOUNDARY: Do NOT advise on business valuation, fair market value, "
+        "buy-sell agreement terms, or tax implications of transferring business "
+        "interests. Say: 'Business succession can be complex -- I'd recommend "
+        "discussing the details with your attorney and accountant.'"
+    ),
+    "joint": (
+        "You are helping the user create a joint or mutual will. "
+        "In South African law, a joint will is made by two people (usually spouses) "
+        "in a single document. IMPORTANT: A joint will becomes effectively "
+        "IRREVOCABLE after the first death -- the survivor cannot change the terms "
+        "that were mutually agreed upon.\n\n"
+        "Many estate planners recommend separate 'mirror' wills instead -- these "
+        "are two separate wills with similar terms, but each spouse retains the "
+        "right to change their will at any time.\n\n"
+        "Ask about:\n"
+        "- Spouse/partner details (full name, ID number) if not already captured "
+        "in the marital section\n"
+        "- Whether they want a true joint will or separate mirror wills\n"
+        "- Confirm they understand the irrevocability consequence after first death\n"
+        "- How the combined estate should be distributed after both have passed\n"
+        "- Whether they want to mass their estates (combine into one)\n\n"
+        "UPL BOUNDARY: Do NOT give an opinion on whether a joint will or mirror "
+        "wills are legally better for their situation. Present both options neutrally "
+        "and say: 'The choice between joint and mirror wills depends on your specific "
+        "circumstances -- an attorney can advise on which is best for you.'"
+    ),
 }
 
 
@@ -123,6 +210,26 @@ def format_will_summary(will_context: dict) -> str:
 
     if will_context.get("residue"):
         parts.append("Residue distribution: specified")
+
+    # Complex estate scenario sections
+    trust = will_context.get("trust_provisions")
+    if trust and trust.get("trust_name"):
+        vesting = trust.get("vesting_age", "?")
+        parts.append(f"Trust: {trust['trust_name']} (vesting at {vesting})")
+
+    usufruct = will_context.get("usufruct")
+    if usufruct and usufruct.get("property_description"):
+        uf_name = usufruct.get("usufructuary_name", "?")
+        parts.append(f"Usufruct: {uf_name} over {usufruct['property_description']}")
+
+    biz = will_context.get("business_assets")
+    if biz:
+        parts.append(f"Business assets: {len(biz)} item(s)")
+
+    joint = will_context.get("joint_will")
+    if joint and joint.get("co_testator_first_name"):
+        co_last = joint.get("co_testator_last_name", "")
+        parts.append(f"Joint will with {joint['co_testator_first_name']} {co_last}".strip())
 
     return "\n".join(parts) if parts else "No data collected yet."
 
