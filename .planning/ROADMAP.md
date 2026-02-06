@@ -111,14 +111,14 @@ Plans:
   3. User can add usufruct provisions (spouse keeps home, children inherit remainder)
   4. User can include business assets (CC member interests, company shares)
   5. User can create joint will with spouse (mutual or mirror wills)
-**Plans**: TBD
+**Plans**: 5 plans in 3 waves
 
 Plans:
-- [ ] 04-01: Complex scenario detection and flow routing
-- [ ] 04-02: Testamentary trust clause logic
-- [ ] 04-03: Usufruct provision handling
-- [ ] 04-04: Business asset questionnaire and clauses
-- [ ] 04-05: Joint/mirror will workflow
+- [ ] 04-01-PLAN.md — Backend foundation: migration 004, Will model, schemas, scenario detector, API
+- [ ] 04-02-PLAN.md — Frontend foundation: types, Zustand store, Zod schemas, scenario hook
+- [ ] 04-03-PLAN.md — AI prompts, extraction models, UPL filter patterns, clause seeds
+- [ ] 04-04-PLAN.md — Complex section UI components (trust, usufruct, business, joint)
+- [ ] 04-05-PLAN.md — Wizard integration: scenario detector, conditional sections, review updates
 
 ### Phase 5: AI Verification
 **Goal**: Dual-LLM system verifies document completeness and legal compliance before generation
@@ -218,7 +218,7 @@ Note: Phase 9 depends only on Phase 6, can potentially run in parallel with Phas
 | 2. Authentication | 1/2 | In progress | - |
 | 02.1 DaisyUI Integration | 3/3 | Complete | 2026-02-06 |
 | 3. Core Will Conversation | 8/8 | Complete | 2026-02-06 |
-| 4. Complex Estate Scenarios | 0/5 | Not started | - |
+| 4. Complex Estate Scenarios | 0/5 | Planned | - |
 | 5. AI Verification | 0/4 | Not started | - |
 | 6. Document Generation | 0/5 | Not started | - |
 | 7. Payment & Download | 0/5 | Not started | - |
