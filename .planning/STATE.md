@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-02-05)
 ## Current Position
 
 Phase: 05 of 9 (AI Verification) — In Progress
-Plan: 1 of 4 in current phase
+Plan: 2 of 4 in current phase
 Status: In progress
-Last activity: 2026-02-06 - Completed 05-01-PLAN.md (Gemini SDK foundation)
+Last activity: 2026-02-06 - Completed 05-02-PLAN.md (verification schemas + SA Wills Act rules)
 
-Progress: [███████████████████████░] ~59% (23 of ~39 total plans)
+Progress: [████████████████████████░] ~62% (24 of ~39 total plans)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 23
-- Average duration: 2m 52s
-- Total execution time: 1.10 hours
+- Total plans completed: 24
+- Average duration: 2m 50s
+- Total execution time: 1.14 hours
 
 **By Phase:**
 
@@ -32,11 +32,11 @@ Progress: [███████████████████████
 | 02.1 | 3/3 | 5m 50s | 1m 57s |
 | 03 | 8/8 | 23m 58s | 3m 0s |
 | 04 | 5/5 | 16m 32s | 3m 18s |
-| 05 | 1/4 | 1m 48s | 1m 48s |
+| 05 | 2/4 | 4m 3s | 2m 2s |
 
 **Recent Trend:**
-- Last 5 plans: 04-02 (1m 59s), 04-03 (2m 2s), 04-04 (2m 1s), 04-05 (~8m incl. checkpoint), 05-01 (1m 48s)
-- Trend: Consistent ~2m per plan, 05-01 fastest yet
+- Last 5 plans: 04-03 (2m 2s), 04-04 (2m 1s), 04-05 (~8m incl. checkpoint), 05-01 (1m 48s), 05-02 (2m 15s)
+- Trend: Consistent ~2m per plan
 
 *Updated after each plan completion*
 
@@ -88,6 +88,8 @@ Recent decisions affecting current work:
 - D-0501-01: Gemini 2.5 Flash as default verification model (cost-effective)
 - D-0501-02: Temperature 0.1 for verification (deterministic)
 - D-0501-03: Empty GEMINI_API_KEY means verification disabled (graceful fallback)
+- D-0502-01: Literal types instead of Enum classes for Gemini structured output compatibility
+- D-0502-02: Rules organized as dict[severity][code] -> description for prompt embedding
 
 ### Pending Todos
 
@@ -120,9 +122,9 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-02-06T15:11:43Z
-Stopped at: Completed 05-01-PLAN.md
+Last session: 2026-02-06T15:12:39Z
+Stopped at: Completed 05-02-PLAN.md
 Resume file: None
 
 ---
-*Next: 05-02-PLAN.md — Verification prompts and response schemas*
+*Next: 05-03-PLAN.md — Verification service and API endpoints*
