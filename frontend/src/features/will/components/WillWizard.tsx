@@ -11,6 +11,7 @@ import { TrustSection } from './TrustSection.tsx'
 import { UsufructSection } from './UsufructSection.tsx'
 import { BusinessAssetsSection } from './BusinessAssetsSection.tsx'
 import { JointWillSetup } from './JointWillSetup.tsx'
+import { VerificationPage } from './VerificationPage.tsx'
 import { createWill } from '../../../services/api.ts'
 import type { WillSection } from '../types/will.ts'
 
@@ -58,7 +59,7 @@ export function WillWizard() {
   const willId = useWillStore((s) => s.willId)
   const setWillId = useWillStore((s) => s.setWillId)
   const scenarios = useWillStore((s) => s.scenarios)
-  const { sections, activeComplexSections } = useWillProgress()
+  const { sections } = useWillProgress()
 
   // Track whether scenario detection interstitial has been shown
   const [scenariosDetected, setScenariosDetected] = useState(false)
@@ -80,12 +81,13 @@ export function WillWizard() {
     }
   }, [willId, setWillId])
 
-  // When switching to an AI, complex, or review section, ensure a will exists
+  // When switching to an AI, complex, review, or verification section, ensure a will exists
   useEffect(() => {
     if (
       AI_SECTIONS.has(currentSection) ||
       COMPLEX_SECTION_KEYS.has(currentSection) ||
-      currentSection === 'review'
+      currentSection === 'review' ||
+      currentSection === 'verification'
     ) {
       void ensureWillExists()
     }
@@ -204,6 +206,17 @@ export function WillWizard() {
       )
     }
 
+    if (section === 'verification') {
+      if (!willId) {
+        return (
+          <div className="flex justify-center py-12">
+            <span className="loading loading-spinner loading-md" />
+          </div>
+        )
+      }
+      return <VerificationPage />
+    }
+
     return null
   }
 
@@ -212,7 +225,8 @@ export function WillWizard() {
   const isChatSection =
     (AI_SECTIONS.has(currentSection) ||
       COMPLEX_SECTION_KEYS.has(currentSection) ||
-      currentSection === 'review') &&
+      currentSection === 'review' ||
+      currentSection === 'verification') &&
     !!willId
 
   return (

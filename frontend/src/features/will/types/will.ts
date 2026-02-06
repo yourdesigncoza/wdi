@@ -185,6 +185,7 @@ export const WILL_SECTIONS = [
   'business',
   'joint',
   'review',
+  'verification',
 ] as const
 
 export type WillSection = (typeof WILL_SECTIONS)[number]
@@ -210,6 +211,8 @@ export interface WillState {
   scenarios: ComplexScenario[]
   sectionsComplete: SectionsComplete
   currentSection: WillSection
+  verificationResult: Record<string, unknown> | null
+  acknowledgedWarnings: string[]
 }
 
 export interface WillActions {
@@ -235,5 +238,7 @@ export interface WillActions {
   setScenarios: (scenarios: ComplexScenario[]) => void
   markSectionComplete: (section: string) => void
   setCurrentSection: (section: WillSection) => void
+  setVerificationResult: (result: Record<string, unknown> | null) => void
+  setAcknowledgedWarnings: (codes: string[]) => void
   resetWill: () => void
 }

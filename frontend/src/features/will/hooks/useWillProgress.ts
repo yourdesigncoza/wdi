@@ -51,11 +51,12 @@ export function useWillProgress() {
     if (hasBusiness) complexSections.push({ key: 'business', label: 'Business' })
     if (hasJoint) complexSections.push({ key: 'joint', label: 'Joint Will' })
 
-    // Full section config: base + complex + review
+    // Full section config: base + complex + review + verification
     const sectionConfig = [
       ...BASE_SECTIONS,
       ...complexSections,
       { key: 'review' as WillSection, label: 'Review' },
+      { key: 'verification' as WillSection, label: 'Verification' },
     ]
 
     const sections: SectionInfo[] = sectionConfig.map(({ key, label }) => ({

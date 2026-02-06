@@ -57,7 +57,7 @@ interface ScenarioDetectorProps {
  * with explanations, allows opt-in to additional sections, and navigates
  * to the first applicable complex section (or review if none).
  */
-export function ScenarioDetector({ willId, onContinue }: ScenarioDetectorProps) {
+export function ScenarioDetector({ willId: _willId, onContinue }: ScenarioDetectorProps) {
   const { scenarios, loading, error, detectScenarios } = useScenarioDetection()
   const setScenarios = useWillStore((s) => s.setScenarios)
   const [optedIn, setOptedIn] = useState<Set<ComplexScenario>>(new Set())

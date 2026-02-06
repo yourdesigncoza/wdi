@@ -49,6 +49,8 @@ const initialState: WillState = {
     joint: false,
   },
   currentSection: 'personal',
+  verificationResult: null,
+  acknowledgedWarnings: [],
 }
 
 export const useWillStore = create<WillState & WillActions>()(
@@ -167,6 +169,16 @@ export const useWillStore = create<WillState & WillActions>()(
       setCurrentSection: (section: WillSection) =>
         set((state) => {
           state.currentSection = section
+        }),
+
+      setVerificationResult: (result: Record<string, unknown> | null) =>
+        set((state) => {
+          state.verificationResult = result
+        }),
+
+      setAcknowledgedWarnings: (codes: string[]) =>
+        set((state) => {
+          state.acknowledgedWarnings = codes
         }),
 
       resetWill: () => set(initialState),
