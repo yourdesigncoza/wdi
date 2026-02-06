@@ -5,6 +5,7 @@ GET    /api/wills                                   -- List user's wills
 GET    /api/wills/{will_id}                         -- Get specific will
 PATCH  /api/wills/{will_id}/sections/{section}      -- Update a section
 POST   /api/wills/{will_id}/sections/{section}/complete -- Mark section done
+GET    /api/wills/{will_id}/scenarios               -- Detect applicable scenarios
 """
 
 import logging
@@ -18,14 +19,19 @@ from app.schemas.will import (
     AssetSchema,
     BeneficiarySchema,
     BequestSchema,
+    BusinessAssetDetailSchema,
     ExecutorSchema,
     GuardianSchema,
+    JointWillSchema,
     MaritalSchema,
     ResidueSchema,
     TestatorSchema,
+    TrustProvisionSchema,
+    UsufructSchema,
     WillCreateRequest,
     WillResponse,
 )
+from app.services.scenario_detector import ScenarioDetector
 from app.services.will_service import WillService, get_will_service
 
 logger = logging.getLogger(__name__)
@@ -43,10 +49,20 @@ _SECTION_SCHEMA_MAP: dict[str, type] = {
     "executor": ExecutorSchema,
     "bequests": BequestSchema,
     "residue": ResidueSchema,
+    "trust_provisions": TrustProvisionSchema,
+    "usufruct": UsufructSchema,
+    "business_assets": BusinessAssetDetailSchema,
+    "joint_will": JointWillSchema,
 }
 
 # Sections stored as JSON arrays (list[Schema]) rather than single objects.
-_LIST_SECTIONS: set[str] = {"beneficiaries", "assets", "guardians", "bequests"}
+_LIST_SECTIONS: set[str] = {
+    "beneficiaries",
+    "assets",
+    "guardians",
+    "bequests",
+    "business_assets",
+}
 
 
 def _extract_user_id(request: Request) -> uuid.UUID:
@@ -175,3 +191,32 @@ async def mark_section_complete(
     """Mark a section as completed in the will's progress tracker."""
     user_id = _extract_user_id(request)
     return await service.mark_section_complete(will_id, user_id, section)
+
+
+@router.get("/api/wills/{will_id}/scenarios")
+async def detect_scenarios(
+    will_id: uuid.UUID,
+    request: Request,
+    service: WillService = Depends(get_will_service),
+):
+    """Detect applicable complex estate scenarios from will data.
+
+    Analyses the will's marital status, beneficiaries, and assets to
+    determine which scenarios apply (blended_family, testamentary_trust,
+    usufruct, business_assets). Updates the will's scenarios column and
+    returns the detected list.
+    """
+    user_id = _extract_user_id(request)
+    will = await service.get_will(will_id, user_id)
+
+    will_data = {
+        "marital": will.marital,
+        "beneficiaries": will.beneficiaries,
+        "assets": will.assets,
+    }
+    detected = ScenarioDetector.detect(will_data)
+
+    # Persist detected scenarios on the will
+    await service.update_section(will_id, user_id, "scenarios", detected)
+
+    return {"scenarios": detected}

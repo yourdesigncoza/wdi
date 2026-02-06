@@ -1,8 +1,9 @@
 """Pydantic schemas for will section data and API payloads.
 
-Covers all SA will data fields for a basic will: testator details,
-marital status, beneficiaries, assets, guardians, executor, bequests,
-and residual estate distribution.
+Covers all SA will data fields including basic will sections (testator,
+marital, beneficiaries, assets, guardians, executor, bequests, residue)
+and complex estate scenario sections (trust provisions, usufruct,
+business assets, joint will).
 """
 
 import uuid
@@ -91,6 +92,7 @@ class BeneficiarySchema(BaseModel):
     share_percent: Optional[float] = Field(default=None, ge=0, le=100)
     alternate_beneficiary: Optional[str] = None
     is_charity: bool = False
+    is_minor: bool = False
 
 
 class AssetSchema(BaseModel):
@@ -138,6 +140,69 @@ class ResidueSchema(BaseModel):
     simultaneous_death_clause: Optional[str] = None
 
 
+# ── Complex Estate Scenario Schemas ──────────────────────────────────
+
+
+class TrustProvisionSchema(BaseModel):
+    """Testamentary trust provision for minor beneficiaries."""
+
+    trust_name: str
+    minor_beneficiaries: list[str] = Field(default_factory=list)
+    vesting_age: int = Field(default=18, ge=18, le=25)
+    trustees: list[dict] = Field(
+        default_factory=list,
+        description="List of dicts with 'name', 'id_number', 'relationship' keys",
+    )
+    income_for_maintenance: bool = True
+    capital_for_education: bool = True
+
+
+class UsufructSchema(BaseModel):
+    """Usufruct provision granting use-and-enjoyment rights."""
+
+    property_description: str
+    usufructuary_name: str
+    usufructuary_id_number: Optional[str] = None
+    bare_dominium_holders: list[dict] = Field(
+        default_factory=list,
+        description="List of dicts with 'name', 'id_number', 'share_percent' keys",
+    )
+    duration: str = "lifetime"
+
+
+class BusinessAssetDetailSchema(BaseModel):
+    """Detailed business asset entry for estate planning."""
+
+    business_name: str
+    business_type: str = Field(
+        description="cc_member_interest | company_shares | partnership",
+    )
+    registration_number: Optional[str] = None
+    percentage_held: Optional[float] = Field(default=None, ge=0, le=100)
+    heir_name: Optional[str] = None
+    heir_relationship: Optional[str] = None
+    has_buy_sell_agreement: bool = False
+    has_association_agreement: bool = False
+    notes: Optional[str] = None
+
+
+class JointWillSchema(BaseModel):
+    """Joint will configuration for married couples."""
+
+    co_testator_first_name: str
+    co_testator_last_name: str
+    co_testator_id_number: str = Field(pattern=r"^\d{13}$")
+    will_structure: str = "mutual"  # mutual | mirror
+    massing: bool = False
+    irrevocability_acknowledged: bool = False
+
+
+class ScenarioListSchema(BaseModel):
+    """Active scenario list for a will."""
+
+    scenarios: list[str] = Field(default_factory=list)
+
+
 # ── API Payloads ─────────────────────────────────────────────────────
 
 
@@ -169,6 +234,11 @@ class WillResponse(BaseModel):
     executor: dict
     bequests: list
     residue: dict
+    trust_provisions: dict
+    usufruct: dict
+    business_assets: list
+    joint_will: dict
+    scenarios: list
     sections_complete: dict
     created_at: datetime
     updated_at: datetime

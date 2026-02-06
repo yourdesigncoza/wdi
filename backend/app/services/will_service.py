@@ -29,6 +29,11 @@ VALID_SECTIONS: set[str] = {
     "executor",
     "bequests",
     "residue",
+    "trust_provisions",
+    "usufruct",
+    "business_assets",
+    "joint_will",
+    "scenarios",
 }
 
 # Valid will status transitions.
