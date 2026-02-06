@@ -159,3 +159,76 @@ export const residueSchema = z.object({
 })
 
 export type ResidueFormData = z.infer<typeof residueSchema>
+
+// --- Trust provision schema ---
+
+export const trustProvisionSchema = z.object({
+  trustName: z.string().min(1, 'Trust name is required'),
+  minorBeneficiaries: z.array(z.string().min(1)).min(1, 'At least one minor beneficiary required'),
+  vestingAge: z.number().min(18, 'Vesting age must be at least 18').max(25, 'Vesting age must be 18-25'),
+  trustees: z
+    .array(
+      z.object({
+        name: z.string().min(1, 'Trustee name is required'),
+        idNumber: z.string().regex(SA_ID_REGEX, 'SA ID must be 13 digits').optional().or(z.literal('')),
+        relationship: z.string().min(1, 'Relationship is required'),
+      }),
+    )
+    .min(1, 'At least one trustee required'),
+  incomeForMaintenance: z.boolean(),
+  capitalForEducation: z.boolean(),
+})
+
+export type TrustProvisionFormData = z.infer<typeof trustProvisionSchema>
+
+// --- Usufruct schema ---
+
+export const usufructSchema = z.object({
+  propertyDescription: z.string().min(1, 'Property description is required'),
+  usufructuaryName: z.string().min(1, 'Usufructuary name is required'),
+  usufructuaryIdNumber: z.string().regex(SA_ID_REGEX, 'SA ID must be 13 digits').optional().or(z.literal('')),
+  bareDominiumHolders: z
+    .array(
+      z.object({
+        name: z.string().min(1, 'Name is required'),
+        idNumber: z.string().regex(SA_ID_REGEX, 'SA ID must be 13 digits').optional().or(z.literal('')),
+        sharePercent: z.number().min(0, 'Share must be at least 0').max(100, 'Share must be at most 100'),
+      }),
+    )
+    .min(1, 'At least one bare dominium holder required'),
+  duration: z.string().min(1, 'Duration is required'),
+})
+
+export type UsufructFormData = z.infer<typeof usufructSchema>
+
+// --- Business asset detail schema ---
+
+export const businessAssetDetailSchema = z.object({
+  id: z.string().min(1),
+  businessName: z.string().min(1, 'Business name is required'),
+  businessType: z.enum(['cc_member_interest', 'company_shares', 'partnership']),
+  registrationNumber: z.string().optional().or(z.literal('')),
+  percentageHeld: z.number().min(0).max(100).optional(),
+  heirName: z.string().optional().or(z.literal('')),
+  heirRelationship: z.string().optional().or(z.literal('')),
+  hasBuySellAgreement: z.boolean(),
+  hasAssociationAgreement: z.boolean(),
+  notes: z.string().optional().or(z.literal('')),
+})
+
+export type BusinessAssetDetailFormData = z.infer<typeof businessAssetDetailSchema>
+
+// --- Joint will schema ---
+
+export const jointWillSchema = z.object({
+  coTestatorFirstName: z.string().min(1, 'Co-testator first name is required'),
+  coTestatorLastName: z.string().min(1, 'Co-testator last name is required'),
+  coTestatorIdNumber: z.string().regex(SA_ID_REGEX, 'SA ID must be 13 digits'),
+  willStructure: z.enum(['mutual', 'mirror']),
+  massing: z.boolean(),
+  irrevocabilityAcknowledged: z
+    .boolean()
+    .refine((val) => val === true, 'You must acknowledge irrevocability'),
+})
+
+export type JointWillFormData = z.infer<typeof jointWillSchema>

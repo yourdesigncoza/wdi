@@ -1,5 +1,6 @@
 // Will data types for WillCraft SA
-// Covers all sections: testator, marital, beneficiaries, assets, guardians, executor, bequests, residue
+// Covers all sections: testator, marital, beneficiaries, assets, guardians,
+// executor, bequests, residue, trust, usufruct, business, joint
 
 // --- Enums ---
 
@@ -114,6 +115,61 @@ export interface ResidueInfo {
   simultaneousDeathClause?: string
 }
 
+// --- Complex estate scenario types ---
+
+export const BusinessType = {
+  CC_MEMBER_INTEREST: 'cc_member_interest',
+  COMPANY_SHARES: 'company_shares',
+  PARTNERSHIP: 'partnership',
+} as const
+
+export type BusinessType = (typeof BusinessType)[keyof typeof BusinessType]
+
+export interface TrustProvisions {
+  trustName: string
+  minorBeneficiaries: string[]
+  vestingAge: number
+  trustees: { name: string; idNumber?: string; relationship: string }[]
+  incomeForMaintenance: boolean
+  capitalForEducation: boolean
+}
+
+export interface UsufructProvision {
+  propertyDescription: string
+  usufructuaryName: string
+  usufructuaryIdNumber?: string
+  bareDominiumHolders: { name: string; idNumber?: string; sharePercent: number }[]
+  duration: 'lifetime' | string
+}
+
+export interface BusinessAssetDetail {
+  id: string
+  businessName: string
+  businessType: BusinessType
+  registrationNumber?: string
+  percentageHeld?: number
+  heirName?: string
+  heirRelationship?: string
+  hasBuySellAgreement: boolean
+  hasAssociationAgreement: boolean
+  notes?: string
+}
+
+export interface JointWillConfig {
+  coTestatorFirstName: string
+  coTestatorLastName: string
+  coTestatorIdNumber: string
+  willStructure: 'mutual' | 'mirror'
+  massing: boolean
+  irrevocabilityAcknowledged: boolean
+}
+
+export type ComplexScenario =
+  | 'blended_family'
+  | 'testamentary_trust'
+  | 'usufruct'
+  | 'business_assets'
+
 // --- Section tracking ---
 
 export const WILL_SECTIONS = [
@@ -124,6 +180,10 @@ export const WILL_SECTIONS = [
   'executor',
   'bequests',
   'residue',
+  'trust',
+  'usufruct',
+  'business',
+  'joint',
   'review',
 ] as const
 
@@ -143,6 +203,11 @@ export interface WillState {
   executor: Partial<ExecutorInfo>
   bequests: Bequest[]
   residue: Partial<ResidueInfo>
+  trustProvisions: Partial<TrustProvisions>
+  usufruct: Partial<UsufructProvision>
+  businessAssets: BusinessAssetDetail[]
+  jointWill: Partial<JointWillConfig>
+  scenarios: ComplexScenario[]
   sectionsComplete: SectionsComplete
   currentSection: WillSection
 }
@@ -162,6 +227,12 @@ export interface WillActions {
   addBequest: (bequest: Bequest) => void
   removeBequest: (id: string) => void
   updateResidue: (data: Partial<ResidueInfo>) => void
+  updateTrustProvisions: (data: Partial<TrustProvisions>) => void
+  updateUsufruct: (data: Partial<UsufructProvision>) => void
+  addBusinessAsset: (asset: BusinessAssetDetail) => void
+  removeBusinessAsset: (id: string) => void
+  updateJointWill: (data: Partial<JointWillConfig>) => void
+  setScenarios: (scenarios: ComplexScenario[]) => void
   markSectionComplete: (section: string) => void
   setCurrentSection: (section: WillSection) => void
   resetWill: () => void
