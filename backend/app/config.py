@@ -35,6 +35,10 @@ class Settings(BaseSettings):
     OPENAI_API_KEY: str = ""
     OPENAI_MODEL: str = "gpt-4o-mini"
 
+    # Gemini (verification layer)
+    GEMINI_API_KEY: str = ""
+    GEMINI_MODEL: str = "gemini-2.5-flash"
+
     # Application
     APP_NAME: str = "WillCraft SA"
     APP_VERSION: str = "0.1.0"

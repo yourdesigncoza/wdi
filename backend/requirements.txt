@@ -8,6 +8,7 @@ httpx>=0.28.0
 PyJWT[crypto]>=2.8.0
 Jinja2>=3.1.0
 openai>=1.60.0
+google-genai>=1.62.0
 sse-starlette>=2.0.0
 
 # Testing
