@@ -99,6 +99,20 @@ class Will(SQLModel, table=True):
         sa_column=Column(JSONB, nullable=False, server_default="'[]'"),
     )
 
+    # Verification
+    verification_result: dict | None = Field(
+        default=None,
+        sa_column=Column(JSONB, nullable=True),
+    )
+    verified_at: datetime | None = Field(
+        default=None,
+        sa_column=Column(DateTime(timezone=True), nullable=True),
+    )
+    acknowledged_warnings: list = Field(
+        default_factory=list,
+        sa_column=Column(JSONB, nullable=False, server_default="'[]'"),
+    )
+
     # Section completion tracking
     sections_complete: dict = Field(
         default_factory=lambda: {
