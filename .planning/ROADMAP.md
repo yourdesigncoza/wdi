@@ -16,7 +16,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [ ] **Phase 2: Authentication** - User registration, email verification, login, password reset via Clerk
 - [x] **Phase 02.1: DaisyUI Integration** - Install DaisyUI v5, configure themes, migrate existing components (INSERTED)
 - [x] **Phase 3: Core Will Conversation** - Basic will questionnaire with AI guidance, data collection, real-time explanations
-- [ ] **Phase 4: Complex Estate Scenarios** - Blended families, trusts, usufruct, business assets, joint wills
+- [x] **Phase 4: Complex Estate Scenarios** - Blended families, trusts, usufruct, business assets, joint wills
 - [ ] **Phase 5: AI Verification** - Dual-LLM verification layer (Gemini checks OpenAI), estate logic validation
 - [ ] **Phase 6: Document Generation** - PDF generation with WeasyPrint, witness instructions, preview, disclaimers
 - [ ] **Phase 7: Payment & Download** - PayFast integration, payment gate, download links, email backup
@@ -114,11 +114,11 @@ Plans:
 **Plans**: 5 plans in 3 waves
 
 Plans:
-- [ ] 04-01-PLAN.md — Backend foundation: migration 004, Will model, schemas, scenario detector, API
-- [ ] 04-02-PLAN.md — Frontend foundation: types, Zustand store, Zod schemas, scenario hook
-- [ ] 04-03-PLAN.md — AI prompts, extraction models, UPL filter patterns, clause seeds
-- [ ] 04-04-PLAN.md — Complex section UI components (trust, usufruct, business, joint)
-- [ ] 04-05-PLAN.md — Wizard integration: scenario detector, conditional sections, review updates
+- [x] 04-01-PLAN.md — Backend foundation: migration 004, Will model, schemas, scenario detector, API
+- [x] 04-02-PLAN.md — Frontend foundation: types, Zustand store, Zod schemas, scenario hook
+- [x] 04-03-PLAN.md — AI prompts, extraction models, UPL filter patterns, clause seeds
+- [x] 04-04-PLAN.md — Complex section UI components (trust, usufruct, business, joint)
+- [x] 04-05-PLAN.md — Wizard integration: scenario detector, conditional sections, review updates
 
 ### Phase 5: AI Verification
 **Goal**: Dual-LLM system verifies document completeness and legal compliance before generation
