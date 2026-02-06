@@ -197,3 +197,48 @@ export function getConversationHistory(
 ): Promise<ConversationHistoryResponse> {
   return request(`/conversation/${willId}/${section}`)
 }
+
+// ── Verification API ─────────────────────────────────────────────────
+
+export interface VerificationResponseData {
+  overall_status: 'pass' | 'warning' | 'error'
+  sections: {
+    section: string
+    status: 'pass' | 'warning' | 'error'
+    issues: {
+      code: string
+      severity: 'error' | 'warning' | 'info'
+      section: string
+      title: string
+      explanation: string
+      suggestion: string
+    }[]
+  }[]
+  attorney_referral: { recommended: boolean; reasons: string[] }
+  summary: string
+  verified_at: string
+  has_blocking_errors: boolean
+}
+
+export interface AcknowledgeWarningsResponseData {
+  acknowledged: string[]
+  can_proceed: boolean
+}
+
+/** Retrieve the last verification result for a will */
+export function getVerificationResult(
+  willId: string,
+): Promise<VerificationResponseData> {
+  return request(`/wills/${willId}/verification`)
+}
+
+/** Acknowledge warning-level verification issues */
+export function acknowledgeWarnings(
+  willId: string,
+  warningCodes: string[],
+): Promise<AcknowledgeWarningsResponseData> {
+  return request(`/wills/${willId}/acknowledge-warnings`, {
+    method: 'POST',
+    body: JSON.stringify({ warning_codes: warningCodes }),
+  })
+}
