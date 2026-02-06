@@ -63,6 +63,20 @@ SECTION_PROMPTS: dict[str, str] = {
         "specific bequests. Ask for: who gets the residue, in what "
         "proportions."
     ),
+    "review": (
+        "You are reviewing the user's complete will. Walk through ALL sections "
+        "in plain, friendly language. "
+        "Narrate the will as if telling a story: 'You, [name], have decided that...' "
+        "Use phrases like 'your estate goes to', 'if [person] passes before you', "
+        "'your home at [address]'. "
+        "NEVER use legal jargon, data tables, or bullet-point lists. Make it "
+        "conversational and readable. "
+        "After narrating, ask: 'Does everything look right? Would you like to "
+        "change anything?' "
+        "If the user requests changes, acknowledge their request and suggest "
+        "which section to navigate to. "
+        "Do NOT make changes yourself -- guide the user to the appropriate section."
+    ),
 }
 
 

@@ -5,6 +5,7 @@ import { StepIndicator } from './StepIndicator.tsx'
 import { PersonalForm } from './PersonalForm.tsx'
 import { MaritalForm } from './MaritalForm.tsx'
 import { ChatSection } from './ChatSection.tsx'
+import { ReviewChat } from './ReviewChat.tsx'
 import { createWill } from '../../../services/api.ts'
 import type { WillSection } from '../types/will.ts'
 
@@ -34,16 +35,6 @@ function PersonalSection() {
   return <MaritalForm />
 }
 
-/** Placeholder for sections that will be built in later plans */
-function SectionPlaceholder({ section }: { section: WillSection }) {
-  return (
-    <div className="text-center py-12">
-      <p className="text-base-content/50 text-lg">
-        {section.charAt(0).toUpperCase() + section.slice(1)} section coming soon...
-      </p>
-    </div>
-  )
-}
 
 export function WillWizard() {
   const currentSection = useWillStore((s) => s.currentSection)
@@ -69,12 +60,20 @@ export function WillWizard() {
     }
   }, [willId, setWillId])
 
-  // When switching to an AI section, ensure a will exists
+  // When switching to an AI or review section, ensure a will exists
   useEffect(() => {
-    if (AI_SECTIONS.has(currentSection)) {
+    if (AI_SECTIONS.has(currentSection) || currentSection === 'review') {
       void ensureWillExists()
     }
   }, [currentSection, ensureWillExists])
+
+  /** Navigate from review back to a specific section for editing */
+  const handleNavigateToSection = useCallback(
+    (section: WillSection) => {
+      setCurrentSection(section)
+    },
+    [setCurrentSection],
+  )
 
   function renderSection(section: WillSection) {
     if (section === 'personal') {
@@ -83,7 +82,6 @@ export function WillWizard() {
 
     if (AI_SECTIONS.has(section)) {
       if (!willId) {
-        // Will is being created -- show a brief loading state
         return (
           <div className="flex justify-center py-12">
             <span className="loading loading-spinner loading-md" />
@@ -93,13 +91,29 @@ export function WillWizard() {
       return <ChatSection section={section} willId={willId} />
     }
 
-    // Review and any future sections
-    return <SectionPlaceholder section={section} />
+    if (section === 'review') {
+      if (!willId) {
+        return (
+          <div className="flex justify-center py-12">
+            <span className="loading loading-spinner loading-md" />
+          </div>
+        )
+      }
+      return (
+        <ReviewChat
+          willId={willId}
+          onNavigateToSection={handleNavigateToSection}
+        />
+      )
+    }
+
+    return null
   }
 
-  // AI sections need full height for the chat interface;
+  // AI and review sections need full height for the chat interface;
   // form sections keep the card wrapper for a contained feel
-  const isAISection = AI_SECTIONS.has(currentSection) && !!willId
+  const isChatSection =
+    (AI_SECTIONS.has(currentSection) || currentSection === 'review') && !!willId
 
   return (
     <div className="min-h-screen bg-base-200">
@@ -109,7 +123,7 @@ export function WillWizard() {
           onNavigate={setCurrentSection}
         />
 
-        {isAISection ? (
+        {isChatSection ? (
           <div className="card bg-base-100 shadow-sm">
             <div className="card-body p-4 sm:p-6">
               {renderSection(currentSection)}
