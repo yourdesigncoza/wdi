@@ -52,56 +52,56 @@ def upgrade() -> None:
             "testator",
             postgresql.JSONB,
             nullable=False,
-            server_default="'{}'",
+            server_default="{}",
         ),
         sa.Column(
             "marital",
             postgresql.JSONB,
             nullable=False,
-            server_default="'{}'",
+            server_default="{}",
         ),
         sa.Column(
             "beneficiaries",
             postgresql.JSONB,
             nullable=False,
-            server_default="'[]'",
+            server_default="[]",
         ),
         sa.Column(
             "assets",
             postgresql.JSONB,
             nullable=False,
-            server_default="'[]'",
+            server_default="[]",
         ),
         sa.Column(
             "guardians",
             postgresql.JSONB,
             nullable=False,
-            server_default="'[]'",
+            server_default="[]",
         ),
         sa.Column(
             "executor",
             postgresql.JSONB,
             nullable=False,
-            server_default="'{}'",
+            server_default="{}",
         ),
         sa.Column(
             "bequests",
             postgresql.JSONB,
             nullable=False,
-            server_default="'[]'",
+            server_default="[]",
         ),
         sa.Column(
             "residue",
             postgresql.JSONB,
             nullable=False,
-            server_default="'{}'",
+            server_default="{}",
         ),
         # Section completion tracking
         sa.Column(
             "sections_complete",
             postgresql.JSONB,
             nullable=False,
-            server_default="'{}'",
+            server_default="{}",
         ),
         # Timestamps
         sa.Column(
@@ -134,7 +134,7 @@ def upgrade() -> None:
             "messages",
             postgresql.JSONB,
             nullable=False,
-            server_default="'[]'",
+            server_default="[]",
         ),
         # Timestamps
         sa.Column(
