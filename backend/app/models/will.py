@@ -77,6 +77,28 @@ class Will(SQLModel, table=True):
         sa_column=Column(JSONB, nullable=False, server_default="'{}'"),
     )
 
+    # Complex estate scenario sections (JSONB)
+    trust_provisions: dict = Field(
+        default_factory=dict,
+        sa_column=Column(JSONB, nullable=False, server_default="'{}'"),
+    )
+    usufruct: dict = Field(
+        default_factory=dict,
+        sa_column=Column(JSONB, nullable=False, server_default="'{}'"),
+    )
+    business_assets: list = Field(
+        default_factory=list,
+        sa_column=Column(JSONB, nullable=False, server_default="'[]'"),
+    )
+    joint_will: dict = Field(
+        default_factory=dict,
+        sa_column=Column(JSONB, nullable=False, server_default="'{}'"),
+    )
+    scenarios: list = Field(
+        default_factory=list,
+        sa_column=Column(JSONB, nullable=False, server_default="'[]'"),
+    )
+
     # Section completion tracking
     sections_complete: dict = Field(
         default_factory=lambda: {
@@ -87,6 +109,10 @@ class Will(SQLModel, table=True):
             "executor": False,
             "bequests": False,
             "residue": False,
+            "trust": False,
+            "usufruct": False,
+            "business": False,
+            "joint": False,
         },
         sa_column=Column(JSONB, nullable=False, server_default="'{}'"),
     )
