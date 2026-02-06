@@ -51,15 +51,15 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **AI-02**: AI provides real-time explanations of legal terms and concepts
 - [x] **AI-03**: AI handles "I don't know" responses gracefully with follow-up questions
 - [x] **AI-04**: AI validates inputs and catches potential errors
-- [ ] **AI-05**: Secondary LLM verifies document completeness before generation
+- [x] **AI-05**: Secondary LLM verifies document completeness before generation
 
 ### Complex Scenarios
 
-- [ ] **CMPLX-01**: User can create will with blended family scenarios (step-children, multiple marriages)
-- [ ] **CMPLX-02**: User can create testamentary trust provisions (protect minor children's inheritance)
-- [ ] **CMPLX-03**: User can add usufruct provisions (spouse keeps home, children inherit)
-- [ ] **CMPLX-04**: User can handle business assets (CC member interests, company shares)
-- [ ] **CMPLX-05**: User can create joint will with spouse (mutual or mirror wills)
+- [x] **CMPLX-01**: User can create will with blended family scenarios (step-children, multiple marriages)
+- [x] **CMPLX-02**: User can create testamentary trust provisions (protect minor children's inheritance)
+- [x] **CMPLX-03**: User can add usufruct provisions (spouse keeps home, children inherit)
+- [x] **CMPLX-04**: User can handle business assets (CC member interests, company shares)
+- [x] **CMPLX-05**: User can create joint will with spouse (mutual or mirror wills)
 
 ### Additional Documents
 
@@ -145,12 +145,12 @@ Which phases cover which requirements. Updated during roadmap creation.
 | AI-02 | Phase 3 | Complete |
 | AI-03 | Phase 3 | Complete |
 | AI-04 | Phase 3 | Complete |
-| AI-05 | Phase 5 | Pending |
-| CMPLX-01 | Phase 4 | Pending |
-| CMPLX-02 | Phase 4 | Pending |
-| CMPLX-03 | Phase 4 | Pending |
-| CMPLX-04 | Phase 4 | Pending |
-| CMPLX-05 | Phase 4 | Pending |
+| AI-05 | Phase 5 | Complete |
+| CMPLX-01 | Phase 4 | Complete |
+| CMPLX-02 | Phase 4 | Complete |
+| CMPLX-03 | Phase 4 | Complete |
+| CMPLX-04 | Phase 4 | Complete |
+| CMPLX-05 | Phase 4 | Complete |
 | ADOC-01 | Phase 9 | Pending |
 | ADOC-02 | Phase 9 | Pending |
 
@@ -161,4 +161,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-02-05*
-*Last updated: 2026-02-06 after Phase 3 completion*
+*Last updated: 2026-02-06 after Phase 5 completion*
