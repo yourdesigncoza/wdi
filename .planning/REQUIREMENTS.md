@@ -38,10 +38,10 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Legal Compliance
 
-- [ ] **COMP-01**: User must accept POPIA consent before starting
-- [ ] **COMP-02**: Privacy policy clearly explains data handling
-- [ ] **COMP-03**: Information Officer contact details are displayed
-- [ ] **COMP-04**: User can request data access, correction, or deletion
+- [x] **COMP-01**: User must accept POPIA consent before starting
+- [x] **COMP-02**: Privacy policy clearly explains data handling
+- [x] **COMP-03**: Information Officer contact details are displayed
+- [x] **COMP-04**: User can request data access, correction, or deletion
 - [ ] **COMP-05**: Disclaimers clearly state "not legal advice" at key touchpoints
 - [ ] **COMP-06**: System recommends attorney review for complex scenarios
 
@@ -135,10 +135,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DOC-04 | Phase 7 | Pending |
 | DOC-05 | Phase 7 | Pending |
 | DOC-06 | Phase 7 | Pending |
-| COMP-01 | Phase 1 | Pending |
-| COMP-02 | Phase 1 | Pending |
-| COMP-03 | Phase 1 | Pending |
-| COMP-04 | Phase 1 | Pending |
+| COMP-01 | Phase 1 | Complete |
+| COMP-02 | Phase 1 | Complete |
+| COMP-03 | Phase 1 | Complete |
+| COMP-04 | Phase 1 | Complete |
 | COMP-05 | Phase 6 | Pending |
 | COMP-06 | Phase 6 | Pending |
 | AI-01 | Phase 3 | Pending |

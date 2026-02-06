@@ -1,0 +1,171 @@
+"""Conversation endpoints for AI-guided will creation.
+
+POST /api/conversation/stream  -- SSE streaming conversation with AI
+GET  /api/conversation/{will_id}/{section}  -- Retrieve conversation history
+POST /api/conversation/{will_id}/{section}/extract  -- Extract will data from conversation
+"""
+
+import logging
+import uuid
+
+from fastapi import APIRouter, Depends, HTTPException, Request
+from sse_starlette.sse import EventSourceResponse
+from sqlmodel.ext.asyncio.session import AsyncSession
+
+from app.database import get_session
+from app.schemas.conversation import (
+    ConversationRequest,
+    ConversationResponse,
+    ExtractionResponse,
+    MessageSchema,
+)
+from app.services.conversation_service import (
+    ConversationService,
+    get_conversation_service,
+)
+
+logger = logging.getLogger(__name__)
+
+router = APIRouter(prefix="/api/conversation", tags=["conversation"])
+
+
+@router.post("/stream")
+async def stream_conversation(
+    request: Request,
+    body: ConversationRequest,
+    service: ConversationService = Depends(get_conversation_service),
+):
+    """Stream an AI conversation response via Server-Sent Events.
+
+    Dual-event pattern:
+    - ``delta`` events carry text chunks as they arrive from OpenAI
+    - ``filtered`` event (if UPL filter activates) carries replacement text
+    - ``done`` event signals the response is complete
+
+    Requires authenticated user (set by ClerkAuthMiddleware on request.state.user).
+    Verifies will ownership before allowing conversation access.
+    """
+    # Extract user identity from auth middleware
+    user = getattr(request.state, "user", None)
+    if user is None:
+        raise HTTPException(status_code=401, detail="Authentication required")
+
+    user_id = user.get("id") if isinstance(user, dict) else getattr(user, "id", None)
+    if user_id is None:
+        raise HTTPException(status_code=401, detail="User identity not available")
+
+    # Ensure user_id is a UUID
+    if isinstance(user_id, str):
+        user_id = uuid.UUID(user_id)
+
+    # Verify will ownership
+    will_doc = await service.get_will_for_user(body.will_id, user_id)
+    if will_doc is None:
+        raise HTTPException(status_code=404, detail="Will not found")
+
+    # Extract the latest user message from the request
+    user_messages = [m for m in body.messages if m.role == "user"]
+    if not user_messages:
+        raise HTTPException(status_code=400, detail="No user message provided")
+
+    latest_user_message = user_messages[-1].content
+
+    async def event_generator():
+        async for event in service.stream_ai_response(
+            will_id=body.will_id,
+            section=body.current_section,
+            user_message=latest_user_message,
+            will_context=body.will_context,
+        ):
+            # Check if client disconnected
+            if await request.is_disconnected():
+                logger.info("Client disconnected during streaming")
+                break
+            yield event
+
+    return EventSourceResponse(event_generator())
+
+
+@router.get("/{will_id}/{section}", response_model=ConversationResponse)
+async def get_conversation_history(
+    will_id: uuid.UUID,
+    section: str,
+    request: Request,
+    service: ConversationService = Depends(get_conversation_service),
+):
+    """Retrieve conversation history for a will+section.
+
+    Returns all messages in chronological order. Used when the user
+    navigates back to a previously visited section.
+    """
+    user = getattr(request.state, "user", None)
+    if user is None:
+        raise HTTPException(status_code=401, detail="Authentication required")
+
+    user_id = user.get("id") if isinstance(user, dict) else getattr(user, "id", None)
+    if user_id is None:
+        raise HTTPException(status_code=401, detail="User identity not available")
+
+    if isinstance(user_id, str):
+        user_id = uuid.UUID(user_id)
+
+    # Verify will ownership
+    will_doc = await service.get_will_for_user(will_id, user_id)
+    if will_doc is None:
+        raise HTTPException(status_code=404, detail="Will not found")
+
+    conversation = await service.get_or_create_conversation(will_id, section)
+
+    messages = [
+        MessageSchema(
+            role=msg["role"],
+            content=msg["content"],
+            timestamp=msg.get("timestamp"),
+        )
+        for msg in (conversation.messages or [])
+    ]
+
+    return ConversationResponse(
+        will_id=will_id,
+        section=section,
+        messages=messages,
+    )
+
+
+@router.post("/{will_id}/{section}/extract", response_model=ExtractionResponse)
+async def extract_will_data(
+    will_id: uuid.UUID,
+    section: str,
+    request: Request,
+    service: ConversationService = Depends(get_conversation_service),
+):
+    """Extract structured will data from the conversation for a section.
+
+    Triggers OpenAI Structured Output parsing on the latest conversation
+    messages to extract beneficiaries, assets, guardians, executor, etc.
+    """
+    user = getattr(request.state, "user", None)
+    if user is None:
+        raise HTTPException(status_code=401, detail="Authentication required")
+
+    user_id = user.get("id") if isinstance(user, dict) else getattr(user, "id", None)
+    if user_id is None:
+        raise HTTPException(status_code=401, detail="User identity not available")
+
+    if isinstance(user_id, str):
+        user_id = uuid.UUID(user_id)
+
+    # Verify will ownership
+    will_doc = await service.get_will_for_user(will_id, user_id)
+    if will_doc is None:
+        raise HTTPException(status_code=404, detail="Will not found")
+
+    extracted = await service.extract_data_from_conversation(will_id, section)
+
+    if extracted is None:
+        return ExtractionResponse(extracted={}, has_data=False)
+
+    return ExtractionResponse(
+        extracted=extracted.model_dump(),
+        has_data=True,
+    )

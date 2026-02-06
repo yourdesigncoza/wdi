@@ -21,6 +21,14 @@ Thumbs.db
 .env.*
 !.env.example
 
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+*.egg
+.eggs/
+*.whl
+
 # Dependencies
 node_modules/
 vendor/
@@ -35,14 +43,6 @@ build/
 *.log
 debug.log
 error.log
-
-# WordPress uploads & cache (if applicable)
-wp-content/uploads/
-wp-content/cache/
-wp-content/upgrade/
-
-# PHP
-*.phar
 
 # Archives
 *.zip

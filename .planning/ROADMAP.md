@@ -12,8 +12,9 @@ WillCraft SA delivers an AI-powered will generation platform for South Africa. T
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Foundation & Compliance** - Database, POPIA infrastructure, UPL prevention architecture, clause library
+- [x] **Phase 1: Foundation & Compliance** - Database, POPIA infrastructure, UPL prevention architecture, clause library
 - [ ] **Phase 2: Authentication** - User registration, email verification, login, password reset via Clerk
+- [x] **Phase 02.1: DaisyUI Integration** - Install DaisyUI v5, configure themes, migrate existing components (INSERTED)
 - [ ] **Phase 3: Core Will Conversation** - Basic will questionnaire with AI guidance, data collection, real-time explanations
 - [ ] **Phase 4: Complex Estate Scenarios** - Blended families, trusts, usufruct, business assets, joint wills
 - [ ] **Phase 5: AI Verification** - Dual-LLM verification layer (Gemini checks OpenAI), estate logic validation
@@ -37,14 +38,14 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: 5 plans in 3 waves
 
 Plans:
-- [ ] 01-01-PLAN.md — PostgreSQL schema and migrations (consent, clauses, audit)
-- [ ] 01-02-PLAN.md — FastAPI with POPIA consent middleware and endpoints
-- [ ] 01-03-PLAN.md — React app with blocking consent modal
-- [ ] 01-04-PLAN.md — Clause library service with version control
-- [ ] 01-05-PLAN.md — UPL filter for AI output compliance
+- [x] 01-01-PLAN.md — PostgreSQL schema and migrations (consent, clauses, audit)
+- [x] 01-02-PLAN.md — FastAPI with POPIA consent middleware and endpoints
+- [x] 01-03-PLAN.md — React app with blocking consent modal
+- [x] 01-04-PLAN.md — Clause library service with version control
+- [x] 01-05-PLAN.md — UPL filter for AI output compliance
 
 ### Phase 2: Authentication
-**Goal**: Users can securely create accounts and access the platform
+**Goal**: Users can securely create accounts and access the platform via Clerk
 **Depends on**: Phase 1
 **Requirements**: AUTH-01, AUTH-02, AUTH-03, AUTH-04
 **Success Criteria** (what must be TRUE):
@@ -52,12 +53,28 @@ Plans:
   2. User receives verification email after registration
   3. User can log in and stay logged in across browser sessions
   4. User can reset forgotten password via email link
-**Plans**: TBD
+**Plans**: 2 plans in 1 wave
 
 Plans:
-- [ ] 02-01: Clerk integration (React frontend)
-- [ ] 02-02: Clerk middleware (FastAPI backend)
-- [ ] 02-03: User session and state management
+- [ ] 02-01-PLAN.md — Clerk React integration (ClerkProvider, auth UI, authenticated API client)
+- [x] 02-02-PLAN.md — FastAPI Clerk middleware (JWKS verification, User model, dual-gate enforcement)
+
+### Phase 02.1: DaisyUI Integration (INSERTED)
+**Goal**: Install DaisyUI v5 component library and migrate existing frontend components to DaisyUI classes for consistent, themeable UI before building conversation interface
+**Depends on**: Phase 2
+**Requirements**: UI consistency, theme support, component standardization
+**Success Criteria** (what must be TRUE):
+  1. DaisyUI v5 installed and configured with Tailwind CSS v4 via @plugin directive
+  2. Theme system configured with appropriate light/dark themes
+  3. Existing components (ConsentModal, auth UI, layout) migrated to DaisyUI classes
+  4. All existing functionality preserved after migration (no regressions)
+  5. Design tokens and component patterns documented for Phase 3+ development
+**Plans**: 3 plans in 2 waves
+
+Plans:
+- [x] 02.1-01-PLAN.md — Install DaisyUI, configure themes, create ThemeToggle, migrate App.tsx
+- [x] 02.1-02-PLAN.md — Migrate ConsentModal, PrivacyPolicy, InfoOfficerContact to DaisyUI
+- [x] 02.1-03-PLAN.md — Fix theme init on new tabs and back button fallback navigation (gap closure)
 
 ### Phase 3: Core Will Conversation
 **Goal**: Users can create a basic will through AI-guided conversation
@@ -72,15 +89,17 @@ Plans:
   6. User can specify specific bequests and residual estate distribution
   7. AI explains legal terms and concepts in plain language when asked
   8. AI handles uncertain responses gracefully with follow-up questions
-**Plans**: TBD
+**Plans**: 8 plans in 4 waves
 
 Plans:
-- [ ] 03-01: OpenAI service with SA will-drafting prompts
-- [ ] 03-02: Conversation API endpoints
-- [ ] 03-03: React conversation/wizard UI
-- [ ] 03-04: Will data model and JSONB storage
-- [ ] 03-05: Input validation and error handling
-- [ ] 03-06: Mobile-responsive design
+- [ ] 03-01-PLAN.md — Will data model, Pydantic schemas, Alembic migration 003
+- [ ] 03-02-PLAN.md — OpenAI service with system prompts and extraction schemas (TDD)
+- [ ] 03-03-PLAN.md — Frontend foundation: Zustand store, types, Zod schemas, dependencies
+- [ ] 03-04-PLAN.md — Will CRUD service and API endpoints
+- [ ] 03-05-PLAN.md — Conversation service with SSE streaming and UPL filtering
+- [ ] 03-06-PLAN.md — Wizard shell, step indicator, personal/marital forms
+- [ ] 03-07-PLAN.md — Chat UI with SSE streaming hook and DaisyUI chat bubbles
+- [ ] 03-08-PLAN.md — Section review, will preview, mobile verification (checkpoint)
 
 ### Phase 4: Complex Estate Scenarios
 **Goal**: Users can handle advanced estate planning situations
@@ -190,14 +209,15 @@ Plans:
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9
+Phases execute in numeric order: 1 -> 2 -> 2.1 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9
 Note: Phase 9 depends only on Phase 6, can potentially run in parallel with Phases 7-8.
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation & Compliance | 0/5 | Planned | - |
-| 2. Authentication | 0/3 | Not started | - |
-| 3. Core Will Conversation | 0/6 | Not started | - |
+| 1. Foundation & Compliance | 5/5 | Complete | 2026-02-06 |
+| 2. Authentication | 1/2 | In progress | - |
+| 02.1 DaisyUI Integration | 3/3 | Complete | 2026-02-06 |
+| 3. Core Will Conversation | 0/8 | Not started | - |
 | 4. Complex Estate Scenarios | 0/5 | Not started | - |
 | 5. AI Verification | 0/4 | Not started | - |
 | 6. Document Generation | 0/5 | Not started | - |
@@ -207,5 +227,5 @@ Note: Phase 9 depends only on Phase 6, can potentially run in parallel with Phas
 
 ---
 *Roadmap created: 2026-02-05*
-*Depth: Comprehensive (9 phases, 40 plans)*
+*Depth: Comprehensive (9 phases, 39 plans)*
 *Requirements coverage: 35/35 (100%)*
