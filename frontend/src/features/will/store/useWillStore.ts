@@ -10,6 +10,11 @@ import type {
   MaritalInfo,
   ResidueInfo,
   Testator,
+  TrustProvisions,
+  UsufructProvision,
+  BusinessAssetDetail,
+  JointWillConfig,
+  ComplexScenario,
   WillActions,
   WillSection,
   WillState,
@@ -25,6 +30,11 @@ const initialState: WillState = {
   executor: {},
   bequests: [],
   residue: {},
+  trustProvisions: {},
+  usufruct: {},
+  businessAssets: [],
+  jointWill: {},
+  scenarios: [],
   sectionsComplete: {
     personal: false,
     beneficiaries: false,
@@ -33,6 +43,10 @@ const initialState: WillState = {
     executor: false,
     bequests: false,
     residue: false,
+    trust: false,
+    usufruct: false,
+    business: false,
+    joint: false,
   },
   currentSection: 'personal',
 }
@@ -113,6 +127,36 @@ export const useWillStore = create<WillState & WillActions>()(
       updateResidue: (data: Partial<ResidueInfo>) =>
         set((state) => {
           Object.assign(state.residue, data)
+        }),
+
+      updateTrustProvisions: (data: Partial<TrustProvisions>) =>
+        set((state) => {
+          Object.assign(state.trustProvisions, data)
+        }),
+
+      updateUsufruct: (data: Partial<UsufructProvision>) =>
+        set((state) => {
+          Object.assign(state.usufruct, data)
+        }),
+
+      addBusinessAsset: (asset: BusinessAssetDetail) =>
+        set((state) => {
+          state.businessAssets.push(asset)
+        }),
+
+      removeBusinessAsset: (id: string) =>
+        set((state) => {
+          state.businessAssets = state.businessAssets.filter((b) => b.id !== id)
+        }),
+
+      updateJointWill: (data: Partial<JointWillConfig>) =>
+        set((state) => {
+          Object.assign(state.jointWill, data)
+        }),
+
+      setScenarios: (scenarios: ComplexScenario[]) =>
+        set((state) => {
+          state.scenarios = scenarios
         }),
 
       markSectionComplete: (section: string) =>
