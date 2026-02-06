@@ -129,13 +129,13 @@ Plans:
   2. System catches inconsistencies between collected data and generated clauses
   3. User sees clear verification status before proceeding to generation
   4. Complex estates trigger appropriate warnings or attorney referrals
-**Plans**: TBD
+**Plans**: 4 plans in 3 waves
 
 Plans:
-- [ ] 05-01: Gemini service integration
-- [ ] 05-02: Estate logic validator with SA Wills Act rules
-- [ ] 05-03: Verification API and UI
-- [ ] 05-04: Attorney handoff triggers
+- [ ] 05-01-PLAN.md — Gemini SDK setup, config, Will model verification columns, migration 005
+- [ ] 05-02-PLAN.md — Verification Pydantic schemas and SA Wills Act rules/prompts
+- [ ] 05-03-PLAN.md — Verification service (Gemini + OpenAI fallback) and API endpoints
+- [ ] 05-04-PLAN.md — Frontend verification UI, SSE hook, wizard integration (checkpoint)
 
 ### Phase 6: Document Generation
 **Goal**: Users can generate and preview professionally formatted PDF will documents
