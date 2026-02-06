@@ -83,6 +83,7 @@ Recent decisions affecting current work:
 - D-0305-02: Dual-event SSE pattern: delta events during streaming, filtered/done events after UPL check
 - D-0305-03: UPL-filtered text persisted as assistant message (not original) when filter activates
 - D-0402-01: Complex sections added to WILL_SECTIONS before review, conditionally shown by wizard
+- D-0403-01: Added BUSINESS and JOINT to ClauseCategory enum for proper clause categorization
 
 ### Pending Todos
 
