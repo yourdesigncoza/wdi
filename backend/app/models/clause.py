@@ -5,7 +5,7 @@ from datetime import datetime, timezone
 from enum import Enum
 from typing import Optional
 
-from sqlalchemy import Column, DateTime, Index
+from sqlalchemy import Column, DateTime, Index, String
 from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlmodel import Field, SQLModel
 
@@ -56,7 +56,7 @@ class Clause(SQLModel, table=True):
     # Identification
     code: str = Field(max_length=50)  # e.g. "EXEC-01", "BENEF-02"
     name: str = Field(max_length=200)
-    category: ClauseCategory
+    category: ClauseCategory = Field(sa_column=Column(String(50), nullable=False))
 
     # Version control
     version: int = Field(default=1)
