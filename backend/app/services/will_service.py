@@ -162,6 +162,62 @@ class WillService:
         await self._session.refresh(will)
         return will
 
+    async def update_current_section(
+        self, will_id: uuid.UUID, user_id: uuid.UUID, section: str
+    ) -> Will:
+        """Update the user's current wizard section for save/resume.
+
+        Accepts any valid data section or wizard navigation step.
+        """
+        allowed = VALID_SECTIONS | {
+            "personal",
+            "review",
+            "verification",
+            "document",
+            "payment",
+        }
+        if section not in allowed:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Invalid section '{section}'. Must be one of: {', '.join(sorted(allowed))}",
+            )
+
+        will = await self._get_will_for_user(will_id, user_id)
+        will.current_section = section
+        will.updated_at = datetime.now(timezone.utc)
+        self._session.add(will)
+        await self._session.flush()
+        await self._session.refresh(will)
+        return will
+
+    async def regenerate_will(
+        self, will_id: uuid.UUID, user_id: uuid.UUID
+    ) -> Will:
+        """Prepare a paid will for regeneration after post-purchase edits.
+
+        Requires that the will has been paid for and is currently verified.
+        Increments the version counter and resets status to 'generated'.
+        """
+        will = await self._get_will_for_user(will_id, user_id)
+
+        if will.paid_at is None:
+            raise HTTPException(
+                status_code=402, detail="Payment required"
+            )
+        if will.status != "verified":
+            raise HTTPException(
+                status_code=400,
+                detail="Will must be re-verified before regeneration",
+            )
+
+        will.version += 1
+        will.status = "generated"
+        will.updated_at = datetime.now(timezone.utc)
+        self._session.add(will)
+        await self._session.flush()
+        await self._session.refresh(will)
+        return will
+
 
 async def get_will_service(
     session: AsyncSession = Depends(get_session),

@@ -219,6 +219,12 @@ class WillSectionUpdate(BaseModel):
     data: Any
 
 
+class CurrentSectionUpdate(BaseModel):
+    """Request body for updating the user's current wizard section."""
+
+    current_section: str
+
+
 class WillResponse(BaseModel):
     """Full will response for API output."""
 
@@ -226,6 +232,9 @@ class WillResponse(BaseModel):
     user_id: uuid.UUID
     will_type: str
     status: str
+    version: int = 1
+    current_section: str = "personal"
+    paid_at: Optional[datetime] = None
     testator: dict
     marital: dict
     beneficiaries: list

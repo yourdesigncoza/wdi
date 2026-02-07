@@ -6,6 +6,8 @@ GET    /api/wills/{will_id}                         -- Get specific will
 PATCH  /api/wills/{will_id}/sections/{section}      -- Update a section
 POST   /api/wills/{will_id}/sections/{section}/complete -- Mark section done
 GET    /api/wills/{will_id}/scenarios               -- Detect applicable scenarios
+PATCH  /api/wills/{will_id}/current-section         -- Update wizard position
+POST   /api/wills/{will_id}/regenerate              -- Regenerate paid will
 """
 
 import logging
@@ -15,11 +17,17 @@ from typing import Any
 from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import ValidationError
 
+from sqlmodel import select
+from sqlmodel.ext.asyncio.session import AsyncSession
+
+from app.database import get_session
+from app.models.payment import Payment
 from app.schemas.will import (
     AssetSchema,
     BeneficiarySchema,
     BequestSchema,
     BusinessAssetDetailSchema,
+    CurrentSectionUpdate,
     ExecutorSchema,
     GuardianSchema,
     JointWillSchema,
@@ -31,6 +39,7 @@ from app.schemas.will import (
     WillCreateRequest,
     WillResponse,
 )
+from app.services.download_service import generate_download_token
 from app.services.scenario_detector import ScenarioDetector
 from app.services.will_service import WillService, get_will_service
 
@@ -220,3 +229,61 @@ async def detect_scenarios(
     await service.update_section(will_id, user_id, "scenarios", detected)
 
     return {"scenarios": detected}
+
+
+@router.patch(
+    "/api/wills/{will_id}/current-section",
+    response_model=WillResponse,
+)
+async def update_current_section(
+    will_id: uuid.UUID,
+    body: CurrentSectionUpdate,
+    request: Request,
+    service: WillService = Depends(get_will_service),
+):
+    """Update the user's current wizard section for save/resume."""
+    user_id = _extract_user_id(request)
+    return await service.update_current_section(
+        will_id, user_id, body.current_section
+    )
+
+
+@router.post("/api/wills/{will_id}/regenerate")
+async def regenerate_will(
+    will_id: uuid.UUID,
+    request: Request,
+    service: WillService = Depends(get_will_service),
+    session: AsyncSession = Depends(get_session),
+):
+    """Regenerate a paid will after post-purchase edits.
+
+    Validates that the will has been paid for and is currently verified,
+    increments the version counter, and generates a fresh download token.
+    """
+    user_id = _extract_user_id(request)
+
+    # Validate paid_at + status and increment version
+    will = await service.regenerate_will(will_id, user_id)
+
+    # Find the most recent completed payment for this will
+    stmt = (
+        select(Payment)
+        .where(Payment.will_id == will_id)
+        .where(Payment.status == "completed")
+        .order_by(Payment.created_at.desc())  # type: ignore[union-attr]
+    )
+    result = await session.exec(stmt)
+    payment = result.first()
+
+    if payment is None:
+        raise HTTPException(
+            status_code=400, detail="No completed payment found"
+        )
+
+    # Generate fresh download token and update payment
+    new_token = generate_download_token(str(will_id), str(payment.id))
+    payment.download_token = new_token
+    session.add(payment)
+    await session.flush()
+
+    return {"download_token": new_token, "version": will.version}
