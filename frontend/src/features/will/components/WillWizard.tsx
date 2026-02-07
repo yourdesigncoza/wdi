@@ -13,7 +13,7 @@ import { BusinessAssetsSection } from './BusinessAssetsSection.tsx'
 import { JointWillSetup } from './JointWillSetup.tsx'
 import { VerificationPage } from './VerificationPage.tsx'
 import { DocumentPreviewPage } from './DocumentPreviewPage.tsx'
-import { createWill, updateWillSection } from '../../../services/api.ts'
+import { createWill, updateWillSection, extractConversationData } from '../../../services/api.ts'
 import type { WillSection } from '../types/will.ts'
 
 /** Convert camelCase keys to snake_case for backend Pydantic schemas */
@@ -182,14 +182,22 @@ export function WillWizard() {
   const markSectionComplete = useWillStore((s) => s.markSectionComplete)
 
   /** Advance to the next section in the dynamic sections list */
-  const handleNextSection = useCallback(() => {
+  const handleNextSection = useCallback(async () => {
+    // Trigger extraction for AI sections before advancing
+    if (willId && AI_SECTIONS.has(currentSection)) {
+      try {
+        await extractConversationData(willId, currentSection)
+      } catch (err) {
+        console.error('Extraction failed, continuing anyway:', err)
+      }
+    }
     markSectionComplete(currentSection)
     const currentIndex = sections.findIndex((s) => s.key === currentSection)
     const nextIndex = currentIndex + 1
     if (nextIndex < sections.length) {
       setCurrentSection(sections[nextIndex].key)
     }
-  }, [currentSection, sections, markSectionComplete, setCurrentSection])
+  }, [currentSection, sections, markSectionComplete, setCurrentSection, willId])
 
   /**
    * Determine if we should show the scenario detection interstitial.

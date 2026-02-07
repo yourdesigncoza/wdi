@@ -198,6 +198,16 @@ export function getConversationHistory(
   return request(`/conversation/${willId}/${section}`)
 }
 
+/** Trigger AI extraction for a conversation section and save to will JSONB */
+export function extractConversationData(
+  willId: string,
+  section: string,
+): Promise<{ extracted: Record<string, unknown>; has_data: boolean }> {
+  return request(`/conversation/${willId}/${section}/extract`, {
+    method: 'POST',
+  })
+}
+
 // ── Verification API ─────────────────────────────────────────────────
 
 export interface VerificationResponseData {

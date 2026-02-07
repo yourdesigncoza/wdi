@@ -152,6 +152,9 @@ async def extract_will_data(
     if extracted is None:
         return ExtractionResponse(extracted={}, has_data=False)
 
+    # Persist extracted data to will JSONB columns
+    await service.save_extracted_to_will(will_id, section, extracted)
+
     return ExtractionResponse(
         extracted=extracted.model_dump(),
         has_data=True,
