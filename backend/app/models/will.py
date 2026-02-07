@@ -113,6 +113,12 @@ class Will(SQLModel, table=True):
         sa_column=Column(JSONB, nullable=False, server_default="'[]'"),
     )
 
+    # Payment gating
+    paid_at: datetime | None = Field(
+        default=None,
+        sa_column=Column(DateTime(timezone=True), nullable=True),
+    )
+
     # Section completion tracking
     sections_complete: dict = Field(
         default_factory=lambda: {
