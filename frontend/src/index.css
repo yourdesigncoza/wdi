@@ -3,3 +3,4 @@
   themes: nord --default, business --prefersdark;
 }
 @source inline("chat chat-start chat-end chat-bubble chat-bubble-secondary chat-image chat-header chat-footer");
+@source inline("step-error step-warning step-secondary step-accent step-neutral");

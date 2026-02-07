@@ -12,9 +12,27 @@ interface StepIndicatorProps {
   onNavigate: (key: WillSection) => void
 }
 
+/** Maps each WillSection to its importance category DaisyUI step class */
+const SECTION_CATEGORY: Record<WillSection, string> = {
+  personal: 'step-error',
+  beneficiaries: 'step-warning',
+  assets: 'step-warning',
+  guardians: 'step-warning',
+  executor: 'step-secondary',
+  bequests: 'step-secondary',
+  residue: 'step-secondary',
+  trust: 'step-secondary',
+  usufruct: 'step-secondary',
+  business: 'step-secondary',
+  joint: 'step-secondary',
+  review: 'step-accent',
+  verification: 'step-accent',
+  document: 'step-accent',
+}
+
 function getStepClass(step: SectionStep): string {
-  if (step.isComplete) return 'step step-primary'
-  if (step.isCurrent) return 'step step-neutral'
+  if (step.isComplete) return 'step step-neutral'
+  if (step.isCurrent) return 'step ' + SECTION_CATEGORY[step.key]
   return 'step'
 }
 
