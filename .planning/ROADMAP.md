@@ -167,7 +167,7 @@ Plans:
 **Plans**: 4 plans in 4 waves
 
 Plans:
-- [ ] 07-01-PLAN.md — Payment model, migration 006, config settings, Pydantic schemas
+- [x] 07-01-PLAN.md — Payment model, migration 006, config settings, Pydantic schemas
 - [ ] 07-02-PLAN.md — PayFast service, download token service, email service + template
 - [ ] 07-03-PLAN.md — Payment API (initiate, ITN webhook, status) + download API endpoint
 - [ ] 07-04-PLAN.md — Frontend: PaymentPage, return/cancel/download pages, wizard integration (checkpoint)
@@ -218,8 +218,8 @@ Note: Phase 9 depends only on Phase 6, can potentially run in parallel with Phas
 | 3. Core Will Conversation | 8/8 | Complete | 2026-02-06 |
 | 4. Complex Estate Scenarios | 5/5 | Complete | 2026-02-06 |
 | 5. AI Verification | 4/4 | Complete | 2026-02-06 |
-| 6. Document Generation | 0/4 | Not started | - |
-| 7. Payment & Download | 0/4 | Not started | - |
+| 6. Document Generation | 4/4 | Complete | 2026-02-07 |
+| 7. Payment & Download | 1/4 | In progress | - |
 | 8. Post-Purchase Features | 0/4 | Not started | - |
 | 9. Additional Documents | 0/3 | Not started | - |
 
