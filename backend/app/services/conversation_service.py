@@ -198,6 +198,14 @@ class ConversationService:
         # Persist assistant message (filtered version if applicable)
         await self.add_message(conversation, "assistant", final_text)
 
+        # Auto-extract structured data and persist to will JSONB
+        try:
+            extracted = await self.extract_data_from_conversation(will_id, section)
+            if extracted is not None:
+                await self.save_extracted_to_will(will_id, section, extracted)
+        except Exception as exc:
+            logger.warning("Auto-extraction failed for will %s section %s: %s", will_id, section, exc)
+
         yield {
             "event": "done",
             "data": json.dumps({"complete": True}),
@@ -236,6 +244,58 @@ class ConversationService:
             conversation_history=history,
             latest_message=latest_user_message,
         )
+
+    async def save_extracted_to_will(
+        self,
+        will_id: uuid.UUID,
+        section: str,
+        extracted: ExtractedWillData,
+    ) -> None:
+        """Persist extracted conversation data to the will's JSONB section columns.
+
+        Maps the flat ExtractedWillData fields to the correct will section column
+        based on the current conversation section. Only updates if extracted data
+        is non-empty to avoid overwriting existing data with blanks.
+        """
+        stmt = select(Will).where(Will.id == will_id)
+        result = await self._session.exec(stmt)
+        will = result.first()
+        if will is None:
+            return
+
+        changed = False
+
+        # Map section -> extraction field -> will column
+        if section == "beneficiaries" and extracted.beneficiaries:
+            will.beneficiaries = [b.model_dump() for b in extracted.beneficiaries]
+            changed = True
+        elif section == "assets" and extracted.assets:
+            will.assets = [a.model_dump() for a in extracted.assets]
+            changed = True
+        elif section == "guardians" and extracted.guardians:
+            will.guardians = [g.model_dump() for g in extracted.guardians]
+            changed = True
+        elif section == "executor" and extracted.executor:
+            will.executor = extracted.executor.model_dump()
+            changed = True
+        elif section == "bequests" and extracted.bequests:
+            will.bequests = extracted.bequests
+            changed = True
+        elif section == "trust" and extracted.trust:
+            will.trust_provisions = extracted.trust.model_dump()
+            changed = True
+        elif section == "usufruct" and extracted.usufruct_data:
+            will.usufruct = extracted.usufruct_data.model_dump()
+            changed = True
+        elif section == "business" and extracted.business_data:
+            will.business_assets = [b.model_dump() for b in extracted.business_data]
+            changed = True
+
+        if changed:
+            will.updated_at = datetime.now(timezone.utc)
+            self._session.add(will)
+            await self._session.flush()
+            logger.info("Saved extracted %s data to will %s", section, will_id)
 
     async def get_will_for_user(
         self,
