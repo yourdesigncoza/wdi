@@ -19,6 +19,7 @@ import type {
   WillSection,
   WillState,
 } from '../types/will.ts'
+import { snakeToCamel, type WillResponse } from '../../../services/api.ts'
 
 const initialState: WillState = {
   willId: null,
@@ -179,6 +180,26 @@ export const useWillStore = create<WillState & WillActions>()(
       setAcknowledgedWarnings: (codes: string[]) =>
         set((state) => {
           state.acknowledgedWarnings = codes
+        }),
+
+      loadFromServer: (will: WillResponse) =>
+        set((state) => {
+          state.willId = will.id
+          state.testator = snakeToCamel(will.testator || {}) as Partial<Testator>
+          state.marital = snakeToCamel(will.marital || {}) as Partial<MaritalInfo>
+          state.beneficiaries = (will.beneficiaries || []).map(b => snakeToCamel(b) as Beneficiary)
+          state.assets = (will.assets || []).map(a => snakeToCamel(a) as Asset)
+          state.guardians = (will.guardians || []).map(g => snakeToCamel(g) as Guardian)
+          state.executor = snakeToCamel(will.executor || {}) as Partial<ExecutorInfo>
+          state.bequests = (will.bequests || []).map(b => snakeToCamel(b) as Bequest)
+          state.residue = snakeToCamel(will.residue || {}) as Partial<ResidueInfo>
+          state.trustProvisions = snakeToCamel(will.trust_provisions || {}) as Partial<TrustProvisions>
+          state.usufruct = snakeToCamel(will.usufruct || {}) as Partial<UsufructProvision>
+          state.businessAssets = (will.business_assets || []).map(b => snakeToCamel(b) as BusinessAssetDetail)
+          state.jointWill = snakeToCamel(will.joint_will || {}) as Partial<JointWillConfig>
+          state.scenarios = (will.scenarios || []) as ComplexScenario[]
+          state.sectionsComplete = will.sections_complete || {}
+          state.currentSection = (will.current_section || 'personal') as WillSection
         }),
 
       resetWill: () => set(initialState),

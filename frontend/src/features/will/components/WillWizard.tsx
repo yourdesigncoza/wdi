@@ -14,7 +14,13 @@ import { JointWillSetup } from './JointWillSetup.tsx'
 import { VerificationPage } from './VerificationPage.tsx'
 import { DocumentPreviewPage } from './DocumentPreviewPage.tsx'
 import { PaymentPage } from './PaymentPage.tsx'
-import { createWill, updateWillSection, extractConversationData } from '../../../services/api.ts'
+import {
+  createWill,
+  updateWillSection,
+  extractConversationData,
+  markSectionComplete as markSectionCompleteApi,
+  updateCurrentSection,
+} from '../../../services/api.ts'
 import type { WillSection } from '../types/will.ts'
 
 /** Convert camelCase keys to snake_case for backend Pydantic schemas */
@@ -168,8 +174,13 @@ export function WillWizard() {
   const handleNavigateToSection = useCallback(
     (section: WillSection) => {
       setCurrentSection(section)
+      if (willId) {
+        updateCurrentSection(willId, section).catch((err) =>
+          console.error('Failed to sync current section:', err)
+        )
+      }
     },
-    [setCurrentSection],
+    [setCurrentSection, willId],
   )
 
   /** Handle ScenarioDetector completion */
@@ -181,7 +192,7 @@ export function WillWizard() {
     [setCurrentSection],
   )
 
-  const markSectionComplete = useWillStore((s) => s.markSectionComplete)
+  const markSectionCompleteLocal = useWillStore((s) => s.markSectionComplete)
 
   /** Advance to the next section in the dynamic sections list */
   const handleNextSection = useCallback(async () => {
@@ -193,13 +204,25 @@ export function WillWizard() {
         console.error('Extraction failed, continuing anyway:', err)
       }
     }
-    markSectionComplete(currentSection)
+    markSectionCompleteLocal(currentSection)
+    // Fire-and-forget backend sync for section completion
+    if (willId) {
+      markSectionCompleteApi(willId, currentSection).catch((err) =>
+        console.error('Failed to sync section complete:', err)
+      )
+    }
     const currentIndex = sections.findIndex((s) => s.key === currentSection)
     const nextIndex = currentIndex + 1
     if (nextIndex < sections.length) {
-      setCurrentSection(sections[nextIndex].key)
+      const nextSection = sections[nextIndex].key
+      setCurrentSection(nextSection)
+      if (willId) {
+        updateCurrentSection(willId, nextSection).catch((err) =>
+          console.error('Failed to sync current section:', err)
+        )
+      }
     }
-  }, [currentSection, sections, markSectionComplete, setCurrentSection, willId])
+  }, [currentSection, sections, markSectionCompleteLocal, setCurrentSection, willId])
 
   /**
    * Determine if we should show the scenario detection interstitial.
