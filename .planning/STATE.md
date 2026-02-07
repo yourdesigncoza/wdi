@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-02-05)
 ## Current Position
 
 Phase: 07 of 9 (Payment & Download)
-Plan: 1 of 4 in current phase
+Plan: 2 of 4 in current phase
 Status: In progress
-Last activity: 2026-02-07 - Completed plan 07-01: Payment model and config settings
+Last activity: 2026-02-07 - Completed plan 07-02: Payment services (PayFast, download tokens, email)
 
-Progress: [███████████████████████████████] ~79% (31 of ~39 total plans)
+Progress: [████████████████████████████████] ~82% (32 of ~39 total plans)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 30
-- Average duration: 2m 40s
-- Total execution time: 1.35 hours
+- Total plans completed: 31
+- Average duration: 2m 39s
+- Total execution time: 1.39 hours
 
 **By Phase:**
 
@@ -34,10 +34,10 @@ Progress: [███████████████████████
 | 04 | 5/5 | 16m 32s | 3m 18s |
 | 05 | 4/4 | ~11m 26s | ~2m 52s |
 | 06 | 4/4 | ~14m 24s | ~3m 36s |
-| 07 | 1/4 | 1m 59s | 1m 59s |
+| 07 | 2/4 | 4m 20s | 2m 10s |
 
 **Recent Trend:**
-- Last 5 plans: 06-01 (2m 30s), 06-02 (parallel), 06-03 (1m 54s), 06-04 (~8m incl. checkpoint + fix), 07-01 (1m 59s)
+- Last 5 plans: 06-02 (parallel), 06-03 (1m 54s), 06-04 (~8m incl. checkpoint + fix), 07-01 (1m 59s), 07-02 (2m 21s)
 - Trend: Consistent ~2m per auto plan, checkpoints add ~3-5m
 
 *Updated after each plan completion*
@@ -101,6 +101,8 @@ Recent decisions affecting current work:
 - D-0603-02: Content-Disposition inline (not attachment) for browser PDF viewer display
 - D-0604-01: Blob-based PDF preview opens in new browser tab (not inline embed)
 - D-0604-02: Clause category field uses explicit String(50) sa_column to match Alembic-created VARCHAR column
+- D-0702-01: Pure functions (not class) for PayFast service — stateless operations
+- D-0702-02: ITN validation preserves received POST field order (differs from checkout signature ordering)
 
 ### Pending Todos
 
@@ -147,9 +149,9 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-02-07T18:57:35Z
-Stopped at: Phase 7 plan 01 complete
-Resume file: .planning/phases/07-payment-download/07-02-PLAN.md
+Last session: 2026-02-07T19:03:24Z
+Stopped at: Phase 7 plan 02 complete
+Resume file: .planning/phases/07-payment-download/07-03-PLAN.md
 
 ---
-*Next: Phase 7 Plan 02: PayFast service, download token service, email service*
+*Next: Phase 7 Plan 03: Payment API endpoints*
