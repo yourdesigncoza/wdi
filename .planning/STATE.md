@@ -5,22 +5,22 @@
 See: .planning/PROJECT.md (updated 2026-02-05)
 
 **Core value:** Any South African can create a legally compliant will through an intelligent, guided conversation — no legal knowledge required.
-**Current focus:** Phase 7 complete — ready for Phase 8
+**Current focus:** Phase 8 in progress — Post-Purchase Features
 
 ## Current Position
 
-Phase: 07 of 9 (Payment & Download)
-Plan: 4 of 4 in current phase
-Status: Phase complete
-Last activity: 2026-02-07 - Completed plan 07-04: Frontend payment flow
-Progress: [█████████████████████████████████] ~85% (33 of ~39 total plans)
+Phase: 08 of 9 (Post-Purchase Features)
+Plan: 1 of ? in current phase
+Status: In progress
+Last activity: 2026-02-07 - Completed plan 08-01: Will versioning and session persistence
+Progress: [██████████████████████████████████] ~87% (34 of ~39 total plans)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 33
+- Total plans completed: 34
 - Average duration: 2m 38s
-- Total execution time: ~1.48 hours
+- Total execution time: ~1.52 hours
 
 **By Phase:**
 
@@ -34,10 +34,11 @@ Progress: [███████████████████████
 | 05 | 4/4 | ~11m 26s | ~2m 52s |
 | 06 | 4/4 | ~14m 24s | ~3m 36s |
 | 07 | 4/4 | ~11m 20s | ~2m 50s |
+| 08 | 1/? | 2m 33s | 2m 33s |
 
 **Recent Trend:**
-- Last 5 plans: 07-01 (1m 59s), 07-02 (2m 21s), 07-03 (3m 0s), 07-04 (~4m incl. checkpoint)
-- Trend: Consistent ~2-3m per auto plan, checkpoints add ~1-2m
+- Last 5 plans: 07-02 (2m 21s), 07-03 (3m 0s), 07-04 (~4m incl. checkpoint), 08-01 (2m 33s)
+- Trend: Consistent ~2-3m per auto plan
 
 *Updated after each plan completion*
 
@@ -107,6 +108,9 @@ Recent decisions affecting current work:
 - D-0703-03: ITN processing is idempotent -- completed payments skipped on re-processing
 - D-0704-01: localStorage for payment_id persistence across PayFast redirect
 - D-0704-02: Blob-based download via temporary anchor element for browser PDF download
+- D-0801-01: version (Integer, default 1) tracks regeneration count; current_section (String(50), default "personal") tracks wizard resume position
+- D-0801-02: Regenerate endpoint requires both paid_at (402) and verified status (400) before allowing re-generation
+- D-0801-03: Regenerate reuses existing completed Payment record, generating a fresh download token
 
 ### Pending Todos
 
@@ -132,6 +136,7 @@ None yet.
 - Phase 7: Migration 006 must be applied (`alembic upgrade head`) before payment features work
 - Phase 7: PayFast sandbox testing required before production
 - Phase 7: Production deployment requires public URL for PayFast ITN webhook
+- Phase 8: Migration 007 must be applied (`alembic upgrade head`) before will versioning features work
 - Audit immutability (REVOKE UPDATE/DELETE) must be applied manually on production DB
 - Monthly audit_logs partitions need automated creation or pre-creation in future migrations
 
@@ -154,9 +159,9 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-02-07T19:14:00Z
-Stopped at: Phase 7 complete (all 4 plans done)
-Resume file: .planning/phases/08-post-purchase/08-01-PLAN.md
+Last session: 2026-02-07T19:53:19Z
+Stopped at: Phase 8, plan 1 complete
+Resume file: .planning/phases/08-post-purchase-features/08-02-PLAN.md
 
 ---
-*Next: Phase 8: Post-Purchase Features*
+*Next: Phase 8 Plan 2 (next plan in post-purchase features)*
