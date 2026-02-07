@@ -1,4 +1,5 @@
 import type { Message } from '../hooks/useConversation.ts'
+import avatarImg from '../../../assets/images/avatar.png'
 
 interface ChatMessageProps {
   message: Message
@@ -17,11 +18,13 @@ export function ChatMessage({ message, isStreaming = false }: ChatMessageProps) 
 
   return (
     <div className={`chat ${isAI ? 'chat-start' : 'chat-end'}`}>
-      <div className="chat-image avatar placeholder">
-        <div className={`${isAI ? 'bg-neutral text-neutral-content' : 'bg-primary text-primary-content'} w-10 rounded-full`}>
-          <span className="text-xs">{isAI ? 'WC' : 'You'}</span>
+      {isAI && (
+        <div className="chat-image avatar">
+          <div className="w-10 rounded-full">
+            <img alt="WillCraft" src={avatarImg} />
+          </div>
         </div>
-      </div>
+      )}
       <div className={`chat-bubble${isAI ? '' : ' chat-bubble-secondary'}`}>
         {message.content}
         {isStreaming && isAI && (
