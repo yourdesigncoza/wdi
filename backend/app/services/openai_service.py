@@ -83,28 +83,28 @@ class OpenAIService:
         conversation_history: list[dict],
         latest_message: str,
     ) -> ExtractedWillData:
-        """Extract structured will data from the latest conversation turn.
+        """Extract structured will data from the full conversation.
 
         Uses OpenAI Structured Outputs (response_format with Pydantic model)
-        for guaranteed schema-valid extraction.
+        for guaranteed schema-valid extraction. Sends the full conversation
+        history so the model can compile data stated across multiple messages.
 
         Parameters
         ----------
         conversation_history:
-            Previous messages for context.
+            Full conversation messages for extraction context.
         latest_message:
-            The most recent user message to extract data from.
+            The most recent user message (unused, kept for API compat).
 
         Returns
         -------
-        ExtractedWillData with any will-related data found in the message.
+        ExtractedWillData with all will-related data found in the conversation.
         """
         completion = await self._client.chat.completions.parse(
             model=self._model,
             messages=[
                 {"role": "system", "content": EXTRACTION_SYSTEM_PROMPT},
-                *conversation_history[-10:],  # Rolling window for context
-                {"role": "user", "content": latest_message},
+                *conversation_history[-20:],  # Full conversation window
             ],
             response_format=ExtractedWillData,
             temperature=_EXTRACTION_TEMPERATURE,

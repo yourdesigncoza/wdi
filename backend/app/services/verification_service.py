@@ -25,6 +25,11 @@ from app.models.will import Will
 from app.prompts.verification import build_verification_prompt
 from app.schemas.verification import VerificationResult
 from app.services.gemini_service import GeminiService
+from app.services.conversation_service import ConversationService
+from app.services.openai_service import OpenAIService
+from app.services.upl_filter import UPLFilterService
+from app.services.clause_library import ClauseLibraryService
+from app.services.audit_service import AuditService
 
 logger = logging.getLogger(__name__)
 
@@ -64,6 +69,58 @@ class VerificationService:
         )
         result = await self._session.exec(stmt)
         return result.first()
+
+    async def _extract_missing_sections(self, will: Will) -> None:
+        """Extract data for AI sections that have conversations but empty JSONB columns.
+
+        Runs before verification to ensure any data discussed in AI conversations
+        is persisted to the will model, even if auto-extraction or Next Section
+        extraction was missed.
+        """
+        # Map AI sections to their will JSONB column names
+        section_column_map = {
+            "beneficiaries": "beneficiaries",
+            "assets": "assets",
+            "guardians": "guardians",
+            "executor": "executor",
+            "bequests": "bequests",
+            "residue": "residue",
+        }
+
+        conv_service = ConversationService(
+            session=self._session,
+            openai_service=OpenAIService(
+                api_key=settings.OPENAI_API_KEY,
+                model=settings.OPENAI_MODEL,
+            ),
+            upl_filter=UPLFilterService(
+                clause_service=ClauseLibraryService(session=self._session),
+                audit_service=AuditService(session=self._session),
+            ),
+        )
+
+        for section, column in section_column_map.items():
+            current_data = getattr(will, column, None)
+            # Skip if data already exists
+            if current_data and current_data != {} and current_data != []:
+                continue
+
+            try:
+                extracted = await conv_service.extract_data_from_conversation(
+                    will.id, section
+                )
+                if extracted is not None:
+                    await conv_service.save_extracted_to_will(
+                        will.id, section, extracted
+                    )
+            except Exception as exc:
+                logger.warning(
+                    "Pre-verification extraction failed for section %s: %s",
+                    section, exc,
+                )
+
+        # Refresh will to pick up any changes from extraction
+        await self._session.refresh(will)
 
     def _collect_will_data(self, will: Will) -> dict:
         """Collect all JSONB section data into a single verification dict."""
@@ -136,11 +193,12 @@ class VerificationService:
             }
             return
 
-        # Step 1: Collect will data
+        # Step 1: Extract any missing section data from conversations
         yield {
             "event": "check",
             "data": json.dumps({"step": "collecting_data", "message": "Collecting will data..."}),
         }
+        await self._extract_missing_sections(will)
         will_data = self._collect_will_data(will)
 
         # Step 2: Build verification prompt

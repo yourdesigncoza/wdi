@@ -182,7 +182,9 @@ class ExtractedWillData(BaseModel):
 
 
 EXTRACTION_SYSTEM_PROMPT: str = (
-    "Extract any will-related data from the user's message. "
+    "Extract ALL will-related data from the ENTIRE conversation below. "
+    "Consider every message in the conversation, not just the last one. "
+    "Compile a complete picture of what the user has stated across all their messages. "
     "Only extract data that was explicitly stated by the user. "
     "Do not infer or assume information that was not mentioned. "
     "If something is unclear or ambiguous, add it to needs_clarification. "
