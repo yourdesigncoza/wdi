@@ -20,8 +20,9 @@ VERIFICATION_RULES: dict[str, dict[str, str]] = {
             "Full name, SA ID number (13 digits), and residential address are required."
         ),
         "INVALID_ID_NUMBER": (
-            "SA ID number must be exactly 13 digits and pass the Luhn check algorithm. "
-            "Verify the ID number is correctly entered."
+            "SA ID number must be exactly 13 digits with valid format: "
+            "digits 1-6 must form a valid date (YYMMDD), digit 11 must be 0 (SA citizen) "
+            "or 1 (permanent resident). Check that the ID number matches this format."
         ),
         "TESTATOR_UNDER_16": (
             "Per the Wills Act s4, the testator must be 16 years or older to make a valid will. "
