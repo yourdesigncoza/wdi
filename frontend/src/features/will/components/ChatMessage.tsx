@@ -19,12 +19,12 @@ export function ChatMessage({ message, isStreaming = false }: ChatMessageProps) 
     <div className={`chat ${isAI ? 'chat-start' : 'chat-end'}`}>
       {isAI && (
         <div className="chat-image avatar placeholder">
-          <div className="bg-primary text-primary-content w-8 rounded-full">
+          <div className="bg-primary text-primary-content w-8 rounded-full flex items-center justify-center">
             <span className="text-xs">WC</span>
           </div>
         </div>
       )}
-      <div className={`chat-bubble text-center${isAI ? ' chat-bubble-neutral' : ''}`}>
+      <div className={`chat-bubble${!isAI ? ' chat-bubble-secondary' : ''}`}>
         {message.content}
         {isStreaming && isAI && (
           <span className="loading loading-dots loading-xs ml-1 align-bottom" />
