@@ -8,7 +8,7 @@ queries without requiring database migrations for field changes.
 import uuid
 from datetime import datetime, timezone
 
-from sqlalchemy import Column, DateTime, ForeignKey, Index, String
+from sqlalchemy import Column, DateTime, ForeignKey, Index, Integer, String
 from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlmodel import Field, SQLModel
 
@@ -117,6 +117,16 @@ class Will(SQLModel, table=True):
     paid_at: datetime | None = Field(
         default=None,
         sa_column=Column(DateTime(timezone=True), nullable=True),
+    )
+
+    # Versioning and session persistence
+    version: int = Field(
+        default=1,
+        sa_column=Column(Integer, nullable=False, server_default="1"),
+    )
+    current_section: str = Field(
+        default="personal",
+        sa_column=Column(String(50), nullable=False, server_default="personal"),
     )
 
     # Section completion tracking
