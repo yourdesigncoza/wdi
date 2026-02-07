@@ -93,6 +93,9 @@ Recent decisions affecting current work:
 - D-0502-02: Rules organized as dict[severity][code] -> description for prompt embedding
 - D-0601-01: WeasyPrint position:fixed for watermark (repeats on every page)
 - D-0601-02: Include paths prefixed with will/ subdirectory for Jinja2 template resolution
+- D-0602-01: Safe defaults "[To be completed]" for missing JSONB fields in variable extraction
+- D-0602-02: CLAUSE_ORDER as ordered list with condition evaluators (always/scenario/has/each)
+- D-0602-03: TEMPLATE_DIR at templates/ root, paths prefixed with will/ for FileSystemLoader
 - D-0603-01: WillService injected separately for status check rather than exposing get_will on DocumentGenerationService
 - D-0603-02: Content-Disposition inline (not attachment) for browser PDF viewer display
 
