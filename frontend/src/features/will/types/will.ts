@@ -242,5 +242,6 @@ export interface WillActions {
   setCurrentSection: (section: WillSection) => void
   setVerificationResult: (result: Record<string, unknown> | null) => void
   setAcknowledgedWarnings: (codes: string[]) => void
+  loadFromServer: (will: Record<string, unknown>) => void
   resetWill: () => void
 }

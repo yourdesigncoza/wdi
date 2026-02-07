@@ -1,5 +1,15 @@
 const BASE_URL = '/api'
 
+/** Convert snake_case keys to camelCase for frontend consumption */
+export function snakeToCamel(obj: Record<string, unknown>): Record<string, unknown> {
+  const result: Record<string, unknown> = {}
+  for (const [key, value] of Object.entries(obj)) {
+    const camelKey = key.replace(/_([a-z])/g, (_, c) => c.toUpperCase())
+    result[camelKey] = value
+  }
+  return result
+}
+
 type TokenGetter = () => Promise<string | null>
 
 async function request<T>(
@@ -130,6 +140,9 @@ export interface WillResponse {
   user_id: string
   will_type: string
   status: string
+  version: number
+  current_section: string
+  paid_at: string | null
   testator: Record<string, unknown>
   marital: Record<string, unknown>
   beneficiaries: Record<string, unknown>[]
@@ -138,6 +151,11 @@ export interface WillResponse {
   executor: Record<string, unknown>
   bequests: Record<string, unknown>[]
   residue: Record<string, unknown>
+  trust_provisions: Record<string, unknown>
+  usufruct: Record<string, unknown>
+  business_assets: Record<string, unknown>[]
+  joint_will: Record<string, unknown>
+  scenarios: string[]
   sections_complete: Record<string, boolean>
   created_at: string
   updated_at: string
@@ -306,4 +324,31 @@ export async function downloadWill(token: string): Promise<Blob> {
     throw new Error(err.detail || `Download error: ${response.status}`)
   }
   return response.blob()
+}
+
+// ── Will Management API ──────────────────────────────────────────────
+
+/** List all wills for the current user */
+export function listWills(): Promise<WillResponse[]> {
+  return request('/wills')
+}
+
+/** Update the current section pointer for a will (resume position) */
+export function updateCurrentSection(
+  willId: string,
+  section: string,
+): Promise<WillResponse> {
+  return request(`/wills/${willId}/current-section`, {
+    method: 'PATCH',
+    body: JSON.stringify({ current_section: section }),
+  })
+}
+
+/** Regenerate a paid and verified will document */
+export function regenerateWill(
+  willId: string,
+): Promise<{ download_token: string; version: number }> {
+  return request(`/wills/${willId}/regenerate`, {
+    method: 'POST',
+  })
 }
