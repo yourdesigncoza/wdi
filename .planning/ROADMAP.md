@@ -20,7 +20,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 5: AI Verification** - Dual-LLM verification layer (Gemini checks OpenAI), estate logic validation
 - [x] **Phase 6: Document Generation** - PDF generation with WeasyPrint, witness instructions, preview, disclaimers (completed 2026-02-07)
 - [x] **Phase 7: Payment & Download** - PayFast integration, payment gate, download links, email backup (completed 2026-02-07)
-- [ ] **Phase 8: Post-Purchase Features** - Save/resume functionality, unlimited will updates
+- [x] **Phase 8: Post-Purchase Features** - Save/resume functionality, unlimited will updates (completed 2026-02-07)
 - [ ] **Phase 9: Additional Documents** - Living will and funeral wishes document generation
 
 ## Phase Details
@@ -184,10 +184,10 @@ Plans:
 **Plans**: 4 plans in 4 waves
 
 Plans:
-- [ ] 08-01-PLAN.md — Backend foundation: migration 007 (version, current_section), new API endpoints
-- [ ] 08-02-PLAN.md — Frontend auto-save, Zustand-DB sync, loadFromServer, useAutoSave hook
-- [ ] 08-03-PLAN.md — WillDashboard component, resume flow, updated App.tsx routing
-- [ ] 08-04-PLAN.md — Post-purchase update flow: paid will editing, re-generation without payment
+- [x] 08-01-PLAN.md — Backend foundation: migration 007 (version, current_section), new API endpoints
+- [x] 08-02-PLAN.md — Frontend auto-save, Zustand-DB sync, loadFromServer, useAutoSave hook
+- [x] 08-03-PLAN.md — WillDashboard component, resume flow, updated App.tsx routing
+- [x] 08-04-PLAN.md — Post-purchase update flow: paid will editing, re-generation without payment
 
 ### Phase 9: Additional Documents
 **Goal**: Users can create supplementary estate planning documents
@@ -220,7 +220,7 @@ Note: Phase 9 depends only on Phase 6, can potentially run in parallel with Phas
 | 5. AI Verification | 4/4 | Complete | 2026-02-06 |
 | 6. Document Generation | 4/4 | Complete | 2026-02-07 |
 | 7. Payment & Download | 4/4 | Complete | 2026-02-07 |
-| 8. Post-Purchase Features | 0/4 | Not started | - |
+| 8. Post-Purchase Features | 4/4 | Complete | 2026-02-07 |
 | 9. Additional Documents | 0/3 | Not started | - |
 
 ---
