@@ -181,13 +181,13 @@ Plans:
   2. User can resume will creation from where they left off
   3. User can update their will unlimited times after initial purchase
   4. Updates generate new PDF versions without additional payment
-**Plans**: TBD
+**Plans**: 4 plans in 4 waves
 
 Plans:
-- [ ] 08-01: Auto-save and session persistence
-- [ ] 08-02: Resume flow UI
-- [ ] 08-03: Will versioning and update workflow
-- [ ] 08-04: Re-generation without payment (for purchased wills)
+- [ ] 08-01-PLAN.md — Backend foundation: migration 007 (version, current_section), new API endpoints
+- [ ] 08-02-PLAN.md — Frontend auto-save, Zustand-DB sync, loadFromServer, useAutoSave hook
+- [ ] 08-03-PLAN.md — WillDashboard component, resume flow, updated App.tsx routing
+- [ ] 08-04-PLAN.md — Post-purchase update flow: paid will editing, re-generation without payment
 
 ### Phase 9: Additional Documents
 **Goal**: Users can create supplementary estate planning documents
