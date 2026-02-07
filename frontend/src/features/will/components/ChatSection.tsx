@@ -187,7 +187,7 @@ export function ChatSection({ section, willId, onNext }: ChatSectionProps) {
           <div className="flex justify-end mt-2">
             <button
               type="button"
-              className="btn btn-outline btn-sm"
+              className="btn btn-active btn-accent btn-sm"
               onClick={onNext}
             >
               Next Section &rarr;

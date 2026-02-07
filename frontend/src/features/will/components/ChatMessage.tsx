@@ -8,8 +8,8 @@ interface ChatMessageProps {
 /**
  * DaisyUI chat bubble wrapper.
  *
- * - AI messages: chat-start with neutral bubble and WC avatar
- * - User messages: chat-end with primary bubble
+ * - AI messages: chat-start with primary bubble and WC avatar
+ * - User messages: chat-end with secondary bubble and You avatar
  * - Shows loading dots when streaming and message is the current assistant reply
  */
 export function ChatMessage({ message, isStreaming = false }: ChatMessageProps) {
@@ -17,14 +17,12 @@ export function ChatMessage({ message, isStreaming = false }: ChatMessageProps) 
 
   return (
     <div className={`chat ${isAI ? 'chat-start' : 'chat-end'}`}>
-      {isAI && (
-        <div className="chat-image avatar placeholder">
-          <div className="bg-primary text-primary-content w-8 rounded-full flex items-center justify-center">
-            <span className="text-xs">WC</span>
-          </div>
+      <div className="chat-image avatar placeholder">
+        <div className={`${isAI ? 'bg-neutral text-neutral-content' : 'bg-primary text-primary-content'} w-10 rounded-full`}>
+          <span className="text-xs">{isAI ? 'WC' : 'You'}</span>
         </div>
-      )}
-      <div className={`chat-bubble${!isAI ? ' chat-bubble-secondary' : ''}`}>
+      </div>
+      <div className={`chat-bubble${isAI ? '' : ' chat-bubble-secondary'}`}>
         {message.content}
         {isStreaming && isAI && (
           <span className="loading loading-dots loading-xs ml-1 align-bottom" />
