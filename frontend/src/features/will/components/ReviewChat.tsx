@@ -247,17 +247,7 @@ export function ReviewChat({ willId, onNavigateToSection }: ReviewChatProps) {
           <button
             type="button"
             className="btn btn-primary btn-sm flex-1 sm:flex-none"
-            onClick={() => {
-              // Placeholder: advance to Phase 5 verification
-              setMessages((prev) => [
-                ...prev,
-                {
-                  role: 'assistant',
-                  content:
-                    'Your will is ready for the next step. The verification phase will be available soon.',
-                },
-              ])
-            }}
+            onClick={() => onNavigateToSection('verification')}
           >
             Looks Good — Proceed
           </button>
