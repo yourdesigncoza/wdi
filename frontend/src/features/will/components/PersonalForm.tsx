@@ -16,7 +16,12 @@ const SA_PROVINCES = [
   { value: 'WC', label: 'Western Cape' },
 ] as const
 
-export function PersonalForm() {
+interface PersonalFormProps {
+  /** Called after testator data is saved — parent uses this to advance sub-step */
+  onSaved?: () => void
+}
+
+export function PersonalForm({ onSaved }: PersonalFormProps) {
   const testator = useWillStore((s) => s.testator)
   const updateTestator = useWillStore((s) => s.updateTestator)
 
@@ -42,6 +47,7 @@ export function PersonalForm() {
 
   function onSubmit(data: TestatorFormData) {
     updateTestator(data)
+    onSaved?.()
   }
 
   return (
@@ -201,7 +207,7 @@ export function PersonalForm() {
       <div className="flex justify-end">
         <button
           type="submit"
-          className="btn btn-primary"
+          className="btn btn-neutral"
           disabled={isSubmitting}
         >
           {isSubmitting ? (

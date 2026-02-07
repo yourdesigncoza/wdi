@@ -15,7 +15,12 @@ const MARITAL_STATUSES = [
 
 const MARRIED_PREFIXES = ['married_in_community', 'married_anc', 'married_cop']
 
-export function MaritalForm() {
+interface MaritalFormProps {
+  /** Navigate back to the personal details sub-step */
+  onBackToPersonal: () => void
+}
+
+export function MaritalForm({ onBackToPersonal }: MaritalFormProps) {
   const marital = useWillStore((s) => s.marital)
   const updateMarital = useWillStore((s) => s.updateMarital)
   const markSectionComplete = useWillStore((s) => s.markSectionComplete)
@@ -124,7 +129,7 @@ export function MaritalForm() {
             <label className="flex items-center gap-3 cursor-pointer">
               <input
                 type="checkbox"
-                className="checkbox checkbox-primary"
+                className="checkbox"
                 {...register('marriedOutsideSa')}
               />
               <span className="text-base-content">Married outside South Africa</span>
@@ -151,14 +156,14 @@ export function MaritalForm() {
       <div className="flex justify-between">
         <button
           type="button"
-          className="btn btn-ghost"
-          onClick={() => setCurrentSection('personal')}
+          className="btn btn-soft"
+          onClick={onBackToPersonal}
         >
           Back to Personal
         </button>
         <button
           type="submit"
-          className="btn btn-primary"
+          className="btn btn-neutral"
           disabled={isSubmitting}
         >
           {isSubmitting ? (

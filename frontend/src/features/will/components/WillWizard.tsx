@@ -41,16 +41,22 @@ const COMPLEX_SECTION_KEYS: ReadonlySet<WillSection> = new Set([
  * Personal section renders PersonalForm first.
  * Once testator data is saved, it shows MaritalForm.
  * After marital is saved, the section advances to beneficiaries.
+ *
+ * Uses a local sub-step so "Back to Personal" from MaritalForm
+ * always shows PersonalForm (even when testator data already exists).
  */
 function PersonalSection() {
-  const testator = useWillStore((s) => s.testator)
-  const hasTestator = !!(testator.firstName && testator.lastName && testator.idNumber)
+  const [subStep, setSubStep] = useState<'personal' | 'marital'>('personal')
 
-  if (!hasTestator) {
-    return <PersonalForm />
+  const advanceToMarital = useCallback(() => {
+    setSubStep('marital')
+  }, [])
+
+  if (subStep === 'personal') {
+    return <PersonalForm onSaved={advanceToMarital} />
   }
 
-  return <MaritalForm />
+  return <MaritalForm onBackToPersonal={() => setSubStep('personal')} />
 }
 
 
