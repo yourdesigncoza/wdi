@@ -279,7 +279,10 @@ class ConversationService:
             will.executor = extracted.executor.model_dump()
             changed = True
         elif section == "bequests" and extracted.bequests:
-            will.bequests = extracted.bequests
+            will.bequests = [b.model_dump() for b in extracted.bequests]
+            changed = True
+        elif section == "residue" and extracted.residue:
+            will.residue = extracted.residue.model_dump()
             changed = True
         elif section == "trust" and extracted.trust:
             will.trust_provisions = extracted.trust.model_dump()

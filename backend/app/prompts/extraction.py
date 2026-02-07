@@ -75,6 +75,19 @@ class ExtractedExecutor(BaseModel):
     )
 
 
+class ExtractedTrustee(BaseModel):
+    """Trustee nomination extracted from conversation."""
+
+    name: str = Field(description="Full name of the trustee")
+    relationship: Optional[str] = Field(
+        default=None, description="Relationship to testator"
+    )
+    is_independent: bool = Field(
+        default=False,
+        description="Whether trustee is independent (not a family member or beneficiary)",
+    )
+
+
 class ExtractedTrustData(BaseModel):
     """Testamentary trust data extracted from conversation."""
 
@@ -89,9 +102,9 @@ class ExtractedTrustData(BaseModel):
         default=None,
         description="Age at which beneficiaries receive assets outright (18, 21, or 25)",
     )
-    trustees: list[dict] = Field(
+    trustees: list[ExtractedTrustee] = Field(
         default_factory=list,
-        description="Trustee nominations: [{name, relationship, is_independent}]",
+        description="Trustee nominations",
     )
     income_for_maintenance: Optional[bool] = Field(
         default=None,
@@ -100,6 +113,15 @@ class ExtractedTrustData(BaseModel):
     capital_for_education: Optional[bool] = Field(
         default=None,
         description="Whether trustee may use capital for education if income insufficient",
+    )
+
+
+class ExtractedBareDominiumHolder(BaseModel):
+    """Bare dominium holder extracted from conversation."""
+
+    name: str = Field(description="Full name of the ownership holder")
+    share: Optional[str] = Field(
+        default=None, description="Share or percentage held (e.g. '50%', 'equal')"
     )
 
 
@@ -112,9 +134,9 @@ class ExtractedUsufructData(BaseModel):
     usufructuary_name: Optional[str] = Field(
         default=None, description="Name of the person who receives usage rights"
     )
-    bare_dominium_holders: list[dict] = Field(
+    bare_dominium_holders: list[ExtractedBareDominiumHolder] = Field(
         default_factory=list,
-        description="Ownership holders: [{name, share}]",
+        description="Ownership holders who receive bare dominium",
     )
     duration: Optional[str] = Field(
         default=None,
@@ -149,6 +171,43 @@ class ExtractedBusinessData(BaseModel):
     )
 
 
+class ExtractedBequest(BaseModel):
+    """Specific bequest extracted from conversation."""
+
+    item: str = Field(description="The item or asset being bequeathed")
+    recipient: str = Field(description="Name of the person or entity receiving the bequest")
+    details: Optional[str] = Field(
+        default=None, description="Additional details about the bequest"
+    )
+
+
+class ExtractedResidueBeneficiary(BaseModel):
+    """Residue beneficiary extracted from conversation."""
+
+    name: str = Field(description="Full name of the residue beneficiary")
+    share_percent: Optional[float] = Field(
+        default=None,
+        description="Percentage share of the residue (e.g. 100 for sole beneficiary)",
+    )
+    is_charity: bool = Field(
+        default=False,
+        description="Whether this is a charity or organisation",
+    )
+
+
+class ExtractedResidueData(BaseModel):
+    """Residue clause data extracted from conversation."""
+
+    beneficiaries: list[ExtractedResidueBeneficiary] = Field(
+        default_factory=list,
+        description="Beneficiaries who will receive the residue of the estate",
+    )
+    distribution_method: Optional[str] = Field(
+        default=None,
+        description="How the residue should be distributed (e.g. 'equal shares', 'percentages')",
+    )
+
+
 class ExtractedWillData(BaseModel):
     """Composite structured data extracted from a conversation turn.
 
@@ -160,9 +219,13 @@ class ExtractedWillData(BaseModel):
     assets: list[ExtractedAsset] = Field(default_factory=list)
     guardians: list[ExtractedGuardian] = Field(default_factory=list)
     executor: Optional[ExtractedExecutor] = None
-    bequests: list[dict] = Field(
+    bequests: list[ExtractedBequest] = Field(
         default_factory=list,
-        description="Specific bequests: [{item, recipient, details}]",
+        description="Specific bequests of particular items to particular people",
+    )
+    residue: Optional[ExtractedResidueData] = Field(
+        default=None,
+        description="Residue clause specifying who gets the remainder of the estate",
     )
     needs_clarification: list[str] = Field(
         default_factory=list,
@@ -190,7 +253,8 @@ EXTRACTION_SYSTEM_PROMPT: str = (
     "If something is unclear or ambiguous, add it to needs_clarification. "
     "For South African wills, pay attention to: beneficiary names and "
     "relationships, SA ID numbers (13 digits), asset descriptions, "
-    "guardian nominations for minor children, and executor appointments. "
+    "guardian nominations for minor children, executor appointments, "
+    "and residue clause (who receives the remainder of the estate). "
     "Also extract trust provisions (trust name, vesting age, trustees), "
     "usufruct details (property, usufructuary, bare dominium holders), "
     "and business asset information (business name, type, registration "
