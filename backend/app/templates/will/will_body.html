@@ -1,0 +1,29 @@
+{# Will body partial — renders ordered clause list, included by base.html #}
+<div class="will-body">
+  <h2 style="text-align:center; font-size:14pt; text-transform:uppercase; letter-spacing:1px; margin-bottom:20pt;">
+    Last Will and Testament
+  </h2>
+
+  {% for clause in clauses %}
+  <div class="clause-block">
+    <p class="clause-title">{{ clause.number }}. {{ clause.name | upper }}</p>
+    <div class="clause-text">{{ clause.rendered_text }}</div>
+
+    {% if clause.sub_clauses %}
+      {% for sub in clause.sub_clauses %}
+      <div class="sub-clause">
+        <p>{{ clause.number }}.{{ loop.index }} {{ sub.text }}</p>
+
+        {% if sub.sub_clauses %}
+          {% for subsub in sub.sub_clauses %}
+          <div class="sub-sub-clause">
+            <p>{{ clause.number }}.{{ loop.parent.loop.index }}.{{ loop.index }} {{ subsub.text }}</p>
+          </div>
+          {% endfor %}
+        {% endif %}
+      </div>
+      {% endfor %}
+    {% endif %}
+  </div>
+  {% endfor %}
+</div>

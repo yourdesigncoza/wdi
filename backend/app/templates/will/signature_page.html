@@ -1,0 +1,86 @@
+{# Signature page partial — included by base.html #}
+<div class="signature-page">
+  <h2 style="text-align:center; font-size:14pt; text-transform:uppercase; letter-spacing:1px; margin-bottom:20pt;">
+    Signature Page
+  </h2>
+
+  {# --- Testator signature ------------------------------------------------- #}
+  <div class="sig-section">
+    <p>
+      I, <strong>{{ testator_name | upper }}</strong>, declare that this is my
+      Last Will and Testament, that I sign it voluntarily, and that I am of
+      sound mind and disposing memory.
+    </p>
+
+    <p>
+      This Will consists of <strong>{{ page_count }}</strong> page(s),
+      including this signature page, each of which has been signed or
+      initialled by me and by the witnesses below.
+    </p>
+
+    <div class="sig-line"></div>
+    <p class="sig-label">Signature of Testator</p>
+
+    <div class="sig-field">
+      Full Name: <span class="sig-field-line"></span>
+    </div>
+    <div class="sig-field">
+      Date: <span class="sig-field-line"></span>
+    </div>
+    <div class="sig-field">
+      Place of Signing: <span class="sig-field-line"></span>
+    </div>
+  </div>
+
+  {# --- Witness preamble --------------------------------------------------- #}
+  <div class="witness-preamble">
+    <p>
+      We, the undersigned witnesses, declare that the testator signed this
+      Will in our presence, and that we sign as witnesses in the presence of
+      the testator and of each other. We confirm that the testator appeared
+      to be of sound mind and was not under duress.
+    </p>
+  </div>
+
+  {# --- Witness 1 ---------------------------------------------------------- #}
+  <div class="witness-block">
+    <h3>Witness 1</h3>
+
+    <div class="sig-line"></div>
+    <p class="sig-label">Signature of Witness</p>
+
+    <div class="sig-field">
+      Full Name: <span class="sig-field-line"></span>
+    </div>
+    <div class="sig-field">
+      Identity Number: <span class="sig-field-line"></span>
+    </div>
+    <div class="sig-field">
+      Address: <span class="sig-field-line"></span>
+    </div>
+    <div class="sig-field">
+      Date: <span class="sig-field-line"></span>
+    </div>
+  </div>
+
+  {# --- Witness 2 ---------------------------------------------------------- #}
+  <div class="witness-block">
+    <h3>Witness 2</h3>
+
+    <div class="sig-line"></div>
+    <p class="sig-label">Signature of Witness</p>
+
+    <div class="sig-field">
+      Full Name: <span class="sig-field-line"></span>
+    </div>
+    <div class="sig-field">
+      Identity Number: <span class="sig-field-line"></span>
+    </div>
+    <div class="sig-field">
+      Address: <span class="sig-field-line"></span>
+    </div>
+    <div class="sig-field">
+      Date: <span class="sig-field-line"></span>
+    </div>
+  </div>
+</div>

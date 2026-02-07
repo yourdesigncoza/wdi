@@ -1,0 +1,32 @@
+{# Cover page partial — included by base.html #}
+<div class="cover-page">
+  <div class="cover-brand">WillCraft SA</div>
+
+  <h1 class="cover-title">Last Will and Testament</h1>
+  <p class="cover-of">OF</p>
+  <h2 class="cover-name">{{ testator_name | upper }}</h2>
+
+  <div class="cover-meta">
+    <p>Date of Execution: _______________</p>
+    <p>Document Reference: {{ document_reference }}</p>
+    {% if id_number %}
+    <p>Identity Number: {{ id_number }}</p>
+    {% endif %}
+  </div>
+
+  <div class="cover-disclaimer">
+    <h3>DISCLAIMER</h3>
+    <p>
+      WillCraft SA is not a law firm and does not provide legal advice.
+      This document was generated using WillCraft SA's guided will creation
+      service. We strongly recommend that you have this will reviewed by a
+      qualified South African attorney before signing. This document does
+      not constitute legal advice.
+    </p>
+    <p class="cover-attorney-rec">
+      <strong>Attorney Review Recommended:</strong> We recommend all wills
+      be reviewed by a qualified attorney before signing, regardless of
+      complexity.
+    </p>
+  </div>
+</div>
