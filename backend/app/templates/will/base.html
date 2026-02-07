@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Last Will and Testament — {{ testator_name }}</title>
+  <style>
+    /* ==========================================================================
+       CSS Paged Media — A4 will document
+       ========================================================================== */
+
+    /* --- Page rules --------------------------------------------------------- */
+    @page {
+      size: A4;
+      margin: 25mm 25mm 30mm 25mm;
+
+      @bottom-center {
+        content: "Page " counter(page) " of " counter(pages);
+        font-family: "Liberation Serif", "Times New Roman", serif;
+        font-size: 9pt;
+        color: #666;
+      }
+
+      @bottom-right {
+        content: "Initials: ______ / ______ / ______";
+        font-size: 8pt;
+        color: #999;
+      }
+    }
+
+    @page :first {
+      @bottom-center { content: none; }
+      @bottom-right  { content: none; }
+    }
+
+    /* --- Typography --------------------------------------------------------- */
+    body {
+      font-family: "Liberation Serif", "Times New Roman", serif;
+      font-size: 12pt;
+      line-height: 1.5;
+      color: #000;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1, h2, h3, h4 {
+      margin-top: 0;
+    }
+
+    /* --- Watermark (position:fixed repeats on every page in WeasyPrint) ------ */
+    .watermark-overlay {
+      position: fixed;
+      top: 30%;
+      left: 5%;
+      width: 90%;
+      text-align: center;
+      font-size: 72pt;
+      color: rgba(200, 0, 0, 0.12);
+      transform: rotate(-35deg);
+      z-index: 1000;
+      pointer-events: none;
+      font-weight: bold;
+      letter-spacing: 8px;
+    }
+
+    /* --- Cover page --------------------------------------------------------- */
+    .cover-page {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+    }
+
+    .cover-brand {
+      font-size: 14pt;
+      letter-spacing: 4px;
+      color: #555;
+      margin-bottom: 40pt;
+      text-transform: uppercase;
+    }
+
+    .cover-title {
+      font-size: 18pt;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 10pt;
+    }
+
+    .cover-of {
+      font-size: 12pt;
+      margin: 10pt 0;
+      color: #333;
+    }
+
+    .cover-name {
+      font-size: 16pt;
+      font-weight: bold;
+      text-transform: uppercase;
+      margin-bottom: 40pt;
+    }
+
+    .cover-meta {
+      margin-top: 30pt;
+      font-size: 11pt;
+      color: #333;
+    }
+
+    .cover-meta p {
+      margin: 6pt 0;
+    }
+
+    .cover-disclaimer {
+      margin-top: 60pt;
+      border-top: 1px solid #333;
+      padding-top: 20pt;
+      font-size: 10pt;
+      color: #333;
+      text-align: left;
+      max-width: 420pt;
+    }
+
+    .cover-disclaimer h3 {
+      font-size: 11pt;
+      text-align: center;
+      margin-bottom: 8pt;
+    }
+
+    .cover-disclaimer p {
+      margin: 6pt 0;
+    }
+
+    .cover-attorney-rec {
+      margin-top: 10pt;
+    }
+
+    /* --- Clause body -------------------------------------------------------- */
+    .will-body {
+      page-break-before: always;
+    }
+
+    .clause-block {
+      page-break-inside: avoid;
+      margin-bottom: 14pt;
+    }
+
+    .clause-title {
+      font-size: 12pt;
+      font-weight: bold;
+      margin-bottom: 4pt;
+    }
+
+    .clause-text {
+      margin-bottom: 6pt;
+    }
+
+    .sub-clause {
+      margin-left: 20pt;
+      margin-bottom: 4pt;
+    }
+
+    .sub-sub-clause {
+      margin-left: 40pt;
+      margin-bottom: 4pt;
+    }
+
+    /* --- Signature page ----------------------------------------------------- */
+    .signature-page {
+      page-break-before: always;
+    }
+
+    .sig-section {
+      margin-bottom: 30pt;
+    }
+
+    .sig-line {
+      border-bottom: 1px solid #000;
+      width: 250pt;
+      margin: 40pt 0 5pt 0;
+    }
+
+    .sig-label {
+      font-weight: bold;
+      font-size: 11pt;
+    }
+
+    .sig-field {
+      margin: 8pt 0;
+      font-size: 11pt;
+    }
+
+    .sig-field-line {
+      border-bottom: 1px solid #000;
+      display: inline-block;
+      width: 250pt;
+      margin-left: 8pt;
+    }
+
+    .witness-block {
+      page-break-inside: avoid;
+      margin-bottom: 30pt;
+    }
+
+    .witness-preamble {
+      margin-bottom: 20pt;
+      font-size: 11pt;
+    }
+
+    /* --- Instruction sheet -------------------------------------------------- */
+    .instruction-break {
+      page-break-before: always;
+    }
+
+    .instruction-sheet {
+      font-size: 11pt;
+    }
+
+    .inst-title {
+      font-size: 14pt;
+      font-weight: bold;
+      text-transform: uppercase;
+      text-align: center;
+      margin-bottom: 20pt;
+    }
+
+    .inst-section {
+      margin-bottom: 16pt;
+    }
+
+    .inst-section h3 {
+      font-size: 12pt;
+      font-weight: bold;
+      margin-bottom: 6pt;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 4pt;
+    }
+
+    .inst-section ul {
+      margin: 4pt 0 4pt 20pt;
+      padding: 0;
+    }
+
+    .inst-section li {
+      margin-bottom: 4pt;
+    }
+
+    .inst-do-not {
+      color: #900;
+      font-weight: bold;
+    }
+
+    .inst-footer {
+      margin-top: 30pt;
+      border-top: 1px solid #999;
+      padding-top: 10pt;
+      font-size: 9pt;
+      color: #666;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  {% if is_preview %}
+  <div class="watermark-overlay">PREVIEW — NOT VALID</div>
+  {% endif %}
+
+  {% include "will/cover_page.html" %}
+  {% include "will/will_body.html" %}
+  {% include "will/signature_page.html" %}
+  <div class="instruction-break"></div>
+  {% include "will/instruction_sheet.html" %}
+</body>
+</html>
