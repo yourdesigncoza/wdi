@@ -147,14 +147,13 @@ Plans:
   3. User can preview document before payment
   4. Disclaimers clearly state "not legal advice" at document generation touchpoint
   5. System recommends attorney review for complex scenarios
-**Plans**: TBD
+**Plans**: 4 plans in 3 waves
 
 Plans:
-- [ ] 06-01: Jinja2 will templates (basic, trust, usufruct variants)
-- [ ] 06-02: WeasyPrint PDF generation service
-- [ ] 06-03: Document preview UI
-- [ ] 06-04: Witness instruction generator
-- [ ] 06-05: Disclaimer integration and attorney recommendation logic
+- [ ] 06-01-PLAN.md — WeasyPrint install + Jinja2 HTML/CSS will templates (cover, body, signature, instructions, watermark)
+- [ ] 06-02-PLAN.md — DocumentGenerationService (clause assembly, variable extraction, PDF generation)
+- [ ] 06-03-PLAN.md — Document preview API endpoint with disclaimer and status gating
+- [ ] 06-04-PLAN.md — Frontend: disclaimer confirmation, preview page, wizard integration (checkpoint)
 
 ### Phase 7: Payment & Download
 **Goal**: Users can pay and download their completed will document
@@ -220,7 +219,7 @@ Note: Phase 9 depends only on Phase 6, can potentially run in parallel with Phas
 | 3. Core Will Conversation | 8/8 | Complete | 2026-02-06 |
 | 4. Complex Estate Scenarios | 5/5 | Complete | 2026-02-06 |
 | 5. AI Verification | 4/4 | Complete | 2026-02-06 |
-| 6. Document Generation | 0/5 | Not started | - |
+| 6. Document Generation | 0/4 | Not started | - |
 | 7. Payment & Download | 0/5 | Not started | - |
 | 8. Post-Purchase Features | 0/4 | Not started | - |
 | 9. Additional Documents | 0/3 | Not started | - |
