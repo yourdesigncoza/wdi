@@ -12,7 +12,7 @@ See: .planning/PROJECT.md (updated 2026-02-05)
 Phase: 06 of 9 (Document Generation) — In progress
 Plan: 3 of 4 in current phase
 Status: In progress
-Last activity: 2026-02-07 - Completed 06-03-PLAN.md (Preview API Endpoint)
+Last activity: 2026-02-07 - Completed quick task 001: Fix Back to Personal button navigation
 
 Progress: [████████████████████████████░] ~74% (29 of ~39 total plans)
 
@@ -123,6 +123,12 @@ None yet.
 - Phase 7: PayFast sandbox testing required before production
 - Audit immutability (REVOKE UPDATE/DELETE) must be applied manually on production DB
 - Monthly audit_logs partitions need automated creation or pre-creation in future migrations
+
+### Quick Tasks Completed
+
+| # | Description | Date | Commit | Directory |
+|---|-------------|------|--------|-----------|
+| 001 | Fix Back to Personal button navigation | 2026-02-07 | 3d7d0ce | [001-back-to-personal](./quick/001-back-to-personal-button-not-navigating/) |
 
 ### New Blockers
 
