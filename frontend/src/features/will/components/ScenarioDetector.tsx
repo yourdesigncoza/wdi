@@ -118,7 +118,7 @@ export function ScenarioDetector({ willId: _willId, onContinue }: ScenarioDetect
         <div className="flex justify-center">
           <button
             type="button"
-            className="btn btn-primary btn-sm"
+            className="btn btn-neutral btn-sm"
             onClick={() => {
               setDetected(false)
             }}
@@ -193,24 +193,26 @@ export function ScenarioDetector({ willId: _willId, onContinue }: ScenarioDetect
 
       {/* Opt-in section */}
       {availableOptIns.length > 0 && (
-        <div className="space-y-2">
+        <div className="space-y-3">
           <p className="text-sm font-medium text-base-content/70">
             You can also add these optional sections:
           </p>
-          {availableOptIns.map(({ key, label }) => (
-            <label
-              key={key}
-              className="label cursor-pointer justify-start gap-3"
-            >
-              <input
-                type="checkbox"
-                className="checkbox checkbox-sm checkbox-primary"
-                checked={optedIn.has(key)}
-                onChange={() => toggleOptIn(key)}
-              />
-              <span className="label-text text-sm">{label}</span>
-            </label>
-          ))}
+          <div className="flex flex-col gap-3">
+            {availableOptIns.map(({ key, label }) => (
+              <label
+                key={key}
+                className="flex items-center gap-3 cursor-pointer"
+              >
+                <input
+                  type="checkbox"
+                  className="checkbox"
+                  checked={optedIn.has(key)}
+                  onChange={() => toggleOptIn(key)}
+                />
+                <span className="text-sm">{label}</span>
+              </label>
+            ))}
+          </div>
         </div>
       )}
 
@@ -218,7 +220,7 @@ export function ScenarioDetector({ willId: _willId, onContinue }: ScenarioDetect
       <div className="flex justify-center pt-2">
         <button
           type="button"
-          className="btn btn-primary"
+          className="btn btn-neutral"
           onClick={handleContinue}
         >
           {hasDetected || optedIn.size > 0

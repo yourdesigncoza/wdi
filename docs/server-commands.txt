@@ -1,0 +1,19 @@
+Backend:
+cd /opt/lampp/htdocs/wdi/backend && source venv/bin/activate && uvicorn app.main:app --reload --port 8000
+
+Frontend:
+cd /opt/lampp/htdocs/wdi/frontend && npm run dev                                                                    
+                                                                                                                      
+❯ How do I first kill current runs
+# Kill backend (uvicorn on port 8000)
+lsof -ti:8000 | xargs kill -9
+
+# Kill frontend (vite on port 5173)
+lsof -ti:5173 | xargs kill -9  
+
+
+
+lsof -ti:8000 | xargs kill -9
+lsof -ti:5173 | xargs kill -9 
+cd /opt/lampp/htdocs/wdi/backend && source venv/bin/activate && uvicorn app.main:app --reload --port 8000
+cd /opt/lampp/htdocs/wdi/frontend && npm run dev 

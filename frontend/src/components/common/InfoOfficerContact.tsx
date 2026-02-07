@@ -69,7 +69,7 @@ export function InfoOfficerContact() {
             <p className="text-error mb-4">{error ?? 'Contact details unavailable.'}</p>
             <button
               onClick={goBack}
-              className="btn btn-primary"
+              className="btn btn-neutral"
             >
               Go Back
             </button>
@@ -233,7 +233,7 @@ export function InfoOfficerContact() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="btn btn-primary w-full"
+                className="btn btn-neutral w-full"
               >
                 {isSubmitting && <span className="loading loading-spinner loading-sm"></span>}
                 {isSubmitting ? 'Submitting...' : 'Submit Request'}
@@ -246,7 +246,7 @@ export function InfoOfficerContact() {
         <div className="text-center">
           <button
             onClick={goBack}
-            className="btn btn-primary"
+            className="btn btn-neutral"
           >
             Go Back
           </button>

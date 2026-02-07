@@ -259,7 +259,7 @@ export function VerificationPage() {
         </div>
         <button
           type="button"
-          className="btn btn-primary btn-lg"
+          className="btn btn-neutral btn-lg"
           onClick={startVerification}
           disabled={!willId}
         >
@@ -368,7 +368,7 @@ export function VerificationPage() {
           </svg>
           <span>{error}</span>
         </div>
-        <button type="button" className="btn btn-primary" onClick={startVerification}>
+        <button type="button" className="btn btn-neutral" onClick={startVerification}>
           Try Again
         </button>
       </div>
@@ -490,7 +490,7 @@ export function VerificationPage() {
                 >
                   <input
                     type="checkbox"
-                    className="checkbox checkbox-sm checkbox-warning mt-0.5"
+                    className="checkbox mt-0.5"
                     checked={checkedWarnings.has(issue.code)}
                     onChange={() => toggleWarning(issue.code)}
                   />
@@ -533,7 +533,7 @@ export function VerificationPage() {
         {hasBlockingErrors && (
           <button
             type="button"
-            className="btn btn-primary"
+            className="btn btn-neutral"
             onClick={handleFixIssues}
           >
             Fix Issues
@@ -542,7 +542,7 @@ export function VerificationPage() {
         {!hasBlockingErrors && canProceed && (
           <button
             type="button"
-            className="btn btn-primary"
+            className="btn btn-neutral"
             onClick={() => setCurrentSection('document')}
           >
             Proceed to Document Generation

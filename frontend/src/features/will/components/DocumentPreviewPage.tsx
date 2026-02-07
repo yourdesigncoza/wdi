@@ -95,7 +95,7 @@ export function DocumentPreviewPage({ willId, onBack }: DocumentPreviewPageProps
           <label className="flex items-start gap-3 cursor-pointer mt-3">
             <input
               type="checkbox"
-              className="checkbox checkbox-sm checkbox-primary mt-0.5"
+              className="checkbox mt-0.5"
               checked={disclaimerChecked}
               onChange={(e) => setDisclaimerChecked(e.target.checked)}
             />
@@ -130,7 +130,7 @@ export function DocumentPreviewPage({ willId, onBack }: DocumentPreviewPageProps
       <div className="flex flex-wrap gap-3">
         <button
           type="button"
-          className="btn btn-primary"
+          className="btn btn-neutral"
           onClick={handleGenerate}
           disabled={!disclaimerChecked || isGenerating}
         >

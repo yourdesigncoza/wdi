@@ -98,7 +98,7 @@ export function ConsentModal() {
             <button
               onClick={handleAccept}
               disabled={isSubmitting}
-              className="btn btn-primary flex-1"
+              className="btn btn-neutral flex-1"
             >
               {isSubmitting && <span className="loading loading-spinner loading-sm"></span>}
               {isSubmitting ? 'Processing...' : 'I Accept'}

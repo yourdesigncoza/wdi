@@ -246,7 +246,7 @@ export function ReviewChat({ willId, onNavigateToSection }: ReviewChatProps) {
         <div className="flex flex-wrap gap-2 py-2">
           <button
             type="button"
-            className="btn btn-primary btn-sm flex-1 sm:flex-none"
+            className="btn btn-neutral btn-sm flex-1 sm:flex-none"
             onClick={() => onNavigateToSection('verification')}
           >
             Looks Good — Proceed
@@ -299,7 +299,7 @@ export function ReviewChat({ willId, onNavigateToSection }: ReviewChatProps) {
           ) : (
             <button
               type="button"
-              className="btn btn-primary btn-sm"
+              className="btn btn-neutral btn-sm"
               onClick={handleSend}
               disabled={!input.trim()}
               aria-label="Send message"

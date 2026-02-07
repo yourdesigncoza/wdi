@@ -48,7 +48,7 @@ function LandingPage() {
           </div>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <SignInButton mode="modal">
-              <button className="btn btn-primary">
+              <button className="btn btn-neutral">
                 Sign In
               </button>
             </SignInButton>
@@ -102,7 +102,7 @@ function MainContent() {
             <p className="text-base-content/70">
               Create your legally compliant South African will with our step-by-step guided process.
             </p>
-            <Link to="/will" className="btn btn-primary btn-lg">
+            <Link to="/will" className="btn btn-neutral btn-lg">
               Create Your Will
             </Link>
           </div>

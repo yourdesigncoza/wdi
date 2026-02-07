@@ -40,7 +40,7 @@ export function PrivacyPolicy() {
             <p className="text-error mb-4">{error ?? 'Privacy policy unavailable.'}</p>
             <button
               onClick={goBack}
-              className="btn btn-primary"
+              className="btn btn-neutral"
             >
               Go Back
             </button>
@@ -86,7 +86,7 @@ export function PrivacyPolicy() {
         <div className="mt-8 text-center">
           <button
             onClick={goBack}
-            className="btn btn-primary"
+            className="btn btn-neutral"
           >
             Go Back
           </button>

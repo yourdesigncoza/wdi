@@ -66,7 +66,7 @@ function EmptySection({ onEdit }: { onEdit: () => void }) {
   return (
     <div className="text-center py-6">
       <p className="text-base-content/50 text-sm mb-3">Not yet completed</p>
-      <button type="button" className="btn btn-primary btn-sm" onClick={onEdit}>
+      <button type="button" className="btn btn-neutral btn-sm" onClick={onEdit}>
         Start
       </button>
     </div>

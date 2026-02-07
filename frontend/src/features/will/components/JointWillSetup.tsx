@@ -183,7 +183,7 @@ export function JointWillSetup({ willId, onNext }: JointWillSetupProps) {
           <label className="label cursor-pointer justify-start gap-3">
             <input
               type="checkbox"
-              className="checkbox checkbox-primary"
+              className="checkbox"
               {...register('massing')}
             />
             <div>
@@ -203,7 +203,7 @@ export function JointWillSetup({ willId, onNext }: JointWillSetupProps) {
           <label className="label cursor-pointer justify-start gap-3">
             <input
               type="checkbox"
-              className={`checkbox checkbox-warning ${errors.irrevocabilityAcknowledged ? 'checkbox-error' : ''}`}
+              className={`checkbox ${errors.irrevocabilityAcknowledged ? 'checkbox-error' : ''}`}
               {...register('irrevocabilityAcknowledged')}
             />
             <div>
@@ -227,7 +227,7 @@ export function JointWillSetup({ willId, onNext }: JointWillSetupProps) {
         <div className="flex justify-end">
           <button
             type="submit"
-            className="btn btn-primary"
+            className="btn btn-neutral"
             disabled={isSubmitting}
           >
             {isSubmitting ? (

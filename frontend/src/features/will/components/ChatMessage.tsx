@@ -24,11 +24,7 @@ export function ChatMessage({ message, isStreaming = false }: ChatMessageProps) 
           </div>
         </div>
       )}
-      <div
-        className={`chat-bubble whitespace-pre-wrap ${
-          isAI ? 'chat-bubble-neutral' : 'chat-bubble-primary'
-        }`}
-      >
+      <div className={`chat-bubble text-center${isAI ? ' chat-bubble-neutral' : ''}`}>
         {message.content}
         {isStreaming && isAI && (
           <span className="loading loading-dots loading-xs ml-1 align-bottom" />
