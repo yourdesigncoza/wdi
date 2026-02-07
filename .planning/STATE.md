@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-02-05)
 
 **Core value:** Any South African can create a legally compliant will through an intelligent, guided conversation — no legal knowledge required.
-**Current focus:** Phase 5 — AI Verification
+**Current focus:** Phase 6 — Document Generation
 
 ## Current Position
 
-Phase: 05 of 9 (AI Verification) — Complete
-Plan: 4 of 4 in current phase
-Status: Phase complete
-Last activity: 2026-02-06 - Completed 05-04-PLAN.md (frontend verification UI)
+Phase: 06 of 9 (Document Generation) — In progress
+Plan: 1 of 4 in current phase
+Status: In progress
+Last activity: 2026-02-07 - Completed 06-01-PLAN.md (WeasyPrint templates)
 
-Progress: [██████████████████████████░] ~67% (26 of ~39 total plans)
+Progress: [███████████████████████████░] ~69% (27 of ~39 total plans)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 26
-- Average duration: 2m 48s
-- Total execution time: 1.21 hours
+- Total plans completed: 27
+- Average duration: 2m 47s
+- Total execution time: 1.25 hours
 
 **By Phase:**
 
@@ -33,10 +33,11 @@ Progress: [███████████████████████
 | 03 | 8/8 | 23m 58s | 3m 0s |
 | 04 | 5/5 | 16m 32s | 3m 18s |
 | 05 | 4/4 | ~11m 26s | ~2m 52s |
+| 06 | 1/4 | 2m 30s | 2m 30s |
 
 **Recent Trend:**
-- Last 5 plans: 04-05 (~8m incl. checkpoint), 05-01 (1m 48s), 05-02 (2m 15s), 05-03 (2m 23s), 05-04 (~5m incl. checkpoint)
-- Trend: Consistent ~2m per auto plan, ~5-8m with checkpoints
+- Last 5 plans: 05-02 (2m 15s), 05-03 (2m 23s), 05-04 (~5m incl. checkpoint), 06-01 (2m 30s)
+- Trend: Consistent ~2m 30s per auto plan
 
 *Updated after each plan completion*
 
@@ -90,6 +91,8 @@ Recent decisions affecting current work:
 - D-0501-03: Empty GEMINI_API_KEY means verification disabled (graceful fallback)
 - D-0502-01: Literal types instead of Enum classes for Gemini structured output compatibility
 - D-0502-02: Rules organized as dict[severity][code] -> description for prompt embedding
+- D-0601-01: WeasyPrint position:fixed for watermark (repeats on every page)
+- D-0601-02: Include paths prefixed with will/ subdirectory for Jinja2 template resolution
 
 ### Pending Todos
 
@@ -122,9 +125,9 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-02-06T17:30:00Z
-Stopped at: Completed 05-04-PLAN.md (Phase 5 complete)
+Last session: 2026-02-07T14:38:00Z
+Stopped at: Completed 06-01-PLAN.md (WeasyPrint templates)
 Resume file: None
 
 ---
-*Next: Phase 6 — Document Generation*
+*Next: 06-02-PLAN.md — Document Generation Service*
