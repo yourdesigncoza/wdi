@@ -269,3 +269,41 @@ export async function generatePreview(willId: string): Promise<Blob> {
   }
   return response.blob()
 }
+
+// ── Payment & Download API ──────────────────────────────────────────
+
+export interface PaymentInitiateResponse {
+  payment_id: string
+  m_payment_id: string
+  payfast_url: string
+  form_data: Record<string, string>
+}
+
+export interface PaymentStatusResponse {
+  payment_id: string
+  status: string // pending | completed | cancelled | failed
+  download_token: string | null
+}
+
+export function initiatePayment(willId: string): Promise<PaymentInitiateResponse> {
+  return request('/payment/initiate', {
+    method: 'POST',
+    body: JSON.stringify({ will_id: willId }),
+  })
+}
+
+export function getPaymentStatus(paymentId: string): Promise<PaymentStatusResponse> {
+  return request(`/payment/${paymentId}/status`)
+}
+
+/** Download final PDF via token — returns blob */
+export async function downloadWill(token: string): Promise<Blob> {
+  const response = await fetch(`${BASE_URL}/download/${token}`, {
+    credentials: 'include',
+  })
+  if (!response.ok) {
+    const err = await response.json().catch(() => ({ detail: 'Download failed' }))
+    throw new Error(err.detail || `Download error: ${response.status}`)
+  }
+  return response.blob()
+}
