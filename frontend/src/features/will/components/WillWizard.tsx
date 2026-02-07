@@ -13,8 +13,18 @@ import { BusinessAssetsSection } from './BusinessAssetsSection.tsx'
 import { JointWillSetup } from './JointWillSetup.tsx'
 import { VerificationPage } from './VerificationPage.tsx'
 import { DocumentPreviewPage } from './DocumentPreviewPage.tsx'
-import { createWill } from '../../../services/api.ts'
+import { createWill, updateWillSection } from '../../../services/api.ts'
 import type { WillSection } from '../types/will.ts'
+
+/** Convert camelCase keys to snake_case for backend Pydantic schemas */
+function toSnakeCase(obj: Record<string, unknown>): Record<string, unknown> {
+  const result: Record<string, unknown> = {}
+  for (const [key, value] of Object.entries(obj)) {
+    const snakeKey = key.replace(/[A-Z]/g, (m) => `_${m.toLowerCase()}`)
+    result[snakeKey] = value
+  }
+  return result
+}
 
 /** Sections driven by the AI conversation (as opposed to form-based) */
 const AI_SECTIONS: ReadonlySet<WillSection> = new Set([
@@ -74,6 +84,39 @@ export function WillWizard() {
   // Track whether will creation is in-flight to prevent duplicate calls
   const creatingRef = useRef(false)
 
+  // Track whether form sections have been synced to prevent duplicate calls
+  const syncedRef = useRef(false)
+
+  /**
+   * Sync form-based section data (testator, marital) from Zustand to the backend.
+   * These sections are filled via forms (not AI), so their data lives only in
+   * localStorage until explicitly synced to the DB's JSONB columns.
+   */
+  const syncFormSections = useCallback(
+    async (targetWillId: string) => {
+      if (syncedRef.current) return
+      const state = useWillStore.getState()
+      const { testator, marital } = state
+      // Only sync if testator has meaningful data
+      if (!testator.firstName) return
+      syncedRef.current = true
+      try {
+        const syncs: Promise<unknown>[] = [
+          updateWillSection(targetWillId, 'testator', toSnakeCase(testator)),
+        ]
+        // Only sync marital if user completed the form (status is required)
+        if (marital.status) {
+          syncs.push(updateWillSection(targetWillId, 'marital', toSnakeCase(marital)))
+        }
+        await Promise.all(syncs)
+      } catch (err) {
+        console.error('Failed to sync form sections:', err)
+        syncedRef.current = false
+      }
+    },
+    [],
+  )
+
   // Auto-create a will when user navigates to an AI section without one
   const ensureWillExists = useCallback(async () => {
     if (willId || creatingRef.current) return
@@ -81,12 +124,14 @@ export function WillWizard() {
     try {
       const will = await createWill()
       setWillId(will.id)
+      // Sync form data that was collected before will creation
+      await syncFormSections(will.id)
     } catch (err) {
       console.error('Failed to create will:', err)
     } finally {
       creatingRef.current = false
     }
-  }, [willId, setWillId])
+  }, [willId, setWillId, syncFormSections])
 
   // When switching to an AI, complex, review, or verification section, ensure a will exists
   useEffect(() => {
@@ -100,6 +145,15 @@ export function WillWizard() {
       void ensureWillExists()
     }
   }, [currentSection, ensureWillExists])
+
+  // Re-sync form sections to backend when entering verification or review
+  // Ensures any edits to personal/marital since initial sync are captured
+  useEffect(() => {
+    if ((currentSection === 'verification' || currentSection === 'review') && willId) {
+      syncedRef.current = false
+      void syncFormSections(willId)
+    }
+  }, [currentSection, willId, syncFormSections])
 
   // If scenarios were previously detected (store has scenarios), skip the interstitial
   useEffect(() => {
