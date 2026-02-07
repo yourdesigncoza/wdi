@@ -12,7 +12,7 @@ from app.database import engine
 from app.middleware.clerk_auth import ClerkAuthMiddleware
 from app.middleware.popia_consent import POPIAConsentMiddleware
 from app.middleware.audit import AuditMiddleware
-from app.api import ai, consent, conversation, privacy, health, clauses, verification, will
+from app.api import ai, consent, conversation, document, privacy, health, clauses, verification, will
 
 logger = logging.getLogger(__name__)
 
@@ -79,4 +79,5 @@ app.include_router(clauses.router)
 app.include_router(ai.router)
 app.include_router(conversation.router)
 app.include_router(verification.router)
+app.include_router(document.router)
 app.include_router(will.router)
