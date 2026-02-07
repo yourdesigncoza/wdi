@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-02-05)
 ## Current Position
 
 Phase: 07 of 9 (Payment & Download)
-Plan: 2 of 4 in current phase
+Plan: 3 of 4 in current phase
 Status: In progress
-Last activity: 2026-02-07 - Completed plan 07-02: Payment services (PayFast, download tokens, email)
+Last activity: 2026-02-07 - Completed plan 07-03: Payment & download API endpoints
 
-Progress: [████████████████████████████████] ~82% (32 of ~39 total plans)
+Progress: [█████████████████████████████████] ~85% (33 of ~39 total plans)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 31
-- Average duration: 2m 39s
-- Total execution time: 1.39 hours
+- Total plans completed: 32
+- Average duration: 2m 38s
+- Total execution time: 1.44 hours
 
 **By Phase:**
 
@@ -34,11 +34,11 @@ Progress: [███████████████████████
 | 04 | 5/5 | 16m 32s | 3m 18s |
 | 05 | 4/4 | ~11m 26s | ~2m 52s |
 | 06 | 4/4 | ~14m 24s | ~3m 36s |
-| 07 | 2/4 | 4m 20s | 2m 10s |
+| 07 | 3/4 | 7m 20s | 2m 27s |
 
 **Recent Trend:**
-- Last 5 plans: 06-02 (parallel), 06-03 (1m 54s), 06-04 (~8m incl. checkpoint + fix), 07-01 (1m 59s), 07-02 (2m 21s)
-- Trend: Consistent ~2m per auto plan, checkpoints add ~3-5m
+- Last 5 plans: 06-03 (1m 54s), 06-04 (~8m incl. checkpoint + fix), 07-01 (1m 59s), 07-02 (2m 21s), 07-03 (3m 0s)
+- Trend: Consistent ~2-3m per auto plan, checkpoints add ~3-5m
 
 *Updated after each plan completion*
 
@@ -103,6 +103,9 @@ Recent decisions affecting current work:
 - D-0604-02: Clause category field uses explicit String(50) sa_column to match Alembic-created VARCHAR column
 - D-0702-01: Pure functions (not class) for PayFast service — stateless operations
 - D-0702-02: ITN validation preserves received POST field order (differs from checkout signature ordering)
+- D-0703-01: ITN webhook always returns 200 OK per PayFast spec, logs errors internally
+- D-0703-02: Download endpoint uses token-based auth, bypasses both POPIA and Clerk middleware
+- D-0703-03: ITN processing is idempotent -- completed payments skipped on re-processing
 
 ### Pending Todos
 
@@ -149,9 +152,9 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-02-07T19:03:24Z
-Stopped at: Phase 7 plan 02 complete
-Resume file: .planning/phases/07-payment-download/07-03-PLAN.md
+Last session: 2026-02-07T19:09:49Z
+Stopped at: Phase 7 plan 03 complete
+Resume file: .planning/phases/07-payment-download/07-04-PLAN.md
 
 ---
-*Next: Phase 7 Plan 03: Payment API endpoints*
+*Next: Phase 7 Plan 04: Frontend payment integration*
