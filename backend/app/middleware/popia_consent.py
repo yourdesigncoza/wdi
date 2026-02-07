@@ -24,6 +24,7 @@ EXEMPT_PATHS: set[str] = {
     "/api/privacy-policy",
     "/api/info-officer",
     "/api/data-request",
+    "/api/payment/notify",
     "/docs",
     "/openapi.json",
     "/redoc",
@@ -33,6 +34,7 @@ EXEMPT_PATHS: set[str] = {
 EXEMPT_PREFIXES: tuple[str, ...] = (
     "/static/",
     "/favicon",
+    "/api/download/",
 )
 
 CONSENT_COOKIE_NAME = "popia_consent"
