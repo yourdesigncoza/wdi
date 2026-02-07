@@ -164,14 +164,13 @@ Plans:
   2. User receives download link immediately after successful payment
   3. User receives email with download link as backup
   4. Download links are secure and time-limited
-**Plans**: TBD
+**Plans**: 4 plans in 4 waves
 
 Plans:
-- [ ] 07-01: PayFast service integration
-- [ ] 07-02: Payment flow UI (redirect to PayFast, return handling)
-- [ ] 07-03: Webhook handlers for payment confirmation
-- [ ] 07-04: Download endpoint with secure tokens
-- [ ] 07-05: Post-payment email with download link
+- [ ] 07-01-PLAN.md — Payment model, migration 006, config settings, Pydantic schemas
+- [ ] 07-02-PLAN.md — PayFast service, download token service, email service + template
+- [ ] 07-03-PLAN.md — Payment API (initiate, ITN webhook, status) + download API endpoint
+- [ ] 07-04-PLAN.md — Frontend: PaymentPage, return/cancel/download pages, wizard integration (checkpoint)
 
 ### Phase 8: Post-Purchase Features
 **Goal**: Users can save progress, resume later, and update their will after purchase
@@ -220,7 +219,7 @@ Note: Phase 9 depends only on Phase 6, can potentially run in parallel with Phas
 | 4. Complex Estate Scenarios | 5/5 | Complete | 2026-02-06 |
 | 5. AI Verification | 4/4 | Complete | 2026-02-06 |
 | 6. Document Generation | 0/4 | Not started | - |
-| 7. Payment & Download | 0/5 | Not started | - |
+| 7. Payment & Download | 0/4 | Not started | - |
 | 8. Post-Purchase Features | 0/4 | Not started | - |
 | 9. Additional Documents | 0/3 | Not started | - |
 
