@@ -5,23 +5,22 @@
 See: .planning/PROJECT.md (updated 2026-02-05)
 
 **Core value:** Any South African can create a legally compliant will through an intelligent, guided conversation — no legal knowledge required.
-**Current focus:** Phase 7 — Payment & Download
+**Current focus:** Phase 7 complete — ready for Phase 8
 
 ## Current Position
 
 Phase: 07 of 9 (Payment & Download)
-Plan: 3 of 4 in current phase
-Status: In progress
-Last activity: 2026-02-07 - Completed plan 07-03: Payment & download API endpoints
-
+Plan: 4 of 4 in current phase
+Status: Phase complete
+Last activity: 2026-02-07 - Completed plan 07-04: Frontend payment flow
 Progress: [█████████████████████████████████] ~85% (33 of ~39 total plans)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 32
+- Total plans completed: 33
 - Average duration: 2m 38s
-- Total execution time: 1.44 hours
+- Total execution time: ~1.48 hours
 
 **By Phase:**
 
@@ -34,11 +33,11 @@ Progress: [███████████████████████
 | 04 | 5/5 | 16m 32s | 3m 18s |
 | 05 | 4/4 | ~11m 26s | ~2m 52s |
 | 06 | 4/4 | ~14m 24s | ~3m 36s |
-| 07 | 3/4 | 7m 20s | 2m 27s |
+| 07 | 4/4 | ~11m 20s | ~2m 50s |
 
 **Recent Trend:**
-- Last 5 plans: 06-03 (1m 54s), 06-04 (~8m incl. checkpoint + fix), 07-01 (1m 59s), 07-02 (2m 21s), 07-03 (3m 0s)
-- Trend: Consistent ~2-3m per auto plan, checkpoints add ~3-5m
+- Last 5 plans: 07-01 (1m 59s), 07-02 (2m 21s), 07-03 (3m 0s), 07-04 (~4m incl. checkpoint)
+- Trend: Consistent ~2-3m per auto plan, checkpoints add ~1-2m
 
 *Updated after each plan completion*
 
@@ -106,6 +105,8 @@ Recent decisions affecting current work:
 - D-0703-01: ITN webhook always returns 200 OK per PayFast spec, logs errors internally
 - D-0703-02: Download endpoint uses token-based auth, bypasses both POPIA and Clerk middleware
 - D-0703-03: ITN processing is idempotent -- completed payments skipped on re-processing
+- D-0704-01: localStorage for payment_id persistence across PayFast redirect
+- D-0704-02: Blob-based download via temporary anchor element for browser PDF download
 
 ### Pending Todos
 
@@ -130,6 +131,7 @@ None yet.
 - Phase 3-4: SA attorney review needed for testamentary trust, usufruct, business asset clauses
 - Phase 7: Migration 006 must be applied (`alembic upgrade head`) before payment features work
 - Phase 7: PayFast sandbox testing required before production
+- Phase 7: Production deployment requires public URL for PayFast ITN webhook
 - Audit immutability (REVOKE UPDATE/DELETE) must be applied manually on production DB
 - Monthly audit_logs partitions need automated creation or pre-creation in future migrations
 
@@ -152,9 +154,9 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-02-07T19:09:49Z
-Stopped at: Phase 7 plan 03 complete
-Resume file: .planning/phases/07-payment-download/07-04-PLAN.md
+Last session: 2026-02-07T19:14:00Z
+Stopped at: Phase 7 complete (all 4 plans done)
+Resume file: .planning/phases/08-post-purchase/08-01-PLAN.md
 
 ---
-*Next: Phase 7 Plan 04: Frontend payment integration*
+*Next: Phase 8: Post-Purchase Features*

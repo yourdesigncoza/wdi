@@ -19,7 +19,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 4: Complex Estate Scenarios** - Blended families, trusts, usufruct, business assets, joint wills
 - [x] **Phase 5: AI Verification** - Dual-LLM verification layer (Gemini checks OpenAI), estate logic validation
 - [x] **Phase 6: Document Generation** - PDF generation with WeasyPrint, witness instructions, preview, disclaimers (completed 2026-02-07)
-- [ ] **Phase 7: Payment & Download** - PayFast integration, payment gate, download links, email backup
+- [x] **Phase 7: Payment & Download** - PayFast integration, payment gate, download links, email backup (completed 2026-02-07)
 - [ ] **Phase 8: Post-Purchase Features** - Save/resume functionality, unlimited will updates
 - [ ] **Phase 9: Additional Documents** - Living will and funeral wishes document generation
 
@@ -168,9 +168,9 @@ Plans:
 
 Plans:
 - [x] 07-01-PLAN.md — Payment model, migration 006, config settings, Pydantic schemas
-- [ ] 07-02-PLAN.md — PayFast service, download token service, email service + template
-- [ ] 07-03-PLAN.md — Payment API (initiate, ITN webhook, status) + download API endpoint
-- [ ] 07-04-PLAN.md — Frontend: PaymentPage, return/cancel/download pages, wizard integration (checkpoint)
+- [x] 07-02-PLAN.md — PayFast service, download token service, email service + template
+- [x] 07-03-PLAN.md — Payment API (initiate, ITN webhook, status) + download API endpoint
+- [x] 07-04-PLAN.md — Frontend: PaymentPage, return/cancel/download pages, wizard integration (checkpoint)
 
 ### Phase 8: Post-Purchase Features
 **Goal**: Users can save progress, resume later, and update their will after purchase
@@ -219,7 +219,7 @@ Note: Phase 9 depends only on Phase 6, can potentially run in parallel with Phas
 | 4. Complex Estate Scenarios | 5/5 | Complete | 2026-02-06 |
 | 5. AI Verification | 4/4 | Complete | 2026-02-06 |
 | 6. Document Generation | 4/4 | Complete | 2026-02-07 |
-| 7. Payment & Download | 1/4 | In progress | - |
+| 7. Payment & Download | 4/4 | Complete | 2026-02-07 |
 | 8. Post-Purchase Features | 0/4 | Not started | - |
 | 9. Additional Documents | 0/3 | Not started | - |
 
