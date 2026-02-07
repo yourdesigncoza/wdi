@@ -10,17 +10,17 @@ See: .planning/PROJECT.md (updated 2026-02-05)
 ## Current Position
 
 Phase: 08 of 9 (Post-Purchase Features)
-Plan: 1 of ? in current phase
+Plan: 2 of 4 in current phase
 Status: In progress
-Last activity: 2026-02-07 - Completed plan 08-01: Will versioning and session persistence
-Progress: [██████████████████████████████████] ~87% (34 of ~39 total plans)
+Last activity: 2026-02-07 - Completed plan 08-02: Auto-save and Zustand-DB sync
+Progress: [███████████████████████████████████] ~90% (35 of ~39 total plans)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 34
-- Average duration: 2m 38s
-- Total execution time: ~1.52 hours
+- Total plans completed: 35
+- Average duration: 2m 37s
+- Total execution time: ~1.55 hours
 
 **By Phase:**
 
@@ -34,10 +34,10 @@ Progress: [███████████████████████
 | 05 | 4/4 | ~11m 26s | ~2m 52s |
 | 06 | 4/4 | ~14m 24s | ~3m 36s |
 | 07 | 4/4 | ~11m 20s | ~2m 50s |
-| 08 | 1/? | 2m 33s | 2m 33s |
+| 08 | 2/4 | 4m 39s | 2m 20s |
 
 **Recent Trend:**
-- Last 5 plans: 07-02 (2m 21s), 07-03 (3m 0s), 07-04 (~4m incl. checkpoint), 08-01 (2m 33s)
+- Last 5 plans: 07-03 (3m 0s), 07-04 (~4m incl. checkpoint), 08-01 (2m 33s), 08-02 (2m 6s)
 - Trend: Consistent ~2-3m per auto plan
 
 *Updated after each plan completion*
@@ -111,6 +111,8 @@ Recent decisions affecting current work:
 - D-0801-01: version (Integer, default 1) tracks regeneration count; current_section (String(50), default "personal") tracks wizard resume position
 - D-0801-02: Regenerate endpoint requires both paid_at (402) and verified status (400) before allowing re-generation
 - D-0801-03: Regenerate reuses existing completed Payment record, generating a fresh download token
+- D-0802-01: Fire-and-forget pattern for section sync -- backend failures logged but do not block UI navigation
+- D-0802-02: 2-second debounce default for auto-save -- balances responsiveness with network efficiency
 
 ### Pending Todos
 
@@ -159,9 +161,9 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-02-07T19:53:19Z
-Stopped at: Phase 8, plan 1 complete
-Resume file: .planning/phases/08-post-purchase-features/08-02-PLAN.md
+Last session: 2026-02-07T19:58:26Z
+Stopped at: Phase 8, plan 2 complete
+Resume file: .planning/phases/08-post-purchase-features/08-03-PLAN.md
 
 ---
-*Next: Phase 8 Plan 2 (next plan in post-purchase features)*
+*Next: Phase 8 Plan 3 (next plan in post-purchase features)*
