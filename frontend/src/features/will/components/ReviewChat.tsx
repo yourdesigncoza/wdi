@@ -253,7 +253,7 @@ export function ReviewChat({ willId, onNavigateToSection }: ReviewChatProps) {
           </button>
           <button
             type="button"
-            className="btn btn-ghost btn-sm"
+            className="btn btn-secondary btn-sm"
             onClick={() => setShowReviewCards((prev) => !prev)}
           >
             {showReviewCards ? 'Hide Details' : 'View Details'}
@@ -290,7 +290,7 @@ export function ReviewChat({ willId, onNavigateToSection }: ReviewChatProps) {
           {isStreaming ? (
             <button
               type="button"
-              className="btn btn-ghost btn-sm"
+              className="btn btn-secondary btn-sm"
               onClick={stopStreaming}
               aria-label="Stop streaming"
             >

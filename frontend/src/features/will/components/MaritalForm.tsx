@@ -156,7 +156,7 @@ export function MaritalForm({ onBackToPersonal }: MaritalFormProps) {
       <div className="flex justify-between">
         <button
           type="button"
-          className="btn btn-soft"
+          className="btn btn-secondary"
           onClick={onBackToPersonal}
         >
           Back to Personal

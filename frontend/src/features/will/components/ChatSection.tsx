@@ -163,7 +163,7 @@ export function ChatSection({ section, willId, onNext }: ChatSectionProps) {
           {isStreaming ? (
             <button
               type="button"
-              className="btn btn-ghost btn-sm"
+              className="btn btn-secondary btn-sm"
               onClick={stopStreaming}
               aria-label="Stop streaming"
             >
@@ -187,7 +187,7 @@ export function ChatSection({ section, willId, onNext }: ChatSectionProps) {
           <div className="flex justify-end mt-2">
             <button
               type="button"
-              className="btn btn-active btn-accent btn-sm"
+              className="btn btn-accent btn-sm"
               onClick={onNext}
             >
               Next Section &rarr;

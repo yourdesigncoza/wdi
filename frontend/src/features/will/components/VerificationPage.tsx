@@ -122,7 +122,7 @@ function IssueCard({
       {targetSection && (
         <button
           type="button"
-          className="btn btn-ghost btn-xs self-start mt-1"
+          className="btn btn-secondary btn-xs self-start mt-1"
           onClick={() => onNavigate(targetSection)}
         >
           Go to {SECTION_LABELS[issue.section] ?? issue.section}
@@ -505,7 +505,7 @@ export function VerificationPage() {
               {!allWarningsChecked && (
                 <button
                   type="button"
-                  className="btn btn-ghost btn-sm"
+                  className="btn btn-secondary btn-sm"
                   onClick={handleAcknowledgeAll}
                 >
                   Select All
@@ -550,7 +550,7 @@ export function VerificationPage() {
         )}
         <button
           type="button"
-          className="btn btn-outline"
+          className="btn btn-secondary"
           onClick={startVerification}
         >
           Re-verify

@@ -106,7 +106,7 @@ export function ConsentModal() {
             <button
               onClick={handleLeaveSite}
               disabled={isSubmitting}
-              className="btn btn-outline flex-1"
+              className="btn btn-secondary flex-1"
             >
               Leave Site
             </button>

@@ -147,7 +147,7 @@ export function DocumentPreviewPage({ willId, onBack }: DocumentPreviewPageProps
         </button>
         <button
           type="button"
-          className="btn btn-outline"
+          className="btn btn-secondary"
           onClick={onBack}
         >
           Back to Verification

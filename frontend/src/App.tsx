@@ -53,7 +53,7 @@ function LandingPage() {
               </button>
             </SignInButton>
             <SignUpButton mode="modal">
-              <button className="btn btn-outline">
+              <button className="btn btn-secondary">
                 Sign Up
               </button>
             </SignUpButton>

@@ -455,7 +455,7 @@ export function SectionReview({ section, onEdit }: SectionReviewProps) {
           {hasData && (
             <button
               type="button"
-              className="btn btn-outline btn-sm"
+              className="btn btn-secondary btn-sm"
               onClick={() => onEdit(section)}
             >
               Edit
