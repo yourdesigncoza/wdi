@@ -16,6 +16,7 @@ import { DocumentPreviewPage } from './DocumentPreviewPage.tsx'
 import { PaymentPage } from './PaymentPage.tsx'
 import {
   createWill,
+  getWill,
   updateWillSection,
   extractConversationData,
   markSectionComplete as markSectionCompleteApi,
@@ -85,8 +86,26 @@ export function WillWizard() {
   const scenarios = useWillStore((s) => s.scenarios)
   const { sections } = useWillProgress()
 
+  // Track whether the current will has already been paid for
+  const [isPaidWill, setIsPaidWill] = useState(false)
+
   // Track whether scenario detection interstitial has been shown
   const [scenariosDetected, setScenariosDetected] = useState(false)
+
+  // Detect whether the current will has been paid for
+  useEffect(() => {
+    if (!willId) {
+      setIsPaidWill(false)
+      return
+    }
+    getWill(willId)
+      .then((will) => {
+        if (will.paid_at) {
+          setIsPaidWill(true)
+        }
+      })
+      .catch(() => {})
+  }, [willId])
 
   // Track whether will creation is in-flight to prevent duplicate calls
   const creatingRef = useRef(false)
@@ -323,6 +342,7 @@ export function WillWizard() {
       return (
         <DocumentPreviewPage
           willId={willId}
+          isPaidWill={isPaidWill}
           onBack={() => setCurrentSection('verification')}
           onProceedToPayment={() => setCurrentSection('payment')}
         />
