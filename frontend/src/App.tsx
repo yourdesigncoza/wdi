@@ -13,6 +13,9 @@ import { PrivacyPolicy } from './components/common/PrivacyPolicy'
 import { InfoOfficerContact } from './components/common/InfoOfficerContact'
 import { ThemeToggle } from './components/ui/ThemeToggle'
 import { WillWizard } from './features/will/components/WillWizard.tsx'
+import { PaymentReturnPage } from './features/will/components/PaymentReturnPage.tsx'
+import { PaymentCancelPage } from './features/will/components/PaymentCancelPage.tsx'
+import { DownloadPage } from './features/will/components/DownloadPage.tsx'
 import { useConsent } from './hooks/useConsent'
 
 const queryClient = new QueryClient({
@@ -154,6 +157,9 @@ export default function App() {
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/info-officer" element={<InfoOfficerContact />} />
           <Route path="/will" element={<AuthGatedContent><WillPage /></AuthGatedContent>} />
+          <Route path="/payment/return" element={<AuthGatedContent><PaymentReturnPage /></AuthGatedContent>} />
+          <Route path="/payment/cancel" element={<AuthGatedContent><PaymentCancelPage /></AuthGatedContent>} />
+          <Route path="/download/:token" element={<AuthGatedContent><DownloadPage /></AuthGatedContent>} />
           <Route path="*" element={<AuthGatedContent><MainContent /></AuthGatedContent>} />
         </Routes>
       </BrowserRouter>

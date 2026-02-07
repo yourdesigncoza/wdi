@@ -4,9 +4,10 @@ import { generatePreview } from '../../../services/api.ts'
 interface DocumentPreviewPageProps {
   willId: string
   onBack: () => void
+  onProceedToPayment?: () => void
 }
 
-export function DocumentPreviewPage({ willId, onBack }: DocumentPreviewPageProps) {
+export function DocumentPreviewPage({ willId, onBack, onProceedToPayment }: DocumentPreviewPageProps) {
   const [disclaimerChecked, setDisclaimerChecked] = useState(false)
   const [isGenerating, setIsGenerating] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -178,6 +179,19 @@ export function DocumentPreviewPage({ willId, onBack }: DocumentPreviewPageProps
               to your will.
             </p>
           </div>
+        </div>
+      )}
+
+      {/* Proceed to payment after preview generated */}
+      {hasGenerated && onProceedToPayment && (
+        <div className="mt-4">
+          <button
+            type="button"
+            className="btn btn-neutral btn-lg w-full"
+            onClick={onProceedToPayment}
+          >
+            Proceed to Payment — R199.00
+          </button>
         </div>
       )}
     </div>

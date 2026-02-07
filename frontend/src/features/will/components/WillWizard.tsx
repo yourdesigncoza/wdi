@@ -13,6 +13,7 @@ import { BusinessAssetsSection } from './BusinessAssetsSection.tsx'
 import { JointWillSetup } from './JointWillSetup.tsx'
 import { VerificationPage } from './VerificationPage.tsx'
 import { DocumentPreviewPage } from './DocumentPreviewPage.tsx'
+import { PaymentPage } from './PaymentPage.tsx'
 import { createWill, updateWillSection, extractConversationData } from '../../../services/api.ts'
 import type { WillSection } from '../types/will.ts'
 
@@ -140,7 +141,8 @@ export function WillWizard() {
       COMPLEX_SECTION_KEYS.has(currentSection) ||
       currentSection === 'review' ||
       currentSection === 'verification' ||
-      currentSection === 'document'
+      currentSection === 'document' ||
+      currentSection === 'payment'
     ) {
       void ensureWillExists()
     }
@@ -299,6 +301,23 @@ export function WillWizard() {
         <DocumentPreviewPage
           willId={willId}
           onBack={() => setCurrentSection('verification')}
+          onProceedToPayment={() => setCurrentSection('payment')}
+        />
+      )
+    }
+
+    if (section === 'payment') {
+      if (!willId) {
+        return (
+          <div className="flex justify-center py-12">
+            <span className="loading loading-spinner loading-md" />
+          </div>
+        )
+      }
+      return (
+        <PaymentPage
+          willId={willId}
+          onBack={() => setCurrentSection('document')}
         />
       )
     }
@@ -313,7 +332,8 @@ export function WillWizard() {
       COMPLEX_SECTION_KEYS.has(currentSection) ||
       currentSection === 'review' ||
       currentSection === 'verification' ||
-      currentSection === 'document') &&
+      currentSection === 'document' ||
+      currentSection === 'payment') &&
     !!willId
 
   return (
