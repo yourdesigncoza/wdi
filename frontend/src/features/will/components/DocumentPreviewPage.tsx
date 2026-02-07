@@ -1,17 +1,21 @@
 import { useState, useCallback } from 'react'
-import { generatePreview } from '../../../services/api.ts'
+import { Link } from 'react-router-dom'
+import { generatePreview, regenerateWill } from '../../../services/api.ts'
 
 interface DocumentPreviewPageProps {
   willId: string
+  isPaidWill?: boolean
   onBack: () => void
   onProceedToPayment?: () => void
 }
 
-export function DocumentPreviewPage({ willId, onBack, onProceedToPayment }: DocumentPreviewPageProps) {
+export function DocumentPreviewPage({ willId, isPaidWill, onBack, onProceedToPayment }: DocumentPreviewPageProps) {
   const [disclaimerChecked, setDisclaimerChecked] = useState(false)
   const [isGenerating, setIsGenerating] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [hasGenerated, setHasGenerated] = useState(false)
+  const [isRegenerating, setIsRegenerating] = useState(false)
+  const [regenerateResult, setRegenerateResult] = useState<{ download_token: string; version: number } | null>(null)
 
   const handleGenerate = useCallback(async () => {
     if (!disclaimerChecked) return
@@ -30,6 +34,19 @@ export function DocumentPreviewPage({ willId, onBack, onProceedToPayment }: Docu
       setIsGenerating(false)
     }
   }, [willId, disclaimerChecked])
+
+  const handleRegenerate = useCallback(async () => {
+    setIsRegenerating(true)
+    setError(null)
+    try {
+      const result = await regenerateWill(willId)
+      setRegenerateResult(result)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Re-generation failed')
+    } finally {
+      setIsRegenerating(false)
+    }
+  }, [willId])
 
   return (
     <div className="flex flex-col gap-6 py-4">
@@ -182,8 +199,63 @@ export function DocumentPreviewPage({ willId, onBack, onProceedToPayment }: Docu
         </div>
       )}
 
-      {/* Proceed to payment after preview generated */}
-      {hasGenerated && onProceedToPayment && (
+      {/* Post-preview actions: re-generate for paid wills, payment for unpaid */}
+      {hasGenerated && isPaidWill && !regenerateResult && (
+        <div className="mt-4">
+          <button
+            type="button"
+            className="btn btn-neutral btn-lg w-full"
+            onClick={handleRegenerate}
+            disabled={isRegenerating}
+          >
+            {isRegenerating ? (
+              <>
+                <span className="loading loading-spinner loading-xs" />
+                Re-generating...
+              </>
+            ) : (
+              'Re-generate Will (Free)'
+            )}
+          </button>
+        </div>
+      )}
+
+      {hasGenerated && isPaidWill && regenerateResult && (
+        <div className="mt-4 space-y-3">
+          <div className="alert alert-success">
+            <svg
+              className="w-6 h-6 shrink-0"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M5 13l4 4L19 7"
+              />
+            </svg>
+            <div>
+              <h4 className="font-bold">Will updated to version {regenerateResult.version}!</h4>
+              <p className="text-sm mt-1">
+                Your updated will document is ready for download.
+              </p>
+            </div>
+          </div>
+          <Link
+            to={`/download/${regenerateResult.download_token}`}
+            className="btn btn-neutral btn-lg w-full"
+          >
+            Download Updated Will
+          </Link>
+          <Link to="/dashboard" className="btn btn-soft w-full">
+            Back to Dashboard
+          </Link>
+        </div>
+      )}
+
+      {hasGenerated && !isPaidWill && onProceedToPayment && (
         <div className="mt-4">
           <button
             type="button"
