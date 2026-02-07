@@ -18,7 +18,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 3: Core Will Conversation** - Basic will questionnaire with AI guidance, data collection, real-time explanations
 - [x] **Phase 4: Complex Estate Scenarios** - Blended families, trusts, usufruct, business assets, joint wills
 - [x] **Phase 5: AI Verification** - Dual-LLM verification layer (Gemini checks OpenAI), estate logic validation
-- [ ] **Phase 6: Document Generation** - PDF generation with WeasyPrint, witness instructions, preview, disclaimers
+- [x] **Phase 6: Document Generation** - PDF generation with WeasyPrint, witness instructions, preview, disclaimers (completed 2026-02-07)
 - [ ] **Phase 7: Payment & Download** - PayFast integration, payment gate, download links, email backup
 - [ ] **Phase 8: Post-Purchase Features** - Save/resume functionality, unlimited will updates
 - [ ] **Phase 9: Additional Documents** - Living will and funeral wishes document generation
@@ -150,10 +150,10 @@ Plans:
 **Plans**: 4 plans in 3 waves
 
 Plans:
-- [ ] 06-01-PLAN.md — WeasyPrint install + Jinja2 HTML/CSS will templates (cover, body, signature, instructions, watermark)
-- [ ] 06-02-PLAN.md — DocumentGenerationService (clause assembly, variable extraction, PDF generation)
-- [ ] 06-03-PLAN.md — Document preview API endpoint with disclaimer and status gating
-- [ ] 06-04-PLAN.md — Frontend: disclaimer confirmation, preview page, wizard integration (checkpoint)
+- [x] 06-01-PLAN.md — WeasyPrint install + Jinja2 HTML/CSS will templates (cover, body, signature, instructions, watermark)
+- [x] 06-02-PLAN.md — DocumentGenerationService (clause assembly, variable extraction, PDF generation)
+- [x] 06-03-PLAN.md — Document preview API endpoint with disclaimer and status gating
+- [x] 06-04-PLAN.md — Frontend: disclaimer confirmation, preview page, wizard integration (checkpoint)
 
 ### Phase 7: Payment & Download
 **Goal**: Users can pay and download their completed will document

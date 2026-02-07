@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-02-05)
 
 **Core value:** Any South African can create a legally compliant will through an intelligent, guided conversation — no legal knowledge required.
-**Current focus:** Phase 6 — Document Generation
+**Current focus:** Phase 6 — Document Generation (COMPLETE)
 
 ## Current Position
 
-Phase: 06 of 9 (Document Generation) — In progress
-Plan: 3 of 4 in current phase
-Status: In progress
-Last activity: 2026-02-07 - Completed quick task 008: Colorful step indicator by importance
+Phase: 06 of 9 (Document Generation) — COMPLETE
+Plan: 4 of 4 in current phase
+Status: Complete — awaiting verification
+Last activity: 2026-02-07 - Completed plan 06-04: Frontend Preview UI + clause model fix
 
-Progress: [████████████████████████████░] ~74% (29 of ~39 total plans)
+Progress: [██████████████████████████████] ~77% (30 of ~39 total plans)
 
 ## Performance Metrics
 
@@ -33,11 +33,11 @@ Progress: [███████████████████████
 | 03 | 8/8 | 23m 58s | 3m 0s |
 | 04 | 5/5 | 16m 32s | 3m 18s |
 | 05 | 4/4 | ~11m 26s | ~2m 52s |
-| 06 | 3/4 | ~6m 24s | ~2m 8s |
+| 06 | 4/4 | ~14m 24s | ~3m 36s |
 
 **Recent Trend:**
-- Last 5 plans: 05-03 (2m 23s), 05-04 (~5m incl. checkpoint), 06-01 (2m 30s), 06-02 (parallel), 06-03 (1m 54s)
-- Trend: Consistent ~2m per auto plan
+- Last 5 plans: 05-04 (~5m incl. checkpoint), 06-01 (2m 30s), 06-02 (parallel), 06-03 (1m 54s), 06-04 (~8m incl. checkpoint + fix)
+- Trend: Consistent ~2m per auto plan, checkpoints add ~3-5m
 
 *Updated after each plan completion*
 
@@ -98,6 +98,8 @@ Recent decisions affecting current work:
 - D-0602-03: TEMPLATE_DIR at templates/ root, paths prefixed with will/ for FileSystemLoader
 - D-0603-01: WillService injected separately for status check rather than exposing get_will on DocumentGenerationService
 - D-0603-02: Content-Disposition inline (not attachment) for browser PDF viewer display
+- D-0604-01: Blob-based PDF preview opens in new browser tab (not inline embed)
+- D-0604-02: Clause category field uses explicit String(50) sa_column to match Alembic-created VARCHAR column
 
 ### Pending Todos
 
@@ -143,9 +145,9 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-02-07T18:19:22Z
-Stopped at: Completed quick task 008 (Colorful step indicator by importance)
+Last session: 2026-02-07T20:00:00Z
+Stopped at: Phase 6 complete — running verification
 Resume file: None
 
 ---
-*Next: 06-04-PLAN.md — Frontend Preview UI*
+*Next: Phase 6 verification, then Phase 7: Payment & Download*
