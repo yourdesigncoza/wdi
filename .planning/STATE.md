@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-02-05)
 ## Current Position
 
 Phase: 06 of 9 (Document Generation) — In progress
-Plan: 1 of 4 in current phase
+Plan: 3 of 4 in current phase
 Status: In progress
-Last activity: 2026-02-07 - Completed 06-01-PLAN.md (WeasyPrint templates)
+Last activity: 2026-02-07 - Completed 06-03-PLAN.md (Preview API Endpoint)
 
-Progress: [███████████████████████████░] ~69% (27 of ~39 total plans)
+Progress: [████████████████████████████░] ~74% (29 of ~39 total plans)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 27
-- Average duration: 2m 47s
-- Total execution time: 1.25 hours
+- Total plans completed: 29
+- Average duration: 2m 43s
+- Total execution time: 1.32 hours
 
 **By Phase:**
 
@@ -33,11 +33,11 @@ Progress: [███████████████████████
 | 03 | 8/8 | 23m 58s | 3m 0s |
 | 04 | 5/5 | 16m 32s | 3m 18s |
 | 05 | 4/4 | ~11m 26s | ~2m 52s |
-| 06 | 1/4 | 2m 30s | 2m 30s |
+| 06 | 3/4 | ~6m 24s | ~2m 8s |
 
 **Recent Trend:**
-- Last 5 plans: 05-02 (2m 15s), 05-03 (2m 23s), 05-04 (~5m incl. checkpoint), 06-01 (2m 30s)
-- Trend: Consistent ~2m 30s per auto plan
+- Last 5 plans: 05-03 (2m 23s), 05-04 (~5m incl. checkpoint), 06-01 (2m 30s), 06-02 (parallel), 06-03 (1m 54s)
+- Trend: Consistent ~2m per auto plan
 
 *Updated after each plan completion*
 
@@ -93,6 +93,8 @@ Recent decisions affecting current work:
 - D-0502-02: Rules organized as dict[severity][code] -> description for prompt embedding
 - D-0601-01: WeasyPrint position:fixed for watermark (repeats on every page)
 - D-0601-02: Include paths prefixed with will/ subdirectory for Jinja2 template resolution
+- D-0603-01: WillService injected separately for status check rather than exposing get_will on DocumentGenerationService
+- D-0603-02: Content-Disposition inline (not attachment) for browser PDF viewer display
 
 ### Pending Todos
 
@@ -125,9 +127,9 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-02-07T14:38:00Z
-Stopped at: Completed 06-01-PLAN.md (WeasyPrint templates)
+Last session: 2026-02-07T14:43:36Z
+Stopped at: Completed 06-03-PLAN.md (Preview API Endpoint)
 Resume file: None
 
 ---
-*Next: 06-02-PLAN.md — Document Generation Service*
+*Next: 06-04-PLAN.md — Frontend Preview UI*
