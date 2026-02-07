@@ -542,9 +542,8 @@ export function VerificationPage() {
         {!hasBlockingErrors && canProceed && (
           <button
             type="button"
-            className="btn btn-primary btn-disabled"
-            disabled
-            title="Document generation coming in Phase 6"
+            className="btn btn-primary"
+            onClick={() => setCurrentSection('document')}
           >
             Proceed to Document Generation
           </button>

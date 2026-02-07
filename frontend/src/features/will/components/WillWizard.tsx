@@ -12,6 +12,7 @@ import { UsufructSection } from './UsufructSection.tsx'
 import { BusinessAssetsSection } from './BusinessAssetsSection.tsx'
 import { JointWillSetup } from './JointWillSetup.tsx'
 import { VerificationPage } from './VerificationPage.tsx'
+import { DocumentPreviewPage } from './DocumentPreviewPage.tsx'
 import { createWill } from '../../../services/api.ts'
 import type { WillSection } from '../types/will.ts'
 
@@ -87,7 +88,8 @@ export function WillWizard() {
       AI_SECTIONS.has(currentSection) ||
       COMPLEX_SECTION_KEYS.has(currentSection) ||
       currentSection === 'review' ||
-      currentSection === 'verification'
+      currentSection === 'verification' ||
+      currentSection === 'document'
     ) {
       void ensureWillExists()
     }
@@ -217,6 +219,22 @@ export function WillWizard() {
       return <VerificationPage />
     }
 
+    if (section === 'document') {
+      if (!willId) {
+        return (
+          <div className="flex justify-center py-12">
+            <span className="loading loading-spinner loading-md" />
+          </div>
+        )
+      }
+      return (
+        <DocumentPreviewPage
+          willId={willId}
+          onBack={() => setCurrentSection('verification')}
+        />
+      )
+    }
+
     return null
   }
 
@@ -226,7 +244,8 @@ export function WillWizard() {
     (AI_SECTIONS.has(currentSection) ||
       COMPLEX_SECTION_KEYS.has(currentSection) ||
       currentSection === 'review' ||
-      currentSection === 'verification') &&
+      currentSection === 'verification' ||
+      currentSection === 'document') &&
     !!willId
 
   return (
