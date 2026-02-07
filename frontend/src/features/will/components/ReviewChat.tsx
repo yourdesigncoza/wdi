@@ -74,7 +74,7 @@ export function ReviewChat({ willId, onNavigateToSection }: ReviewChatProps) {
     jointWill,
   }
 
-  const { messages, isStreaming, error, sendMessage, stopStreaming, setMessages } =
+  const { messages, isStreaming, error, sendMessage, stopStreaming } =
     useConversation({ section: 'review', willContext, willId })
 
   // On mount, trigger the AI to narrate the complete will

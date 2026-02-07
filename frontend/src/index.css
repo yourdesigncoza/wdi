@@ -2,3 +2,4 @@
 @plugin "daisyui" {
   themes: nord --default, business --prefersdark;
 }
+@source inline("chat chat-start chat-end chat-bubble chat-bubble-secondary chat-image chat-header chat-footer");
