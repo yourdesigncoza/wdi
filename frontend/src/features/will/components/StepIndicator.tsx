@@ -47,7 +47,7 @@ export function StepIndicator({ sections, onNavigate }: StepIndicatorProps) {
           >
             <button
               type="button"
-              className="text-xs sm:text-sm cursor-pointer hover:underline"
+              className="text-xs cursor-pointer hover:underline"
               onClick={() => onNavigate(step.key)}
             >
               {step.label}
