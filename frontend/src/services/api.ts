@@ -242,3 +242,20 @@ export function acknowledgeWarnings(
     body: JSON.stringify({ warning_codes: warningCodes }),
   })
 }
+
+// ── Document Generation API ─────────────────────────────────────────
+
+/** Generate a watermarked preview PDF and return as Blob */
+export async function generatePreview(willId: string): Promise<Blob> {
+  const response = await fetch(`${BASE_URL}/wills/${willId}/preview`, {
+    method: 'POST',
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ disclaimer_acknowledged: true }),
+  })
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({ detail: 'Preview generation failed' }))
+    throw new Error(errorData.detail || `API error: ${response.status}`)
+  }
+  return response.blob()
+}

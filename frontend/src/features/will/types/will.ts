@@ -186,6 +186,7 @@ export const WILL_SECTIONS = [
   'joint',
   'review',
   'verification',
+  'document',
 ] as const
 
 export type WillSection = (typeof WILL_SECTIONS)[number]
