@@ -114,7 +114,7 @@ All `VITE_*` variables are **build-time** variables. They're passed as Docker bu
 - Base: `python:3.13-slim`
 - Installs WeasyPrint system deps (cairo, pango, gdk-pixbuf)
 - Installs Python deps from `requirements.txt`
-- Entry: `start.sh` (runs `alembic upgrade head` then `uvicorn`)
+- Entry: `start.sh` (runs `alembic upgrade head`, seeds clause library, then `uvicorn`)
 
 ### Frontend (`frontend/Dockerfile`)
 
@@ -129,6 +129,7 @@ Railway-managed PostgreSQL with persistent volume (`postgres-volume`).
 - Internal host: `postgres.railway.internal:5432`
 - Database name: `railway`
 - Migrations: Alembic, auto-run on backend deploy via `start.sh`
+- Clause seeding: `python -m scripts.seed_clauses` runs after migrations (idempotent, skips existing)
 
 ### Connecting Locally
 
@@ -181,6 +182,10 @@ The POPIA consent cookie uses `SameSite=None` + `Secure=True` in production for 
 ### 401 "authentication_required" on specific endpoints
 
 All frontend API calls must use the authenticated `useApi()` client (from `AuthApiContext`), never raw `fetch()`. The `useApi()` client automatically includes the Clerk Bearer token. Raw fetch calls will work in dev (when `CLERK_JWKS_URL` is empty and auth is skipped) but fail in production.
+
+### Will PDF pages are blank (no clause content)
+
+The clause library must be seeded in the database. The `start.sh` script runs `python -m scripts.seed_clauses` on every deploy (idempotent). If clauses are missing, the document service skips all clause rendering and the will body page is empty. Verify with: `railway connect Postgres` then `SELECT count(*) FROM clause;` (should be 12).
 
 ### VITE_API_URL not updating
 
