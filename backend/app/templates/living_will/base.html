@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Advance Healthcare Directive &mdash; {{ full_name }}</title>
+  <style>
+    /* ==========================================================================
+       CSS Paged Media - Living Will / Advance Healthcare Directive
+       ========================================================================== */
+
+    /* --- Page rules --------------------------------------------------------- */
+    @page {
+      size: A4;
+      margin: 25mm 25mm 30mm 25mm;
+
+      @bottom-center {
+        content: "Page " counter(page) " of " counter(pages);
+        font-family: "Liberation Serif", "Times New Roman", serif;
+        font-size: 9pt;
+        color: #666;
+      }
+    }
+
+    @page :first {
+      @bottom-center { content: none; }
+    }
+
+    /* --- Typography --------------------------------------------------------- */
+    body {
+      font-family: "Liberation Serif", "Times New Roman", serif;
+      font-size: 12pt;
+      line-height: 1.5;
+      color: #000;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1, h2, h3, h4 {
+      margin-top: 0;
+    }
+
+    /* --- Watermark ---------------------------------------------------------- */
+    .watermark-overlay {
+      position: fixed;
+      top: 30%;
+      left: 5%;
+      width: 90%;
+      text-align: center;
+      font-size: 72pt;
+      color: rgba(200, 0, 0, 0.12);
+      transform: rotate(-35deg);
+      z-index: 1000;
+      pointer-events: none;
+      font-weight: bold;
+      letter-spacing: 8px;
+    }
+
+    /* --- Cover page --------------------------------------------------------- */
+    .cover-page {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+    }
+
+    .cover-brand {
+      font-size: 14pt;
+      letter-spacing: 4px;
+      color: #555;
+      margin-bottom: 40pt;
+      text-transform: uppercase;
+    }
+
+    .cover-title {
+      font-size: 18pt;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 10pt;
+    }
+
+    .cover-of {
+      font-size: 12pt;
+      margin: 10pt 0;
+      color: #333;
+    }
+
+    .cover-name {
+      font-size: 16pt;
+      font-weight: bold;
+      text-transform: uppercase;
+      margin-bottom: 40pt;
+    }
+
+    .cover-meta {
+      margin-top: 30pt;
+      font-size: 11pt;
+      color: #333;
+    }
+
+    .cover-meta p {
+      margin: 6pt 0;
+    }
+
+    /* --- Document body ------------------------------------------------------ */
+    .document-body {
+      page-break-before: always;
+    }
+
+    .section-block {
+      page-break-inside: avoid;
+      margin-bottom: 18pt;
+    }
+
+    .section-title {
+      font-size: 13pt;
+      font-weight: bold;
+      margin-bottom: 8pt;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 4pt;
+    }
+
+    .field-row {
+      margin-bottom: 4pt;
+    }
+
+    .field-label {
+      font-weight: bold;
+    }
+
+    /* Treatment table */
+    .treatment-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 8pt 0;
+    }
+
+    .treatment-table th,
+    .treatment-table td {
+      border: 1px solid #999;
+      padding: 6pt 10pt;
+      text-align: left;
+      font-size: 11pt;
+    }
+
+    .treatment-table th {
+      background-color: #f0f0f0;
+      font-weight: bold;
+    }
+
+    .accept { color: #006600; font-weight: bold; }
+    .refuse { color: #990000; font-weight: bold; }
+
+    /* Notes */
+    .important-notes {
+      margin-top: 24pt;
+      padding: 12pt;
+      border: 1px solid #999;
+      background-color: #fafafa;
+      font-size: 10pt;
+    }
+
+    .important-notes h3 {
+      font-size: 11pt;
+      margin-bottom: 8pt;
+    }
+
+    .important-notes ul {
+      margin: 4pt 0 4pt 16pt;
+      padding: 0;
+    }
+
+    .important-notes li {
+      margin-bottom: 4pt;
+    }
+
+    /* --- Signature page ----------------------------------------------------- */
+    .signature-page {
+      page-break-before: always;
+    }
+
+    .sig-section {
+      margin-bottom: 30pt;
+    }
+
+    .sig-line {
+      border-bottom: 1px solid #000;
+      width: 250pt;
+      margin: 40pt 0 5pt 0;
+    }
+
+    .sig-label {
+      font-weight: bold;
+      font-size: 11pt;
+    }
+
+    .sig-field {
+      margin: 8pt 0;
+      font-size: 11pt;
+    }
+
+    .sig-field-line {
+      border-bottom: 1px solid #000;
+      display: inline-block;
+      width: 250pt;
+      margin-left: 8pt;
+    }
+
+    .witness-block {
+      page-break-inside: avoid;
+      margin-bottom: 30pt;
+    }
+
+    .witness-note {
+      font-size: 10pt;
+      color: #555;
+      font-style: italic;
+      margin-top: 12pt;
+    }
+  </style>
+</head>
+<body>
+  {% if is_preview %}
+  <div class="watermark-overlay">PREVIEW &mdash; NOT VALID</div>
+  {% endif %}
+
+  {# --- Cover page --- #}
+  <div class="cover-page">
+    <div class="cover-brand">WillCraft SA</div>
+    <div class="cover-title">Advance Healthcare Directive</div>
+    <div class="cover-of">(Living Will)</div>
+    <div class="cover-of">of</div>
+    <div class="cover-name">{{ full_name or "[Full Name]" }}</div>
+    <div class="cover-meta">
+      <p>ID Number: {{ id_number or "[ID Number]" }}</p>
+      <p>Date: {{ generation_date }}</p>
+    </div>
+  </div>
+
+  {% include "living_will/body.html" %}
+  {% include "living_will/signature_page.html" %}
+</body>
+</html>

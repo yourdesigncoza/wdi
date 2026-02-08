@@ -1,0 +1,135 @@
+{# Funeral Wishes -- Body Content #}
+<div class="document-body">
+
+  {# --- Personal Details --- #}
+  <div class="section-block">
+    <h2 class="section-title">1. Personal Details</h2>
+    <div class="field-row"><span class="field-label">Full Name:</span> {{ full_name or "[Full Name]" }}</div>
+    <div class="field-row"><span class="field-label">ID Number:</span> {{ id_number or "[ID Number]" }}</div>
+  </div>
+
+  {# --- Body Disposition --- #}
+  <div class="section-block">
+    <h2 class="section-title">2. Body Disposition</h2>
+    {% if disposition %}
+    <div class="field-row"><span class="field-label">Preferred method:</span> {{ disposition | capitalize }}</div>
+    {% else %}
+    <div class="field-row"><span class="field-label">Preferred method:</span> [Not specified]</div>
+    {% endif %}
+
+    {% if embalming is not none %}
+    <div class="field-row"><span class="field-label">Embalming:</span> {{ "Yes" if embalming else "No" }}</div>
+    {% endif %}
+
+    {# Burial details #}
+    {% if disposition == "burial" %}
+    <div class="sub-section">
+      <h3>Burial Details</h3>
+      {% if cemetery_name %}
+      <div class="field-row"><span class="field-label">Cemetery:</span> {{ cemetery_name }}</div>
+      {% endif %}
+      {% if burial_location_details %}
+      <div class="field-row"><span class="field-label">Location details:</span> {{ burial_location_details }}</div>
+      {% endif %}
+      {% if casket_preference %}
+      <div class="field-row"><span class="field-label">Casket preference:</span> {{ casket_preference }}</div>
+      {% endif %}
+    </div>
+    {% endif %}
+
+    {# Cremation details #}
+    {% if disposition == "cremation" %}
+    <div class="sub-section">
+      <h3>Cremation Details</h3>
+      {% if ashes_instruction %}
+      <div class="field-row"><span class="field-label">Ashes:</span> {{ ashes_instruction | capitalize }}</div>
+      {% endif %}
+      {% if ashes_details %}
+      <div class="field-row"><span class="field-label">Details:</span> {{ ashes_details }}</div>
+      {% endif %}
+    </div>
+    {% endif %}
+  </div>
+
+  {# --- Ceremony Preferences --- #}
+  {% if ceremony_type or ceremony_location or religious_denomination or officiant_preference %}
+  <div class="section-block">
+    <h2 class="section-title">3. Ceremony Preferences</h2>
+    {% if ceremony_type %}
+    <div class="field-row"><span class="field-label">Type of ceremony:</span> {{ ceremony_type | replace("_", " ") | capitalize }}</div>
+    {% endif %}
+    {% if ceremony_location %}
+    <div class="field-row"><span class="field-label">Preferred location:</span> {{ ceremony_location }}</div>
+    {% endif %}
+    {% if religious_denomination %}
+    <div class="field-row"><span class="field-label">Religious denomination:</span> {{ religious_denomination }}</div>
+    {% endif %}
+    {% if officiant_preference %}
+    <div class="field-row"><span class="field-label">Officiant preference:</span> {{ officiant_preference }}</div>
+    {% endif %}
+  </div>
+  {% endif %}
+
+  {# --- Music and Readings --- #}
+  {% if music_preferences or readings_or_poems %}
+  <div class="section-block">
+    <h2 class="section-title">Music and Readings</h2>
+    {% if music_preferences %}
+    <p><strong>Music preferences:</strong></p>
+    <p>{{ music_preferences }}</p>
+    {% endif %}
+    {% if readings_or_poems %}
+    <p><strong>Readings or poems:</strong></p>
+    <p>{{ readings_or_poems }}</p>
+    {% endif %}
+  </div>
+  {% endif %}
+
+  {# --- People to Notify --- #}
+  {% if specific_attendees %}
+  <div class="section-block">
+    <h2 class="section-title">People to Notify</h2>
+    <p>{{ specific_attendees }}</p>
+  </div>
+  {% endif %}
+
+  {# --- Budget Guidance --- #}
+  {% if budget_preference %}
+  <div class="section-block">
+    <h2 class="section-title">Budget Guidance</h2>
+    <div class="field-row"><span class="field-label">Budget preference:</span> {{ budget_preference | capitalize }}</div>
+  </div>
+  {% endif %}
+
+  {# --- Additional Wishes --- #}
+  {% if additional_wishes %}
+  <div class="section-block">
+    <h2 class="section-title">Additional Wishes</h2>
+    <p>{{ additional_wishes }}</p>
+  </div>
+  {% endif %}
+
+  {# --- Messages to Family --- #}
+  {% if messages_to_family %}
+  <div class="section-block">
+    <h2 class="section-title">Messages to My Family</h2>
+    <p>{{ messages_to_family }}</p>
+  </div>
+  {% endif %}
+
+  {# --- Important Note --- #}
+  <div class="important-notes">
+    <h3>Important Note</h3>
+    <p>
+      This document records my personal wishes regarding my funeral arrangements.
+      It is <strong>not legally binding</strong> in South Africa. The executor of my estate
+      has final authority over funeral arrangements. However, I trust that my family and
+      executor will honour these wishes to the extent that is reasonably possible.
+    </p>
+    <p>
+      It is recommended that you share this document with your executor, family members,
+      and any person who may be involved in making funeral arrangements.
+    </p>
+  </div>
+
+</div>

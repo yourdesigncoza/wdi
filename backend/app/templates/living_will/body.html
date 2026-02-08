@@ -1,0 +1,148 @@
+{# Living Will -- Body Content #}
+<div class="document-body">
+
+  {# --- Declaration of Intent --- #}
+  <div class="section-block">
+    <h2 class="section-title">1. Declaration of Intent</h2>
+    <p>
+      I, <strong>{{ full_name or "[Full Name]" }}</strong>,
+      {% if id_number %}ID Number: <strong>{{ id_number }}</strong>,{% endif %}
+      {% if date_of_birth %}born on <strong>{{ date_of_birth }}</strong>,{% endif %}
+      {% if address %}residing at <strong>{{ address }}</strong>,{% endif %}
+      being of sound mind and acting of my own free will, hereby declare this to be my
+      Advance Healthcare Directive (Living Will).
+    </p>
+    <p>
+      I understand the nature and consequences of this directive. I make this declaration
+      while I am competent and able to communicate my wishes clearly.
+    </p>
+  </div>
+
+  {# --- Trigger Conditions --- #}
+  <div class="section-block">
+    <h2 class="section-title">2. When This Directive Applies</h2>
+    <p>This directive shall take effect if I am unable to participate in decisions about my medical care, specifically in any of the following circumstances:</p>
+    <ul>
+      {% if terminal_illness %}
+      <li><strong>Terminal Illness:</strong> I have an incurable and irreversible condition that has been diagnosed by two or more medical practitioners, and which will result in my death within a relatively short time without the administration of life-sustaining treatment.</li>
+      {% endif %}
+      {% if permanent_vegetative_state %}
+      <li><strong>Permanent Vegetative State:</strong> I have been diagnosed by two or more medical practitioners as being in a permanent vegetative state with no reasonable prospect of recovery.</li>
+      {% endif %}
+      {% if permanent_unconsciousness %}
+      <li><strong>Permanent Unconsciousness:</strong> I have been diagnosed by two or more medical practitioners as being permanently unconscious with no reasonable prospect of regaining consciousness.</li>
+      {% endif %}
+    </ul>
+  </div>
+
+  {# --- Treatment Preferences --- #}
+  <div class="section-block">
+    <h2 class="section-title">3. Treatment Preferences</h2>
+    <p>In the circumstances described above, my wishes regarding medical treatment are as follows:</p>
+    <table class="treatment-table">
+      <thead>
+        <tr>
+          <th>Treatment</th>
+          <th>My Decision</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Life support systems</td>
+          <td class="{{ 'accept' if life_support else 'refuse' }}">{{ "ACCEPT" if life_support else "REFUSE" }}</td>
+        </tr>
+        <tr>
+          <td>Artificial ventilation (breathing machine)</td>
+          <td class="{{ 'accept' if artificial_ventilation else 'refuse' }}">{{ "ACCEPT" if artificial_ventilation else "REFUSE" }}</td>
+        </tr>
+        <tr>
+          <td>Artificial nutrition and hydration (feeding tubes)</td>
+          <td class="{{ 'accept' if artificial_nutrition else 'refuse' }}">{{ "ACCEPT" if artificial_nutrition else "REFUSE" }}</td>
+        </tr>
+        <tr>
+          <td>Cardiopulmonary resuscitation (CPR)</td>
+          <td class="{{ 'accept' if resuscitation_cpr else 'refuse' }}">{{ "ACCEPT" if resuscitation_cpr else "REFUSE" }}</td>
+        </tr>
+        <tr>
+          <td>Antibiotics (when condition is terminal)</td>
+          <td class="{{ 'accept' if antibiotics_terminal else 'refuse' }}">{{ "ACCEPT" if antibiotics_terminal else "REFUSE" }}</td>
+        </tr>
+        <tr>
+          <td>Pain management and palliative care</td>
+          <td class="{{ 'accept' if pain_management else 'refuse' }}">{{ "ACCEPT" if pain_management else "REFUSE" }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  {# --- Healthcare Proxy --- #}
+  {% if proxy_name %}
+  <div class="section-block">
+    <h2 class="section-title">4. Healthcare Proxy</h2>
+    <p>I appoint the following person to make healthcare decisions on my behalf if I am unable to do so:</p>
+    <div class="field-row"><span class="field-label">Name:</span> {{ proxy_name }}</div>
+    {% if proxy_id_number %}<div class="field-row"><span class="field-label">ID Number:</span> {{ proxy_id_number }}</div>{% endif %}
+    {% if proxy_phone %}<div class="field-row"><span class="field-label">Contact Number:</span> {{ proxy_phone }}</div>{% endif %}
+    {% if proxy_relationship %}<div class="field-row"><span class="field-label">Relationship:</span> {{ proxy_relationship }}</div>{% endif %}
+    {% if alternate_proxy_name %}
+    <p style="margin-top: 12pt;">Should the above-named proxy be unable or unwilling to act, I appoint <strong>{{ alternate_proxy_name }}</strong> as alternate healthcare proxy.</p>
+    {% endif %}
+    <p style="margin-top: 8pt; font-size: 10pt; color: #555;">
+      My healthcare proxy is authorised to make decisions consistent with the wishes expressed in this directive.
+      Where my wishes are not clear, my proxy should make decisions in my best interest.
+    </p>
+  </div>
+  {% endif %}
+
+  {# --- Personal Values --- #}
+  {% if personal_values or religious_considerations %}
+  <div class="section-block">
+    <h2 class="section-title">{% if proxy_name %}5{% else %}4{% endif %}. Personal Values and Considerations</h2>
+    {% if personal_values %}
+    <p><strong>Personal values and wishes:</strong></p>
+    <p>{{ personal_values }}</p>
+    {% endif %}
+    {% if religious_considerations %}
+    <p><strong>Religious or spiritual considerations:</strong></p>
+    <p>{{ religious_considerations }}</p>
+    {% endif %}
+  </div>
+  {% endif %}
+
+  {# --- Organ Donation --- #}
+  {% if organ_donation is not none %}
+  <div class="section-block">
+    <h2 class="section-title">Organ Donation</h2>
+    {% if organ_donation %}
+    <p>I <strong>wish</strong> to donate my organs and/or tissues upon my death.</p>
+    {% if organ_donation_details %}
+    <p><strong>Details:</strong> {{ organ_donation_details }}</p>
+    {% endif %}
+    {% else %}
+    <p>I <strong>do not wish</strong> to donate my organs or tissues upon my death.</p>
+    {% endif %}
+  </div>
+  {% endif %}
+
+  {# --- Revocation Clause --- #}
+  <div class="section-block">
+    <h2 class="section-title">Revocation</h2>
+    <p>
+      I understand that I may revoke this directive at any time, either in writing or verbally,
+      as long as I am of sound mind and able to communicate my wishes. Any revocation shall
+      take effect immediately upon communication to my healthcare provider or proxy.
+    </p>
+  </div>
+
+  {# --- Important Notes --- #}
+  <div class="important-notes">
+    <h3>Important Notes</h3>
+    <ul>
+      <li>It is recommended that you discuss the contents of this directive with a medical professional to ensure you fully understand the implications of your treatment preferences.</li>
+      <li>Please provide copies of this directive to your healthcare proxy, family members, personal physician, and any hospital or care facility where you may receive treatment.</li>
+      <li>While South Africa does not have specific legislation governing living wills, this directive is supported by constitutional rights to dignity (Section 10) and bodily integrity (Section 12) of the Constitution of the Republic of South Africa, as well as the National Health Act's recognition of the right to refuse medical treatment.</li>
+      <li>This directive is intended as a clear expression of my wishes and should be respected by medical practitioners in accordance with established medical ethics and the guidelines of the Health Professions Council of South Africa (HPCSA).</li>
+    </ul>
+  </div>
+
+</div>
