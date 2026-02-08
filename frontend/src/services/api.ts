@@ -17,9 +17,10 @@ async function request<T>(
   options?: RequestInit,
   tokenGetter?: TokenGetter,
 ): Promise<T> {
+  const { headers: optHeaders, ...restOptions } = options || {}
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
-    ...(options?.headers as Record<string, string>),
+    ...(optHeaders as Record<string, string>),
   }
 
   if (tokenGetter) {
@@ -31,8 +32,8 @@ async function request<T>(
 
   const response = await fetch(`${BASE_URL}${path}`, {
     credentials: 'include',
+    ...restOptions,
     headers,
-    ...options,
   })
 
   if (!response.ok) {
@@ -47,8 +48,9 @@ async function requestBlob(
   options?: RequestInit,
   tokenGetter?: TokenGetter,
 ): Promise<Blob> {
+  const { headers: optHeaders, ...restOptions } = options || {}
   const headers: Record<string, string> = {
-    ...(options?.headers as Record<string, string>),
+    ...(optHeaders as Record<string, string>),
   }
 
   if (tokenGetter) {
@@ -60,8 +62,8 @@ async function requestBlob(
 
   const response = await fetch(`${BASE_URL}${path}`, {
     credentials: 'include',
+    ...restOptions,
     headers,
-    ...options,
   })
 
   if (!response.ok) {
