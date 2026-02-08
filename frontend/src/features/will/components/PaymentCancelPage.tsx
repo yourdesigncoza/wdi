@@ -1,20 +1,7 @@
 import { Link } from 'react-router-dom'
-import { ThemeToggle } from '../../../components/ui/ThemeToggle.tsx'
-import { UserButton } from '@clerk/clerk-react'
 
 export function PaymentCancelPage() {
   return (
-    <div className="min-h-screen bg-base-200">
-      <div className="navbar bg-base-100 shadow-sm">
-        <div className="navbar-start">
-          <span className="text-xl font-bold">WillCraft SA</span>
-        </div>
-        <div className="navbar-end gap-2">
-          <ThemeToggle />
-          <UserButton />
-        </div>
-      </div>
-
       <main className="max-w-lg mx-auto px-4 py-12">
         <div className="card bg-base-100 shadow-sm">
           <div className="card-body items-center text-center space-y-4">
@@ -47,6 +34,5 @@ export function PaymentCancelPage() {
           </div>
         </div>
       </main>
-    </div>
   )
 }

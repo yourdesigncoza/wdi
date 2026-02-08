@@ -1,8 +1,6 @@
 import { useState, useCallback } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
-import { UserButton } from '@clerk/clerk-react'
-import { ThemeToggle } from '../../../components/ui/ThemeToggle'
 import { useApi } from '../../../contexts/AuthApiContext'
 import type { AdditionalDocumentResponse } from '../../../services/api'
 
@@ -94,33 +92,16 @@ export function DocumentPreview() {
     }
   }, [docId, doc, api])
 
-  const navbar = (
-    <div className="navbar bg-base-100 shadow-sm">
-      <div className="navbar-start">
-        <span className="text-xl font-bold">WillCraft SA</span>
-      </div>
-      <div className="navbar-end gap-2">
-        <ThemeToggle />
-        <UserButton />
-      </div>
-    </div>
-  )
-
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-base-200">
-        {navbar}
         <main className="max-w-2xl mx-auto px-4 py-8 flex justify-center">
           <span className="loading loading-spinner loading-lg text-primary"></span>
         </main>
-      </div>
     )
   }
 
   if (fetchError || !doc) {
     return (
-      <div className="min-h-screen bg-base-200">
-        {navbar}
         <main className="max-w-2xl mx-auto px-4 py-8 space-y-4">
           <div className="alert alert-error">
             <span>
@@ -133,13 +114,10 @@ export function DocumentPreview() {
             Back to Documents
           </Link>
         </main>
-      </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-base-200">
-      {navbar}
       <main className="max-w-2xl mx-auto px-4 py-8 space-y-6">
         <Link to="/documents" className="btn btn-soft btn-sm">
           Back to Documents
@@ -255,6 +233,5 @@ export function DocumentPreview() {
           </div>
         )}
       </main>
-    </div>
   )
 }
