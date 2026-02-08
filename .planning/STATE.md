@@ -13,21 +13,21 @@ Phase: 08 of 9 (Post-Purchase Features)
 Plan: 4 of 4 in current phase
 Status: Phase complete
 Last activity: 2026-02-07 - Completed plan 08-04: Post-Purchase Update Flow
-Progress: [██████████████████████████████████████] ~95% (37 of ~39 total plans)
+Progress: [██████████████████████████████████████] ~97% (38 of ~39 total plans)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 37
-- Average duration: 2m 34s
-- Total execution time: ~1.59 hours
+- Total plans completed: 38
+- Average duration: 2m 33s
+- Total execution time: ~1.63 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01 | 5/5 | 18m 56s | 3m 47s |
-| 02 | 1/2 | 5m 53s | 5m 53s |
+| 02 | 2/2 | ~11m | ~5m 30s |
 | 02.1 | 3/3 | 5m 50s | 1m 57s |
 | 03 | 8/8 | 23m 58s | 3m 0s |
 | 04 | 5/5 | 16m 32s | 3m 18s |
@@ -72,7 +72,11 @@ Recent decisions affecting current work:
 - D-0202-02: Empty CLERK_JWKS_URL means auth disabled (dev mode graceful fallback)
 - D-0202-03: Lazy user creation is non-fatal (auth succeeds even if DB unavailable)
 - D-0202-04: Middleware order CORS > ClerkAuth > POPIA > Audit for dual-gate enforcement
-- D-0201-01: corporate (light) + business (dark) as DaisyUI theme pair
+- D-0201-01: Modal mode for SignInButton/SignUpButton (keeps users in-app)
+- D-0201-02: Email+password only (no social logins)
+- D-0201-03: Lazy token getter pattern -- getToken() called per-request for freshness
+- D-0201-04: Public routes outside auth gate (/privacy-policy, /info-officer)
+- D-02.1-01: corporate (light) + business (dark) as DaisyUI theme pair
 - D-0301-01: JSONB section columns (not single blob) for per-section queries and partial updates
 - D-0301-02: Unique composite index on (will_id, section) enforcing one conversation per will+section
 - D-0301-03: CASCADE delete on conversation FK -- deleting a will removes all its conversation history
@@ -162,8 +166,8 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-02-07T20:06:52Z
-Stopped at: Phase 8 complete, all 4 plans done
+Last session: 2026-02-08
+Stopped at: Phase 2 completion (backfill of 02-01 summary)
 Resume file: .planning/phases/09-additional-documents/
 
 ---
