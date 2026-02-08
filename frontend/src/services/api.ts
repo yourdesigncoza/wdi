@@ -194,6 +194,17 @@ export interface PaymentStatusResponse {
   download_token: string | null
 }
 
+export interface AdditionalDocumentResponse {
+  id: string
+  user_id: string
+  will_id: string | null
+  document_type: string
+  status: string
+  content: Record<string, unknown>
+  created_at: string
+  updated_at: string
+}
+
 // ── buildApi Factory ─────────────────────────────────────────────────
 
 function buildApi(tokenGetter?: TokenGetter) {
@@ -349,6 +360,70 @@ function buildApi(tokenGetter?: TokenGetter) {
 
     downloadWill(token: string): Promise<Blob> {
       return requestBlob(`/download/${token}`, undefined, tokenGetter)
+    },
+
+    // ── Additional Documents ───────────────────────────────────────
+
+    createAdditionalDocument(data: {
+      document_type: string
+      will_id?: string
+    }): Promise<AdditionalDocumentResponse> {
+      return request('/additional-documents', {
+        method: 'POST',
+        body: JSON.stringify(data),
+      }, tokenGetter)
+    },
+
+    listAdditionalDocuments(): Promise<AdditionalDocumentResponse[]> {
+      return request('/additional-documents', undefined, tokenGetter)
+    },
+
+    getAdditionalDocument(docId: string): Promise<AdditionalDocumentResponse> {
+      return request(`/additional-documents/${docId}`, undefined, tokenGetter)
+    },
+
+    updateAdditionalDocument(
+      docId: string,
+      data: { content: Record<string, unknown>; status?: string },
+    ): Promise<AdditionalDocumentResponse> {
+      return request(`/additional-documents/${docId}`, {
+        method: 'PATCH',
+        body: JSON.stringify(data),
+      }, tokenGetter)
+    },
+
+    async deleteAdditionalDocument(docId: string): Promise<void> {
+      const headers: Record<string, string> = {
+        'Content-Type': 'application/json',
+      }
+      if (tokenGetter) {
+        const token = await tokenGetter()
+        if (token) {
+          headers['Authorization'] = `Bearer ${token}`
+        }
+      }
+      const response = await fetch(`${BASE_URL}/additional-documents/${docId}`, {
+        method: 'DELETE',
+        credentials: 'include',
+        headers,
+      })
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status} ${response.statusText}`)
+      }
+    },
+
+    previewAdditionalDocument(docId: string): Promise<Blob> {
+      return requestBlob(`/additional-documents/${docId}/preview`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+      }, tokenGetter)
+    },
+
+    generateAdditionalDocument(docId: string): Promise<Blob> {
+      return requestBlob(`/additional-documents/${docId}/generate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+      }, tokenGetter)
     },
 
     // ── Token Access (for SSE hooks that need raw fetch) ───────────
