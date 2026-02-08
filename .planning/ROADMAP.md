@@ -198,12 +198,12 @@ Plans:
   1. User can create living will (advance healthcare directive)
   2. User can create funeral wishes document
   3. Additional documents follow same professional formatting as main will
-**Plans**: TBD
+**Plans**: 3 plans in 3 waves
 
 Plans:
-- [ ] 09-01: Living will questionnaire and clauses
-- [ ] 09-02: Funeral wishes questionnaire and clauses
-- [ ] 09-03: Additional document templates and PDF generation
+- [ ] 09-01-PLAN.md -- Backend: model, migration, schemas, service, templates, API endpoints
+- [ ] 09-02-PLAN.md -- Frontend: API client, types, Zod schemas, Zustand store, form components
+- [ ] 09-03-PLAN.md -- Dashboard, preview, routing, WillDashboard integration (checkpoint)
 
 ## Progress
 
