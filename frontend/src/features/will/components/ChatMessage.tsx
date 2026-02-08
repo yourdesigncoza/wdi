@@ -1,3 +1,4 @@
+import Markdown from 'react-markdown'
 import type { Message } from '../hooks/useConversation.ts'
 import avatarImg from '../../../assets/images/avatar.png'
 
@@ -26,7 +27,13 @@ export function ChatMessage({ message, isStreaming = false }: ChatMessageProps) 
         </div>
       )}
       <div className={`chat-bubble${isAI ? '' : ' chat-bubble-secondary'}`}>
-        {message.content}
+        {isAI ? (
+          <div className="prose prose-sm max-w-none [&>p]:my-1 [&>p:last-child]:mb-0">
+            <Markdown>{message.content}</Markdown>
+          </div>
+        ) : (
+          message.content
+        )}
         {isStreaming && isAI && (
           <span className="loading loading-dots loading-xs ml-1 align-bottom" />
         )}
