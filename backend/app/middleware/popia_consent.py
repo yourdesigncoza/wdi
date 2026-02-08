@@ -53,8 +53,12 @@ class POPIAConsentMiddleware(BaseHTTPMiddleware):
         if path in EXEMPT_PATHS or path.startswith(EXEMPT_PREFIXES):
             return await call_next(request)
 
-        # Read the consent cookie.
+        # Read the consent cookie, falling back to X-POPIA-Consent header.
+        # Safari ITP blocks cross-origin cookies, so the frontend sends
+        # the signed consent JWT as a header instead.
         token = request.cookies.get(CONSENT_COOKIE_NAME)
+        if not token:
+            token = request.headers.get("x-popia-consent")
         if not token:
             return _consent_required_response()
 

@@ -12,6 +12,22 @@ export function snakeToCamel(obj: Record<string, unknown>): Record<string, unkno
 
 type TokenGetter = () => Promise<string | null>
 
+// Safari ITP blocks cross-origin cookies. Store the POPIA consent JWT
+// in localStorage and send it as a header on every request.
+const CONSENT_TOKEN_KEY = 'popia_consent_token'
+
+export function getStoredConsentToken(): string | null {
+  try { return localStorage.getItem(CONSENT_TOKEN_KEY) } catch { return null }
+}
+
+export function setStoredConsentToken(token: string): void {
+  try { localStorage.setItem(CONSENT_TOKEN_KEY, token) } catch { /* noop */ }
+}
+
+export function clearStoredConsentToken(): void {
+  try { localStorage.removeItem(CONSENT_TOKEN_KEY) } catch { /* noop */ }
+}
+
 async function request<T>(
   path: string,
   options?: RequestInit,
@@ -28,6 +44,11 @@ async function request<T>(
     if (token) {
       headers['Authorization'] = `Bearer ${token}`
     }
+  }
+
+  const consentToken = getStoredConsentToken()
+  if (consentToken) {
+    headers['X-POPIA-Consent'] = consentToken
   }
 
   const response = await fetch(`${BASE_URL}${path}`, {
@@ -60,6 +81,11 @@ async function requestBlob(
     }
   }
 
+  const consentToken = getStoredConsentToken()
+  if (consentToken) {
+    headers['X-POPIA-Consent'] = consentToken
+  }
+
   const response = await fetch(`${BASE_URL}${path}`, {
     credentials: 'include',
     ...restOptions,
@@ -79,12 +105,14 @@ async function requestBlob(
 export interface ConsentStatusResponse {
   has_valid_consent: boolean
   consent_version?: string
+  consent_token?: string
 }
 
 export interface ConsentResponse {
   consent_id: string
   accepted_at: string
   consent_version: string
+  consent_token?: string
 }
 
 export interface PrivacyPolicySection {
@@ -271,6 +299,8 @@ function buildApi(tokenGetter?: TokenGetter) {
         const token = await tokenGetter()
         if (token) headers['Authorization'] = `Bearer ${token}`
       }
+      const ct = getStoredConsentToken()
+      if (ct) headers['X-POPIA-Consent'] = ct
       const response = await fetch(`${BASE_URL}/wills/${willId}`, {
         method: 'DELETE',
         credentials: 'include',
@@ -426,6 +456,8 @@ function buildApi(tokenGetter?: TokenGetter) {
           headers['Authorization'] = `Bearer ${token}`
         }
       }
+      const ct = getStoredConsentToken()
+      if (ct) headers['X-POPIA-Consent'] = ct
       const response = await fetch(`${BASE_URL}/additional-documents/${docId}`, {
         method: 'DELETE',
         credentials: 'include',

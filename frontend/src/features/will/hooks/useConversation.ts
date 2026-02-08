@@ -1,4 +1,5 @@
 import { useState, useCallback, useRef, useEffect } from 'react'
+import { getStoredConsentToken } from '../../../services/api'
 import type { ApiClient } from '../../../services/api'
 import type { WillSection } from '../types/will.ts'
 
@@ -85,6 +86,8 @@ export function useConversation({ section, willContext, willId, api }: UseConver
         if (token) {
           headers['Authorization'] = `Bearer ${token}`
         }
+        const ct = getStoredConsentToken()
+        if (ct) headers['X-POPIA-Consent'] = ct
 
         const response = await fetch(`${API_BASE}/conversation/stream`, {
           method: 'POST',

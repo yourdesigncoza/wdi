@@ -82,13 +82,16 @@ async def grant_consent(body: ConsentRequest, request: Request, response: Respon
         consent_id=record.id,
         accepted_at=record.accepted_at,
         consent_version=record.consent_version,
+        consent_token=token,
     )
 
 
 @router.get("/api/consent/status", response_model=ConsentStatusResponse)
 async def consent_status(request: Request):
-    """Check whether the caller has a valid consent cookie."""
+    """Check whether the caller has a valid consent cookie or header."""
     token = request.cookies.get(CONSENT_COOKIE_NAME)
+    if not token:
+        token = _extract_header_token(request)
     if not token:
         return ConsentStatusResponse(has_valid_consent=False)
 
@@ -101,9 +104,15 @@ async def consent_status(request: Request):
         return ConsentStatusResponse(
             has_valid_consent=True,
             consent_version=payload.get("consent_version"),
+            consent_token=token,
         )
     except Exception:
         return ConsentStatusResponse(has_valid_consent=False)
+
+
+def _extract_header_token(request: Request) -> str | None:
+    """Read consent token from X-POPIA-Consent header (Safari fallback)."""
+    return request.headers.get("x-popia-consent")
 
 
 @router.post("/api/consent/withdraw")

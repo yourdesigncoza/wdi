@@ -1,5 +1,9 @@
 import { createContext, useState, useEffect, useCallback, type ReactNode } from 'react'
-import { api } from '../../services/api'
+import {
+  api,
+  setStoredConsentToken,
+  clearStoredConsentToken,
+} from '../../services/api'
 
 export interface ConsentContextType {
   hasConsent: boolean
@@ -16,7 +20,12 @@ export function ConsentProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     api.checkConsentStatus()
-      .then((data) => setHasConsent(data.has_valid_consent))
+      .then((data) => {
+        setHasConsent(data.has_valid_consent)
+        if (data.has_valid_consent && data.consent_token) {
+          setStoredConsentToken(data.consent_token)
+        }
+      })
       .catch(() => setHasConsent(false))
       .finally(() => setIsLoading(false))
   }, [])
@@ -24,7 +33,10 @@ export function ConsentProvider({ children }: { children: ReactNode }) {
   const grantConsent = useCallback(async () => {
     setIsLoading(true)
     try {
-      await api.grantConsent(['will_generation', 'data_storage', 'ai_processing'])
+      const res = await api.grantConsent(['will_generation', 'data_storage', 'ai_processing'])
+      if (res.consent_token) {
+        setStoredConsentToken(res.consent_token)
+      }
       setHasConsent(true)
     } finally {
       setIsLoading(false)
@@ -35,6 +47,7 @@ export function ConsentProvider({ children }: { children: ReactNode }) {
     setIsLoading(true)
     try {
       await api.withdrawConsent()
+      clearStoredConsentToken()
       setHasConsent(false)
     } finally {
       setIsLoading(false)

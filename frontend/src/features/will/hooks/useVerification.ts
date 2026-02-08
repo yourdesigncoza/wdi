@@ -1,4 +1,5 @@
 import { useState, useCallback, useRef } from 'react'
+import { getStoredConsentToken } from '../../../services/api'
 import type { ApiClient } from '../../../services/api'
 import type {
   VerificationProgress,
@@ -50,6 +51,8 @@ export function useVerification(willId: string | null, api: ApiClient) {
       if (token) {
         headers['Authorization'] = `Bearer ${token}`
       }
+      const ct = getStoredConsentToken()
+      if (ct) headers['X-POPIA-Consent'] = ct
 
       const response = await fetch(`${API_BASE}/wills/${willId}/verify`, {
         method: 'POST',

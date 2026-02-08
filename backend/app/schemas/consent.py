@@ -24,6 +24,7 @@ class ConsentResponse(BaseModel):
     consent_id: uuid.UUID
     accepted_at: datetime
     consent_version: str
+    consent_token: str = ""
 
 
 class ConsentStatusResponse(BaseModel):
@@ -31,6 +32,7 @@ class ConsentStatusResponse(BaseModel):
 
     has_valid_consent: bool
     consent_version: Optional[str] = None
+    consent_token: Optional[str] = None
 
 
 class DataRequestBody(BaseModel):
