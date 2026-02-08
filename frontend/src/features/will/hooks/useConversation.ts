@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef, useEffect } from 'react'
-import { getStoredConsentToken } from '../../../services/api'
+import { getStoredConsentToken, ApiError } from '../../../services/api'
 import type { ApiClient } from '../../../services/api'
 import type { WillSection } from '../types/will.ts'
 
@@ -50,9 +50,12 @@ export function useConversation({ section, willContext, willId, api }: UseConver
               .map((m) => ({ role: m.role as 'user' | 'assistant', content: m.content })),
           )
         }
-      } catch {
-        // First visit to section -- no history yet, start fresh
+      } catch (err) {
         if (!cancelled) {
+          if (err instanceof ApiError && err.status === 404) {
+            // Will no longer exists — surface error instead of silently failing
+            setError('This will no longer exists. Please return to the dashboard.')
+          }
           setMessages([])
         }
       }

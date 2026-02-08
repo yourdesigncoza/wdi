@@ -10,6 +10,13 @@ export function snakeToCamel(obj: Record<string, unknown>): Record<string, unkno
   return result
 }
 
+export class ApiError extends Error {
+  constructor(public status: number, message: string) {
+    super(message)
+    this.name = 'ApiError'
+  }
+}
+
 type TokenGetter = () => Promise<string | null>
 
 // Safari ITP blocks cross-origin cookies. Store the POPIA consent JWT
@@ -58,7 +65,7 @@ async function request<T>(
   })
 
   if (!response.ok) {
-    throw new Error(`API error: ${response.status} ${response.statusText}`)
+    throw new ApiError(response.status, `API error: ${response.status} ${response.statusText}`)
   }
 
   return response.json()
@@ -94,7 +101,7 @@ async function requestBlob(
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({ detail: `Request failed: ${response.status}` }))
-    throw new Error(errorData.detail || `API error: ${response.status}`)
+    throw new ApiError(response.status, errorData.detail || `API error: ${response.status}`)
   }
 
   return response.blob()
@@ -307,7 +314,7 @@ function buildApi(tokenGetter?: TokenGetter) {
         headers,
       })
       if (!response.ok) {
-        throw new Error(`API error: ${response.status} ${response.statusText}`)
+        throw new ApiError(response.status, `API error: ${response.status} ${response.statusText}`)
       }
     },
 
@@ -464,7 +471,7 @@ function buildApi(tokenGetter?: TokenGetter) {
         headers,
       })
       if (!response.ok) {
-        throw new Error(`API error: ${response.status} ${response.statusText}`)
+        throw new ApiError(response.status, `API error: ${response.status} ${response.statusText}`)
       }
     },
 

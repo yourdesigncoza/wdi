@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useWillStore } from '../store/useWillStore.ts'
 import { useWillProgress } from '../hooks/useWillProgress.ts'
 import { StepIndicator } from './StepIndicator.tsx'
@@ -15,6 +16,7 @@ import { VerificationPage } from './VerificationPage.tsx'
 import { DocumentPreviewPage } from './DocumentPreviewPage.tsx'
 import { PaymentPage } from './PaymentPage.tsx'
 import { useApi } from '../../../contexts/AuthApiContext'
+import { ApiError } from '../../../services/api'
 import type { WillSection } from '../types/will.ts'
 
 /** Convert camelCase keys to snake_case for backend Pydantic schemas */
@@ -73,11 +75,13 @@ function PersonalSection() {
 
 export function WillWizard() {
   const api = useApi()
+  const navigate = useNavigate()
   const currentSection = useWillStore((s) => s.currentSection)
   const setCurrentSection = useWillStore((s) => s.setCurrentSection)
   const willId = useWillStore((s) => s.willId)
   const setWillId = useWillStore((s) => s.setWillId)
   const scenarios = useWillStore((s) => s.scenarios)
+  const resetWill = useWillStore((s) => s.resetWill)
   const { sections } = useWillProgress()
 
   // Track whether the current will has already been paid for
@@ -86,7 +90,8 @@ export function WillWizard() {
   // Track whether scenario detection interstitial has been shown
   const [scenariosDetected, setScenariosDetected] = useState(false)
 
-  // Detect whether the current will has been paid for
+  // Validate that the stored willId still exists on the backend.
+  // If it returns 404, the will was deleted — clear local state and redirect.
   useEffect(() => {
     if (!willId) {
       setIsPaidWill(false)
@@ -98,8 +103,14 @@ export function WillWizard() {
           setIsPaidWill(true)
         }
       })
-      .catch(() => {})
-  }, [willId, api])
+      .catch((err) => {
+        if (err instanceof ApiError && err.status === 404) {
+          console.warn('Will no longer exists on server, resetting local state')
+          resetWill()
+          navigate('/', { replace: true })
+        }
+      })
+  }, [willId, api, resetWill, navigate])
 
   // Track whether will creation is in-flight to prevent duplicate calls
   const creatingRef = useRef(false)
