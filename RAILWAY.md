@@ -114,7 +114,7 @@ All `VITE_*` variables are **build-time** variables. They're passed as Docker bu
 - Base: `python:3.13-slim`
 - Installs WeasyPrint system deps (cairo, pango, gdk-pixbuf)
 - Installs Python deps from `requirements.txt`
-- Entry: `start.sh` (runs `alembic upgrade head`, seeds clause library, then `uvicorn`)
+- Entry: `start.sh` (runs `alembic upgrade head`, seeds clause library, then `uvicorn` with `--proxy-headers --forwarded-allow-ips='*'`)
 
 ### Frontend (`frontend/Dockerfile`)
 
@@ -175,13 +175,25 @@ Update `ALLOWED_ORIGINS` on the backend service to include the frontend URL. Com
 
 **Note:** When the backend returns a 500 error, CORS headers may not be included in the error response. The browser will report this as a CORS error, but the real problem is a backend crash. Always check `railway service logs --service backend` first.
 
+### Mixed Content errors (http:// requests blocked)
+
+Railway terminates TLS at the proxy, so uvicorn sees internal HTTP connections. Without `--proxy-headers`, any redirect Starlette generates (e.g. trailing-slash redirects) will use `http://` in the Location header, which browsers block as Mixed Content.
+
+**Fix:** `start.sh` must run uvicorn with `--proxy-headers --forwarded-allow-ips='*'` so it trusts Railway's `X-Forwarded-Proto: https` header. The frontend also has a defence-in-depth `http://` → `https://` upgrade in `config.ts` for the API base URL.
+
 ### 403 "consent_required" on all API calls
 
 The POPIA consent cookie uses `SameSite=None` + `Secure=True` in production for cross-origin requests between Railway subdomains. If consent was granted but the cookie isn't sent, check that `DEBUG=false` is set on the backend (controls the cookie flags).
 
+On Safari (including mobile), cross-origin cookies may be blocked by ITP. The frontend also sends the consent JWT via the `X-POPIA-Consent` header (stored in localStorage) as a fallback. The backend middleware checks both cookie and header.
+
 ### 401 "authentication_required" on specific endpoints
 
 All frontend API calls must use the authenticated `useApi()` client (from `AuthApiContext`), never raw `fetch()`. The `useApi()` client automatically includes the Clerk Bearer token. Raw fetch calls will work in dev (when `CLERK_JWKS_URL` is empty and auth is skipped) but fail in production.
+
+### 500 on DELETE /api/wills (foreign key violation)
+
+If deleting a will that has associated payment records fails with `ForeignKeyViolationError`, the `payments.will_id` FK is missing `ondelete="CASCADE"`. Migration 009 fixes this. All foreign keys referencing `wills.id` must have an explicit `ondelete` clause (`CASCADE` for payments/conversations, `SET NULL` for additional_documents).
 
 ### Will PDF pages are blank (no clause content)
 
