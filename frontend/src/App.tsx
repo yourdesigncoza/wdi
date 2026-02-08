@@ -1,5 +1,6 @@
+import { useState, useEffect } from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, useParams, useNavigate } from 'react-router-dom'
 import {
   SignedIn,
   SignedOut,
@@ -7,6 +8,7 @@ import {
   SignUpButton,
 } from '@clerk/clerk-react'
 import { AuthApiProvider } from './contexts/AuthApiContext'
+import { useApi } from './contexts/AuthApiContext'
 import { ConsentProvider } from './components/consent/ConsentProvider'
 import { ConsentModal } from './components/consent/ConsentModal'
 import { PrivacyPolicy } from './components/common/PrivacyPolicy'
@@ -17,6 +19,11 @@ import { PaymentReturnPage } from './features/will/components/PaymentReturnPage.
 import { PaymentCancelPage } from './features/will/components/PaymentCancelPage.tsx'
 import { DownloadPage } from './features/will/components/DownloadPage.tsx'
 import { WillDashboard } from './features/will/components/WillDashboard.tsx'
+import { AdditionalDocumentsDashboard } from './features/additional-documents/components/AdditionalDocumentsDashboard.tsx'
+import { DocumentPreview } from './features/additional-documents/components/DocumentPreview.tsx'
+import { LivingWillForm } from './features/additional-documents/components/LivingWillForm.tsx'
+import { FuneralWishesForm } from './features/additional-documents/components/FuneralWishesForm.tsx'
+import { useAdditionalDocStore } from './features/additional-documents/store/useAdditionalDocStore.ts'
 import { useConsent } from './hooks/useConsent'
 
 const queryClient = new QueryClient({
@@ -122,6 +129,105 @@ function AuthGatedContent({ children }: { children: React.ReactNode }) {
   )
 }
 
+function DocumentsPage() {
+  const { hasConsent, isLoading } = useConsent()
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <span className="loading loading-spinner loading-lg text-primary"></span>
+      </div>
+    )
+  }
+  if (!hasConsent) return null
+  return <AdditionalDocumentsDashboard />
+}
+
+function DocumentEditPage() {
+  const { hasConsent, isLoading: consentLoading } = useConsent()
+  const { docId } = useParams<{ docId: string }>()
+  const api = useApi()
+  const navigate = useNavigate()
+  const loadFromServer = useAdditionalDocStore((s) => s.loadFromServer)
+  const resetDoc = useAdditionalDocStore((s) => s.resetDoc)
+  const documentType = useAdditionalDocStore((s) => s.documentType)
+  const currentDocId = useAdditionalDocStore((s) => s.currentDocId)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    if (!docId || consentLoading || !hasConsent) return
+    // Only fetch if we don't already have this doc loaded in the store
+    if (currentDocId === docId && documentType) {
+      setLoading(false)
+      return
+    }
+    let cancelled = false
+    async function load() {
+      try {
+        const doc = await api.getAdditionalDocument(docId!)
+        if (!cancelled) {
+          resetDoc()
+          loadFromServer(doc)
+          setLoading(false)
+        }
+      } catch {
+        if (!cancelled) navigate('/documents')
+      }
+    }
+    load()
+    return () => { cancelled = true }
+  }, [docId, consentLoading, hasConsent, api, loadFromServer, resetDoc, navigate, currentDocId, documentType])
+
+  if (consentLoading || loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <span className="loading loading-spinner loading-lg text-primary"></span>
+      </div>
+    )
+  }
+  if (!hasConsent) return null
+
+  function handleComplete() {
+    navigate(`/documents/${docId}/preview`)
+  }
+  function handleBack() {
+    navigate('/documents')
+  }
+
+  if (documentType === 'living_will') {
+    return (
+      <div className="min-h-screen bg-base-200">
+        <main className="max-w-4xl mx-auto px-4 py-8">
+          <LivingWillForm docId={docId!} onComplete={handleComplete} onBack={handleBack} />
+        </main>
+      </div>
+    )
+  }
+  if (documentType === 'funeral_wishes') {
+    return (
+      <div className="min-h-screen bg-base-200">
+        <main className="max-w-4xl mx-auto px-4 py-8">
+          <FuneralWishesForm docId={docId!} onComplete={handleComplete} onBack={handleBack} />
+        </main>
+      </div>
+    )
+  }
+
+  return null
+}
+
+function DocumentPreviewPage2() {
+  const { hasConsent, isLoading } = useConsent()
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <span className="loading loading-spinner loading-lg text-primary"></span>
+      </div>
+    )
+  }
+  if (!hasConsent) return null
+  return <DocumentPreview />
+}
+
 export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
@@ -133,6 +239,9 @@ export default function App() {
           <Route path="/payment/return" element={<AuthGatedContent><PaymentReturnPage /></AuthGatedContent>} />
           <Route path="/payment/cancel" element={<AuthGatedContent><PaymentCancelPage /></AuthGatedContent>} />
           <Route path="/download/:token" element={<AuthGatedContent><DownloadPage /></AuthGatedContent>} />
+          <Route path="/documents" element={<AuthGatedContent><DocumentsPage /></AuthGatedContent>} />
+          <Route path="/documents/:docId/edit" element={<AuthGatedContent><DocumentEditPage /></AuthGatedContent>} />
+          <Route path="/documents/:docId/preview" element={<AuthGatedContent><DocumentPreviewPage2 /></AuthGatedContent>} />
           <Route path="*" element={<AuthGatedContent><MainContent /></AuthGatedContent>} />
         </Routes>
       </BrowserRouter>

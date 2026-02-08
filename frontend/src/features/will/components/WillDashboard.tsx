@@ -205,6 +205,23 @@ export function WillDashboard() {
             ))}
           </div>
         )}
+
+        {/* Additional Documents Section */}
+        <div className="divider"></div>
+        <div className="card bg-base-100 shadow-sm">
+          <div className="card-body">
+            <h3 className="card-title text-lg">Additional Documents</h3>
+            <p className="text-base-content/70 text-sm">
+              Create supplementary estate planning documents such as a living
+              will or funeral wishes.
+            </p>
+            <div className="card-actions mt-2">
+              <Link to="/documents" className="btn btn-neutral">
+                View Documents
+              </Link>
+            </div>
+          </div>
+        </div>
       </main>
     </div>
   )
