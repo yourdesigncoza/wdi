@@ -35,7 +35,7 @@ Full decision log archived in milestones/v1.0-ROADMAP.md.
 
 ### Pending Todos
 
-- 001: Map legacy form to phase 3 (from v1.0 backlog)
+(None — all cleared)
 
 ### Blockers/Concerns
 
