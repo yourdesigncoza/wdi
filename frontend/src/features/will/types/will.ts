@@ -2,6 +2,8 @@
 // Covers all sections: testator, marital, beneficiaries, assets, guardians,
 // executor, bequests, residue, trust, usufruct, business, joint
 
+import type { WillResponse } from '../../../services/api'
+
 // --- Enums ---
 
 export const MaritalStatus = {
@@ -242,6 +244,6 @@ export interface WillActions {
   setCurrentSection: (section: WillSection) => void
   setVerificationResult: (result: Record<string, unknown> | null) => void
   setAcknowledgedWarnings: (codes: string[]) => void
-  loadFromServer: (will: Record<string, unknown>) => void
+  loadFromServer: (will: WillResponse) => void
   resetWill: () => void
 }

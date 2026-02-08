@@ -13,7 +13,7 @@ export function useAutoSave(
   api: ApiClient,
   delay = 2000,
 ) {
-  const timeoutRef = useRef<ReturnType<typeof setTimeout>>()
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
   const dataRef = useRef(data)
   const inflightRef = useRef<AbortController | null>(null)
   dataRef.current = data

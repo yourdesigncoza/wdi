@@ -28,6 +28,7 @@ const SECTION_CATEGORY: Record<WillSection, string> = {
   review: 'step-accent',
   verification: 'step-accent',
   document: 'step-accent',
+  payment: 'step-accent',
 }
 
 function getStepClass(step: SectionStep): string {
