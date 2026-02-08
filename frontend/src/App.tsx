@@ -239,7 +239,7 @@ export default function App() {
         <Routes>
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/info-officer" element={<InfoOfficerContact />} />
-          <Route path="/will" element={<AuthGatedContent><WillPage /></AuthGatedContent>} />
+          <Route path="/will" element={<AuthenticatedLayout><WillPage /></AuthenticatedLayout>} />
           <Route path="/payment/return" element={<AuthenticatedLayout><PaymentReturnPage /></AuthenticatedLayout>} />
           <Route path="/payment/cancel" element={<AuthenticatedLayout><PaymentCancelPage /></AuthenticatedLayout>} />
           <Route path="/download/:token" element={<AuthenticatedLayout><DownloadPage /></AuthenticatedLayout>} />

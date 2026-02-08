@@ -27,7 +27,7 @@ function NavLinks({ mobile }: { mobile?: boolean }) {
   const { pathname } = useLocation()
 
   const links = [
-    { to: '/', label: 'My Wills', isActive: pathname === '/' },
+    { to: '/', label: 'Home', isActive: pathname === '/' },
     { to: '/documents', label: 'Documents', isActive: pathname.startsWith('/documents') },
   ]
 
@@ -62,10 +62,10 @@ function FullNavbar() {
         </div>
         <Link to="/" className="text-xl font-bold">WillCraft SA</Link>
       </div>
-      <div className="navbar-center hidden lg:flex">
-        <NavLinks />
-      </div>
       <div className="navbar-end gap-2">
+        <div className="hidden lg:flex">
+          <NavLinks />
+        </div>
         <ThemeToggle />
         <UserButton />
       </div>
