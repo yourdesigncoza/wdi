@@ -53,11 +53,12 @@ Plans:
   2. User receives verification email after registration
   3. User can log in and stay logged in across browser sessions
   4. User can reset forgotten password via email link
-**Plans**: 2 plans in 1 wave
+**Plans**: 3 plans in 1 wave
 
 Plans:
 - [x] 02-01-PLAN.md — Clerk React integration (ClerkProvider, auth UI, authenticated API client)
 - [x] 02-02-PLAN.md — FastAPI Clerk middleware (JWKS verification, User model, dual-gate enforcement)
+- [ ] 02-03-PLAN.md — Wire Bearer token injection into all will API calls (gap closure)
 
 ### Phase 02.1: DaisyUI Integration (INSERTED)
 **Goal**: Install DaisyUI v5 component library and migrate existing frontend components to DaisyUI classes for consistent, themeable UI before building conversation interface
@@ -213,7 +214,7 @@ Note: Phase 9 depends only on Phase 6, can potentially run in parallel with Phas
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation & Compliance | 5/5 | Complete | 2026-02-06 |
-| 2. Authentication | 2/2 | Complete | 2026-02-08 |
+| 2. Authentication | 2/3 | Gap closure | 2026-02-08 |
 | 02.1 DaisyUI Integration | 3/3 | Complete | 2026-02-06 |
 | 3. Core Will Conversation | 8/8 | Complete | 2026-02-06 |
 | 4. Complex Estate Scenarios | 5/5 | Complete | 2026-02-06 |
