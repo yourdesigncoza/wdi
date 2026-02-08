@@ -43,11 +43,20 @@ app = FastAPI(
 )
 
 # ---------------------------------------------------------------------------
-# Middleware (applied bottom-to-top: last added runs first)
-# Execution order: Audit -> POPIA -> ClerkAuth -> CORS
+# Middleware (last added = outermost = runs first)
+# Execution order: CORS -> Audit -> POPIA -> ClerkAuth -> route handler
 # ---------------------------------------------------------------------------
 
-# 1. CORS -- must be outermost so preflight requests succeed.
+# 1. Clerk auth gate -- verifies session JWT (RS256 via JWKS).
+app.add_middleware(ClerkAuthMiddleware)
+
+# 2. POPIA consent gate -- blocks protected routes without consent cookie.
+app.add_middleware(POPIAConsentMiddleware)
+
+# 3. Audit trail -- logs every non-trivial request.
+app.add_middleware(AuditMiddleware)
+
+# 4. CORS -- added last so it's outermost; handles preflight before auth.
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
@@ -58,15 +67,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-# 2. Clerk auth gate -- verifies session JWT (RS256 via JWKS).
-app.add_middleware(ClerkAuthMiddleware)
-
-# 3. POPIA consent gate -- blocks protected routes without consent cookie.
-app.add_middleware(POPIAConsentMiddleware)
-
-# 4. Audit trail -- logs every non-trivial request.
-app.add_middleware(AuditMiddleware)
 
 # ---------------------------------------------------------------------------
 # Routers

@@ -111,8 +111,8 @@ function BeneficiariesReview() {
 
   return (
     <div className="space-y-2">
-      {beneficiaries.map((b) => (
-        <div key={b.id} className="flex flex-wrap items-baseline gap-x-3 text-sm">
+      {beneficiaries.map((b, i) => (
+        <div key={b.id || i} className="flex flex-wrap items-baseline gap-x-3 text-sm">
           <span className="font-medium">{b.fullName}</span>
           <span className="text-base-content/60">{b.relationship}</span>
           {b.sharePercent != null && (
@@ -135,8 +135,8 @@ function AssetsReview() {
 
   return (
     <div className="space-y-2">
-      {assets.map((a) => (
-        <div key={a.id} className="flex flex-wrap items-baseline gap-x-3 text-sm">
+      {assets.map((a, i) => (
+        <div key={a.id || i} className="flex flex-wrap items-baseline gap-x-3 text-sm">
           <span className="badge badge-sm badge-ghost">
             {ASSET_TYPE_LABELS[a.assetType] ?? a.assetType}
           </span>
@@ -154,8 +154,8 @@ function GuardiansReview() {
 
   return (
     <div className="space-y-2">
-      {guardians.map((g) => (
-        <div key={g.id} className="flex flex-wrap items-baseline gap-x-3 text-sm">
+      {guardians.map((g, i) => (
+        <div key={g.id || i} className="flex flex-wrap items-baseline gap-x-3 text-sm">
           <span className="font-medium">{g.fullName}</span>
           <span className="text-base-content/60">{g.relationship}</span>
           {g.isPrimary && <span className="badge badge-sm badge-primary">Primary</span>}
@@ -188,8 +188,8 @@ function BequestsReview() {
 
   return (
     <div className="space-y-2">
-      {bequests.map((b) => (
-        <div key={b.id} className="text-sm">
+      {bequests.map((b, i) => (
+        <div key={b.id || i} className="text-sm">
           <span className="font-medium">{b.itemDescription}</span>
           <span className="text-base-content/60 mx-1">to</span>
           <span>{b.recipientName}</span>
@@ -313,8 +313,8 @@ function BusinessReview() {
 
   return (
     <div className="space-y-2">
-      {businessAssets.map((asset) => (
-        <div key={asset.id} className="flex flex-wrap items-baseline gap-x-3 text-sm">
+      {businessAssets.map((asset, i) => (
+        <div key={asset.id || i} className="flex flex-wrap items-baseline gap-x-3 text-sm">
           <span className="badge badge-sm badge-ghost">
             {BUSINESS_TYPE_LABELS[asset.businessType] ?? asset.businessType}
           </span>
