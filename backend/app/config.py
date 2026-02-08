@@ -1,5 +1,6 @@
 """Application configuration via pydantic-settings."""
 
+from pydantic import model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -15,8 +16,17 @@ class Settings(BaseSettings):
         case_sensitive=False,
     )
 
-    # Database
+    # Database — Railway provides postgresql://, asyncpg needs postgresql+asyncpg://
     DATABASE_URL: str = "postgresql+asyncpg://user:pass@localhost/willcraft"
+
+    @model_validator(mode="after")
+    def _fix_database_url(self) -> "Settings":
+        url = self.DATABASE_URL
+        if url.startswith("postgresql://"):
+            self.DATABASE_URL = url.replace("postgresql://", "postgresql+asyncpg://", 1)
+        elif url.startswith("postgres://"):
+            self.DATABASE_URL = url.replace("postgres://", "postgresql+asyncpg://", 1)
+        return self
 
     # Security
     SECRET_KEY: str = "change-me-in-production"
@@ -65,6 +75,9 @@ class Settings(BaseSettings):
     MAIL_STARTTLS: bool = True
     MAIL_SSL_TLS: bool = False
     MAIL_SUPPRESS_SEND: bool = True  # True in dev, False in production
+
+    # CORS — comma-separated origins for production
+    ALLOWED_ORIGINS: str = "http://localhost:3000,http://localhost:5173"
 
     # Application
     APP_NAME: str = "WillCraft SA"

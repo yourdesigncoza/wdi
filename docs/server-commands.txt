@@ -16,4 +16,8 @@ lsof -ti:5173 | xargs kill -9
 lsof -ti:8000 | xargs kill -9
 lsof -ti:5173 | xargs kill -9 
 cd /opt/lampp/htdocs/wdi/backend && source venv/bin/activate && uvicorn app.main:app --reload --port 8000
+
 cd /opt/lampp/htdocs/wdi/frontend && npm run dev 
+
+
+

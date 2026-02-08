@@ -2,7 +2,7 @@ import { useState, useCallback } from 'react'
 import { useWillStore } from '../store/useWillStore.ts'
 import type { ComplexScenario } from '../types/will.ts'
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+import { API_BASE } from '../../../config'
 
 export function useScenarioDetection() {
   const willId = useWillStore((s) => s.willId)
@@ -16,7 +16,7 @@ export function useScenarioDetection() {
     setLoading(true)
     setError(null)
     try {
-      const res = await fetch(`${API_BASE}/api/wills/${willId}/scenarios`, {
+      const res = await fetch(`${API_BASE}/wills/${willId}/scenarios`, {
         credentials: 'include',
       })
       if (!res.ok) throw new Error('Failed to detect scenarios')

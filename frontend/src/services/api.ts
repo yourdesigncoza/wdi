@@ -1,4 +1,4 @@
-const BASE_URL = '/api'
+import { API_BASE as BASE_URL } from '../config'
 
 /** Convert snake_case keys to camelCase for frontend consumption */
 export function snakeToCamel(obj: Record<string, unknown>): Record<string, unknown> {

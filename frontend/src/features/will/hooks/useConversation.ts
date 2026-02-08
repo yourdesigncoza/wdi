@@ -14,7 +14,7 @@ interface UseConversationOptions {
   api: ApiClient
 }
 
-const API_BASE = '/api'
+import { API_BASE } from '../../../config'
 
 /**
  * SSE streaming conversation hook.

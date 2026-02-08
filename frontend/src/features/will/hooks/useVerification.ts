@@ -6,7 +6,7 @@ import type {
   VerificationResult,
 } from '../types/verification.ts'
 
-const API_BASE = '/api'
+import { API_BASE } from '../../../config'
 
 /**
  * SSE streaming hook for will verification progress.
