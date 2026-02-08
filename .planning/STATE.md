@@ -5,22 +5,22 @@
 See: .planning/PROJECT.md (updated 2026-02-05)
 
 **Core value:** Any South African can create a legally compliant will through an intelligent, guided conversation — no legal knowledge required.
-**Current focus:** Phase 2 gap closure complete — Ready for Phase 9
+**Current focus:** Phase 9 (Additional Documents) in progress
 
 ## Current Position
 
-Phase: 08 of 9 (Post-Purchase Features)
-Plan: 4 of 4 in current phase
-Status: Phase complete (Phase 2 gap closure 02-03 also complete)
-Last activity: 2026-02-08 - Completed plan 02-03: Bearer Token Injection (gap closure)
-Progress: [███████████████████████████████████████] ~100% (39 of ~39 total plans)
+Phase: 09 of 9 (Additional Documents)
+Plan: 1 of 3 in current phase
+Status: In progress
+Last activity: 2026-02-08 - Completed 09-01-PLAN.md (Additional Documents Backend)
+Progress: [████████████████████████████████████████] ~95% (40 of ~42 total plans)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 39
-- Average duration: 2m 37s
-- Total execution time: ~1.77 hours
+- Total plans completed: 40
+- Average duration: 2m 40s
+- Total execution time: ~1.84 hours
 
 **By Phase:**
 
@@ -35,10 +35,11 @@ Progress: [███████████████████████
 | 06 | 4/4 | ~14m 24s | ~3m 36s |
 | 07 | 4/4 | ~11m 20s | ~2m 50s |
 | 08 | 4/4 | 7m 50s | 1m 58s |
+| 09 | 1/3 | 4m 31s | 4m 31s |
 
 **Recent Trend:**
-- Last 5 plans: 08-02 (2m 6s), 08-03 (1m 35s), 08-04 (1m 36s), 02-03 (8m 15s)
-- Trend: Gap closure plan took longer due to 15-file refactor scope
+- Last 5 plans: 08-03 (1m 35s), 08-04 (1m 36s), 02-03 (8m 15s), 09-01 (4m 31s)
+- Trend: Phase 9 plan 1 at expected pace for backend-heavy plan with 11 new files
 
 *Updated after each plan completion*
 
@@ -118,6 +119,9 @@ Recent decisions affecting current work:
 - D-0802-01: Fire-and-forget pattern for section sync -- backend failures logged but do not block UI navigation
 - D-0802-02: 2-second debounce default for auto-save -- balances responsiveness with network efficiency
 - D-0804-01: No explicit frontend status reset on paid will edit -- backend verification_result and status fields enforce correct flow
+- D-0901-01: Single JSONB content column per additional document (not typed columns) for schema flexibility
+- D-0901-02: server_default='{}' for JSONB (not server_default="'{}'") matching project gotcha
+- D-0901-03: will_id FK with ondelete=SET NULL (optional link, document survives will deletion)
 
 ### Pending Todos
 
@@ -144,6 +148,7 @@ None yet.
 - Phase 7: PayFast sandbox testing required before production
 - Phase 7: Production deployment requires public URL for PayFast ITN webhook
 - Phase 8: Migration 007 must be applied (`alembic upgrade head`) before will versioning features work
+- Phase 9: Migration 008 must be applied (`alembic upgrade head`) before additional document features work
 - Audit immutability (REVOKE UPDATE/DELETE) must be applied manually on production DB
 - Monthly audit_logs partitions need automated creation or pre-creation in future migrations
 
@@ -167,8 +172,8 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-08
-Stopped at: Completed 02-03 Bearer token injection gap closure
-Resume file: .planning/phases/09-additional-documents/
+Stopped at: Completed 09-01 Additional Documents Backend
+Resume file: .planning/phases/09-additional-documents/09-02-PLAN.md
 
 ---
-*Next: Phase 9 (Additional Documents)*
+*Next: Plan 09-02 (Frontend forms) and 09-03 (Dashboard + routing)*
