@@ -68,13 +68,14 @@ async def grant_consent(body: ConsentRequest, request: Request, response: Respon
 
     # Set httpOnly cookie with signed JWT.
     token = _build_consent_token(str(record.id))
+    is_production = not settings.DEBUG
     response.set_cookie(
         key=CONSENT_COOKIE_NAME,
         value=token,
         max_age=_CONSENT_MAX_AGE,
         httponly=True,
-        samesite="lax",
-        secure=False,  # Allow HTTP in development; enforce HTTPS in production.
+        samesite="none" if is_production else "lax",
+        secure=is_production,
     )
 
     return ConsentResponse(
@@ -144,7 +145,12 @@ async def withdraw_consent(request: Request, response: Response):
         details={"consent_id": consent_id},
     )
 
-    # Clear the cookie.
-    response.delete_cookie(key=CONSENT_COOKIE_NAME)
+    # Clear the cookie (must match set_cookie attributes for browser to delete).
+    is_production = not settings.DEBUG
+    response.delete_cookie(
+        key=CONSENT_COOKIE_NAME,
+        samesite="none" if is_production else "lax",
+        secure=is_production,
+    )
 
     return {"status": "withdrawn", "message": "Your consent has been withdrawn."}
