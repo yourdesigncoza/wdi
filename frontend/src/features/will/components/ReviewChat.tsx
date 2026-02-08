@@ -77,30 +77,30 @@ export function ReviewChat({ willId, onNavigateToSection }: ReviewChatProps) {
   }
 
   const { messages, isStreaming, error, sendMessage, stopStreaming } =
-    useConversation({ section: 'review', willContext, willId, api, skipHistory: true })
+    useConversation({ section: 'review', willContext, willId, api })
 
-  // Keep a stable ref to sendMessage so the effect doesn't depend on it
-  const sendMessageRef = useRef(sendMessage)
-  sendMessageRef.current = sendMessage
+  // On mount, trigger the AI to narrate the complete will
+  useEffect(() => {
+    if (greetingSentRef.current || messages.length > 0) return
+    greetingSentRef.current = true
 
-  // Build the review summary text (stable across renders for same data)
-  const reviewSummary = useMemo(() => {
-    const parts: string[] = []
+    // Build a concise summary of all will data for the initial prompt
+    const summaryParts: string[] = []
 
     const name = [testator.firstName, testator.lastName].filter(Boolean).join(' ')
-    if (name) parts.push(`Testator: ${name}`)
+    if (name) summaryParts.push(`Testator: ${name}`)
 
     if (beneficiaries.length > 0) {
       const bList = beneficiaries.map((b) => {
         const share = b.sharePercent != null ? ` (${b.sharePercent}%)` : ''
         return `${b.fullName} - ${b.relationship}${share}`
       })
-      parts.push(`Beneficiaries: ${bList.join('; ')}`)
+      summaryParts.push(`Beneficiaries: ${bList.join('; ')}`)
     }
 
     if (assets.length > 0) {
       const aList = assets.map((a) => `${a.assetType}: ${a.description}`)
-      parts.push(`Assets: ${aList.join('; ')}`)
+      summaryParts.push(`Assets: ${aList.join('; ')}`)
     }
 
     if (guardians.length > 0) {
@@ -108,65 +108,79 @@ export function ReviewChat({ willId, onNavigateToSection }: ReviewChatProps) {
         const role = g.isPrimary ? 'Primary' : 'Backup'
         return `${g.fullName} (${role}, ${g.relationship})`
       })
-      parts.push(`Guardians: ${gList.join('; ')}`)
+      summaryParts.push(`Guardians: ${gList.join('; ')}`)
     }
 
     if (executor.name) {
       const prof = executor.isProfessional ? ' (professional)' : ''
-      parts.push(`Executor: ${executor.name}${prof}`)
+      summaryParts.push(`Executor: ${executor.name}${prof}`)
       if (executor.backupName) {
-        parts.push(`Backup executor: ${executor.backupName}`)
+        summaryParts.push(`Backup executor: ${executor.backupName}`)
       }
     }
 
     if (bequests.length > 0) {
       const bqList = bequests.map((b) => `${b.itemDescription} to ${b.recipientName}`)
-      parts.push(`Specific bequests: ${bqList.join('; ')}`)
+      summaryParts.push(`Specific bequests: ${bqList.join('; ')}`)
     }
 
     if (residue.beneficiaries?.length) {
       const rList = residue.beneficiaries.map((r) => `${r.name} (${r.sharePercent}%)`)
-      parts.push(`Residue: ${rList.join('; ')}`)
+      summaryParts.push(`Residue: ${rList.join('; ')}`)
     }
 
+    // Complex section summaries
     if (trustProvisions.trustName) {
       const tParts = [`Trust: ${trustProvisions.trustName}`]
       if (trustProvisions.vestingAge) tParts.push(`vesting at age ${trustProvisions.vestingAge}`)
       if (trustProvisions.trustees?.length) {
         tParts.push(`trustees: ${trustProvisions.trustees.map((t) => t.name).join(', ')}`)
       }
-      parts.push(`Testamentary Trust: ${tParts.join(', ')}`)
+      summaryParts.push(`Testamentary Trust: ${tParts.join(', ')}`)
     }
 
     if (usufruct.propertyDescription) {
       const uParts = [usufruct.propertyDescription]
       if (usufruct.usufructuaryName) uParts.push(`usufructuary: ${usufruct.usufructuaryName}`)
       if (usufruct.duration) uParts.push(`duration: ${usufruct.duration}`)
-      parts.push(`Usufruct: ${uParts.join(', ')}`)
+      summaryParts.push(`Usufruct: ${uParts.join(', ')}`)
     }
 
     if (businessAssets.length > 0) {
       const baList = businessAssets.map((ba) => `${ba.businessName} (${ba.businessType})`)
-      parts.push(`Business Assets: ${baList.join('; ')}`)
+      summaryParts.push(`Business Assets: ${baList.join('; ')}`)
     }
 
     if (jointWill.coTestatorFirstName) {
       const jParts = [`Co-testator: ${[jointWill.coTestatorFirstName, jointWill.coTestatorLastName].filter(Boolean).join(' ')}`]
       if (jointWill.willStructure) jParts.push(`structure: ${jointWill.willStructure}`)
-      parts.push(`Joint Will: ${jParts.join(', ')}`)
+      summaryParts.push(`Joint Will: ${jParts.join(', ')}`)
     }
 
-    return parts.length > 0 ? parts.join('\n') : 'No will data collected yet.'
-  }, [testator, beneficiaries, assets, guardians, executor, bequests, residue, trustProvisions, usufruct, businessAssets, jointWill])
+    const summary = summaryParts.length > 0
+      ? summaryParts.join('\n')
+      : 'No will data collected yet.'
 
-  // Trigger fresh AI review once willId is available — fire exactly once
-  useEffect(() => {
-    if (greetingSentRef.current || !willId) return
-    greetingSentRef.current = true
-    void sendMessageRef.current(
-      `Please review my complete will. Here is the current data:\n${reviewSummary}`,
+    // Send the full will state as a system-triggered user message
+    // The review system prompt will instruct the AI to narrate it
+    void sendMessage(
+      `Please review my complete will. Here is the current data:\n${summary}`,
     )
-  }, [willId, reviewSummary])
+  }, [
+    messages.length,
+    sendMessage,
+    testator,
+    beneficiaries,
+    assets,
+    guardians,
+    executor,
+    bequests,
+    residue,
+    trustProvisions,
+    usufruct,
+    businessAssets,
+    jointWill,
+  ])
 
   // Auto-scroll to bottom on new messages
   useEffect(() => {
