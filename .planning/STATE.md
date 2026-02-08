@@ -12,7 +12,7 @@ See: .planning/PROJECT.md (updated 2026-02-05)
 Phase: 09 of 9 (Additional Documents)
 Plan: 3 of 3 in current phase
 Status: Checkpoint pending (human-verify)
-Last activity: 2026-02-08 - Completed quick task 009: Fix 2-column layout for toggle sections in additional documents
+Last activity: 2026-02-08 - Completed quick task 010: Fix document status staying draft after completion
 Progress: [██████████████████████████████████████████] 100% (42 of 42 total plans)
 
 ## Performance Metrics
@@ -165,6 +165,7 @@ None yet.
 | 007 | Fix DaisyUI chat styling (@source inline) | 2026-02-07 | a3ba34c | [007-fix-daisyui-chat](./quick/007-fix-daisyui-chat-styling/) |
 | 008 | Colorful step indicator by importance | 2026-02-07 | 0b1ba3d | [008-colorful-step](./quick/008-colorful-step-indicator-by-importance/) |
 | 009 | Fix 2-column layout for toggle sections | 2026-02-08 | e21551e | [009-fix-2-column](./quick/009-fix-2-column-layout-for-toggle-sections/) |
+| 010 | Fix document status staying draft | 2026-02-08 | 1a56d38 | [010-fix-status](./quick/010-fix-document-status-staying-draft/) |
 
 ### New Blockers
 
