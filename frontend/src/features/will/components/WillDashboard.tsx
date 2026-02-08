@@ -1,4 +1,5 @@
-import { useQuery } from '@tanstack/react-query'
+import { useState } from 'react'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { Link, useNavigate } from 'react-router-dom'
 import { UserButton } from '@clerk/clerk-react'
 import { ThemeToggle } from '../../../components/ui/ThemeToggle'
@@ -38,10 +39,13 @@ function testatorName(will: WillResponse): string {
 function WillCard({
   will,
   onResume,
+  onDelete,
 }: {
   will: WillResponse
   onResume: (id: string) => void
+  onDelete: (id: string) => void
 }) {
+  const [confirmDelete, setConfirmDelete] = useState(false)
   const isPaid = !!will.paid_at
 
   return (
@@ -62,20 +66,37 @@ function WillCard({
             </div>
           </div>
           <div className="flex gap-2">
-            {isPaid ? (
+            <button
+              className="btn btn-neutral btn-sm"
+              onClick={() => onResume(will.id)}
+            >
+              {isPaid ? 'Update Will' : 'Edit'}
+            </button>
+            {!confirmDelete ? (
               <button
-                className="btn btn-neutral btn-sm"
-                onClick={() => onResume(will.id)}
+                className="btn btn-error btn-outline btn-sm"
+                onClick={() => setConfirmDelete(true)}
               >
-                Update Will
+                Delete
               </button>
             ) : (
-              <button
-                className="btn btn-neutral btn-sm"
-                onClick={() => onResume(will.id)}
-              >
-                Resume Draft
-              </button>
+              <div className="flex gap-1">
+                <button
+                  className="btn btn-error btn-sm"
+                  onClick={() => {
+                    onDelete(will.id)
+                    setConfirmDelete(false)
+                  }}
+                >
+                  Confirm
+                </button>
+                <button
+                  className="btn btn-ghost btn-sm"
+                  onClick={() => setConfirmDelete(false)}
+                >
+                  Cancel
+                </button>
+              </div>
             )}
           </div>
         </div>
@@ -87,6 +108,7 @@ function WillCard({
 export function WillDashboard() {
   const api = useApi()
   const navigate = useNavigate()
+  const queryClient = useQueryClient()
   const loadFromServer = useWillStore((s) => s.loadFromServer)
   const resetWill = useWillStore((s) => s.resetWill)
 
@@ -99,10 +121,21 @@ export function WillDashboard() {
     queryFn: () => api.listWills(),
   })
 
+  const deleteMutation = useMutation({
+    mutationFn: (willId: string) => api.deleteWill(willId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['wills'] })
+    },
+  })
+
   async function handleResume(willId: string) {
     const will = await api.getWill(willId)
     loadFromServer(will)
     navigate('/will')
+  }
+
+  function handleDelete(willId: string) {
+    deleteMutation.mutate(willId)
   }
 
   function handleCreateNew(e: React.MouseEvent) {
@@ -201,7 +234,7 @@ export function WillDashboard() {
               </Link>
             </div>
             {wills.map((will) => (
-              <WillCard key={will.id} will={will} onResume={handleResume} />
+              <WillCard key={will.id} will={will} onResume={handleResume} onDelete={handleDelete} />
             ))}
           </div>
         )}

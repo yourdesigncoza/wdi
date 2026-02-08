@@ -85,6 +85,17 @@ class WillService:
         """Fetch a single will by ID with ownership check."""
         return await self._get_will_for_user(will_id, user_id)
 
+    async def delete_will(
+        self, will_id: uuid.UUID, user_id: uuid.UUID
+    ) -> None:
+        """Delete a will with ownership check.
+
+        Cascading deletes handle conversations and related records.
+        """
+        will = await self._get_will_for_user(will_id, user_id)
+        await self._session.delete(will)
+        await self._session.flush()
+
     async def list_user_wills(self, user_id: uuid.UUID) -> list[Will]:
         """Return all wills for a user, newest first."""
         stmt = (

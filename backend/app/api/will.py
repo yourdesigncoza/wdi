@@ -3,6 +3,7 @@
 POST   /api/wills                                  -- Create new will draft
 GET    /api/wills                                   -- List user's wills
 GET    /api/wills/{will_id}                         -- Get specific will
+DELETE /api/wills/{will_id}                         -- Delete a will
 PATCH  /api/wills/{will_id}/sections/{section}      -- Update a section
 POST   /api/wills/{will_id}/sections/{section}/complete -- Mark section done
 GET    /api/wills/{will_id}/scenarios               -- Detect applicable scenarios
@@ -15,6 +16,7 @@ import uuid
 from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi.responses import Response
 from pydantic import ValidationError
 
 from sqlmodel import select
@@ -157,6 +159,18 @@ async def get_will(
     """Retrieve a specific will by ID."""
     user_id = _extract_user_id(request)
     return await service.get_will(will_id, user_id)
+
+
+@router.delete("/api/wills/{will_id}", status_code=204)
+async def delete_will(
+    will_id: uuid.UUID,
+    request: Request,
+    service: WillService = Depends(get_will_service),
+):
+    """Delete a will and all associated data (conversations, etc.)."""
+    user_id = _extract_user_id(request)
+    await service.delete_will(will_id, user_id)
+    return Response(status_code=204)
 
 
 @router.patch(

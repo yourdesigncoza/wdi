@@ -261,6 +261,24 @@ function buildApi(tokenGetter?: TokenGetter) {
       return request('/wills', undefined, tokenGetter)
     },
 
+    async deleteWill(willId: string): Promise<void> {
+      const headers: Record<string, string> = {
+        'Content-Type': 'application/json',
+      }
+      if (tokenGetter) {
+        const token = await tokenGetter()
+        if (token) headers['Authorization'] = `Bearer ${token}`
+      }
+      const response = await fetch(`${BASE_URL}/wills/${willId}`, {
+        method: 'DELETE',
+        credentials: 'include',
+        headers,
+      })
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status} ${response.statusText}`)
+      }
+    },
+
     updateWillSection(
       willId: string,
       section: string,
