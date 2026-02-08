@@ -8,9 +8,11 @@ RUN npm ci
 
 COPY . .
 
-# VITE_API_URL is baked in at build time
+# Vite env vars are baked in at build time
 ARG VITE_API_URL=""
+ARG VITE_CLERK_PUBLISHABLE_KEY=""
 ENV VITE_API_URL=$VITE_API_URL
+ENV VITE_CLERK_PUBLISHABLE_KEY=$VITE_CLERK_PUBLISHABLE_KEY
 
 RUN npm run build
 
