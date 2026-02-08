@@ -89,6 +89,9 @@ railway service redeploy --service frontend
 | `ALLOWED_ORIGINS`   | Manual         | CORS origins (comma-separated)             |
 | `DEBUG`             | Manual         | `false` in production                      |
 | `PAYFAST_SANDBOX`   | Manual         | `true` until production PayFast onboarding |
+| `PAYFAST_RETURN_URL`| Manual         | Frontend payment return page URL            |
+| `PAYFAST_CANCEL_URL`| Manual         | Frontend payment cancel page URL            |
+| `PAYFAST_NOTIFY_URL`| Manual         | Backend ITN webhook URL                     |
 | `MAIL_SUPPRESS_SEND`| Manual         | `true` until SMTP configured               |
 
 Railway auto-injects: `PORT`, `RAILWAY_*` variables.
