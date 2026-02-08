@@ -2,7 +2,8 @@ import { useQuery } from '@tanstack/react-query'
 import { Link, useNavigate } from 'react-router-dom'
 import { UserButton } from '@clerk/clerk-react'
 import { ThemeToggle } from '../../../components/ui/ThemeToggle'
-import { listWills, getWill, type WillResponse } from '../../../services/api'
+import type { WillResponse } from '../../../services/api'
+import { useApi } from '../../../contexts/AuthApiContext'
 import { useWillStore } from '../store/useWillStore'
 
 function statusBadge(status: string) {
@@ -84,6 +85,7 @@ function WillCard({
 }
 
 export function WillDashboard() {
+  const api = useApi()
   const navigate = useNavigate()
   const loadFromServer = useWillStore((s) => s.loadFromServer)
   const resetWill = useWillStore((s) => s.resetWill)
@@ -94,11 +96,11 @@ export function WillDashboard() {
     error,
   } = useQuery<WillResponse[]>({
     queryKey: ['wills'],
-    queryFn: listWills,
+    queryFn: () => api.listWills(),
   })
 
   async function handleResume(willId: string) {
-    const will = await getWill(willId)
+    const will = await api.getWill(willId)
     loadFromServer(will)
     navigate('/will')
   }

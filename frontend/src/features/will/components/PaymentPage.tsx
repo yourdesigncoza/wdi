@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
-import { initiatePayment } from '../../../services/api.ts'
 import type { PaymentInitiateResponse } from '../../../services/api.ts'
+import { useApi } from '../../../contexts/AuthApiContext'
 
 const PAYMENT_STORAGE_KEY = 'willcraft_payment_id'
 
@@ -10,6 +10,7 @@ interface PaymentPageProps {
 }
 
 export function PaymentPage({ willId, onBack }: PaymentPageProps) {
+  const api = useApi()
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [formData, setFormData] = useState<PaymentInitiateResponse | null>(null)
@@ -21,7 +22,7 @@ export function PaymentPage({ willId, onBack }: PaymentPageProps) {
       setIsLoading(true)
       setError(null)
       try {
-        const response = await initiatePayment(willId)
+        const response = await api.initiatePayment(willId)
         if (cancelled) return
         setFormData(response)
         localStorage.setItem(PAYMENT_STORAGE_KEY, response.payment_id)

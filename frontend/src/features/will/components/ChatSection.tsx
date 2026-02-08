@@ -2,6 +2,7 @@ import { useState, useRef, useEffect, useCallback } from 'react'
 import { useConversation } from '../hooks/useConversation.ts'
 import { ChatMessage } from './ChatMessage.tsx'
 import { useWillStore } from '../store/useWillStore.ts'
+import { useApi } from '../../../contexts/AuthApiContext'
 import type { WillSection } from '../types/will.ts'
 
 interface ChatSectionProps {
@@ -54,6 +55,7 @@ const SECTION_HEADINGS: Record<string, string> = {
  * Uses useConversation hook for SSE streaming with the backend.
  */
 export function ChatSection({ section, willId, onNext }: ChatSectionProps) {
+  const api = useApi()
   const [input, setInput] = useState('')
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
@@ -80,7 +82,7 @@ export function ChatSection({ section, willId, onNext }: ChatSectionProps) {
   }
 
   const { messages, isStreaming, error, sendMessage, stopStreaming, setMessages } =
-    useConversation({ section, willContext, willId })
+    useConversation({ section, willContext, willId, api })
 
   // Show greeting message when entering a section with no history
   useEffect(() => {

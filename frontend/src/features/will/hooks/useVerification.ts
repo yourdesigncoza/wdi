@@ -1,4 +1,5 @@
 import { useState, useCallback, useRef } from 'react'
+import type { ApiClient } from '../../../services/api'
 import type {
   VerificationProgress,
   SectionProgressEvent,
@@ -20,7 +21,7 @@ const API_BASE = '/api'
  * - done      -> sets result
  * - error     -> sets error
  */
-export function useVerification(willId: string | null) {
+export function useVerification(willId: string | null, api: ApiClient) {
   const [isVerifying, setIsVerifying] = useState(false)
   const [progress, setProgress] = useState<VerificationProgress[]>([])
   const [sectionResults, setSectionResults] = useState<SectionProgressEvent[]>([])
@@ -41,9 +42,18 @@ export function useVerification(willId: string | null) {
     abortRef.current = new AbortController()
 
     try {
+      // Get Bearer token for SSE streaming request
+      const token = await api.getToken()
+      const headers: Record<string, string> = {
+        'Content-Type': 'application/json',
+      }
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`
+      }
+
       const response = await fetch(`${API_BASE}/wills/${willId}/verify`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers,
         credentials: 'include',
         signal: abortRef.current.signal,
       })
@@ -125,7 +135,7 @@ export function useVerification(willId: string | null) {
     } finally {
       setIsVerifying(false)
     }
-  }, [willId])
+  }, [willId, api])
 
   const stopVerification = useCallback(() => {
     abortRef.current?.abort()

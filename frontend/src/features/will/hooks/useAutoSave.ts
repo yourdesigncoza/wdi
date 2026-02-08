@@ -1,5 +1,5 @@
 import { useEffect, useRef, useCallback } from 'react'
-import { updateWillSection } from '../../../services/api'
+import type { ApiClient } from '../../../services/api'
 
 /**
  * Debounced auto-save hook for form-based will sections.
@@ -10,6 +10,7 @@ export function useAutoSave(
   willId: string | null,
   section: string,
   data: Record<string, unknown>,
+  api: ApiClient,
   delay = 2000,
 ) {
   const timeoutRef = useRef<ReturnType<typeof setTimeout>>()
@@ -25,7 +26,7 @@ export function useAutoSave(
       try {
         inflightRef.current?.abort()
         inflightRef.current = new AbortController()
-        await updateWillSection(willId, section, dataRef.current)
+        await api.updateWillSection(willId, section, dataRef.current)
       } catch (err) {
         if (err instanceof Error && err.name !== 'AbortError') {
           console.error(`Auto-save failed for ${section}:`, err)
@@ -35,18 +36,18 @@ export function useAutoSave(
 
     return () => clearTimeout(timeoutRef.current)
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [willId, section, JSON.stringify(data), delay])
+  }, [willId, section, JSON.stringify(data), delay, api])
 
   const flush = useCallback(async () => {
     clearTimeout(timeoutRef.current)
     if (willId) {
       try {
-        await updateWillSection(willId, section, dataRef.current)
+        await api.updateWillSection(willId, section, dataRef.current)
       } catch (err) {
         console.error(`Auto-save flush failed for ${section}:`, err)
       }
     }
-  }, [willId, section])
+  }, [willId, section, api])
 
   return { flush }
 }

@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { downloadWill } from '../../../services/api.ts'
+import { useApi } from '../../../contexts/AuthApiContext'
 import { ThemeToggle } from '../../../components/ui/ThemeToggle.tsx'
 import { UserButton } from '@clerk/clerk-react'
 
@@ -9,6 +9,7 @@ type PageState = 'ready' | 'downloading' | 'success' | 'error'
 const FILE_NAME = 'WillCraft-SA-Will.pdf'
 
 export function DownloadPage() {
+  const api = useApi()
   const { token } = useParams<{ token: string }>()
   const [pageState, setPageState] = useState<PageState>(token ? 'ready' : 'error')
   const [errorMessage, setErrorMessage] = useState<string | null>(
@@ -20,7 +21,7 @@ export function DownloadPage() {
     setPageState('downloading')
     setErrorMessage(null)
     try {
-      const blob = await downloadWill(token)
+      const blob = await api.downloadWill(token)
       const url = URL.createObjectURL(blob)
       const a = document.createElement('a')
       a.href = url
@@ -40,7 +41,7 @@ export function DownloadPage() {
       )
       setPageState('error')
     }
-  }, [token])
+  }, [token, api])
 
   return (
     <div className="min-h-screen bg-base-200">

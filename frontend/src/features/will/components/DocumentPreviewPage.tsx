@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react'
 import { Link } from 'react-router-dom'
-import { generatePreview, regenerateWill } from '../../../services/api.ts'
+import { useApi } from '../../../contexts/AuthApiContext'
 
 interface DocumentPreviewPageProps {
   willId: string
@@ -10,6 +10,7 @@ interface DocumentPreviewPageProps {
 }
 
 export function DocumentPreviewPage({ willId, isPaidWill, onBack, onProceedToPayment }: DocumentPreviewPageProps) {
+  const api = useApi()
   const [disclaimerChecked, setDisclaimerChecked] = useState(false)
   const [isGenerating, setIsGenerating] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -22,7 +23,7 @@ export function DocumentPreviewPage({ willId, isPaidWill, onBack, onProceedToPay
     setIsGenerating(true)
     setError(null)
     try {
-      const blob = await generatePreview(willId)
+      const blob = await api.generatePreview(willId)
       const url = URL.createObjectURL(blob)
       window.open(url, '_blank')
       // Revoke after 60s to free memory
@@ -33,20 +34,20 @@ export function DocumentPreviewPage({ willId, isPaidWill, onBack, onProceedToPay
     } finally {
       setIsGenerating(false)
     }
-  }, [willId, disclaimerChecked])
+  }, [willId, disclaimerChecked, api])
 
   const handleRegenerate = useCallback(async () => {
     setIsRegenerating(true)
     setError(null)
     try {
-      const result = await regenerateWill(willId)
+      const result = await api.regenerateWill(willId)
       setRegenerateResult(result)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Re-generation failed')
     } finally {
       setIsRegenerating(false)
     }
-  }, [willId])
+  }, [willId, api])
 
   return (
     <div className="flex flex-col gap-6 py-4">

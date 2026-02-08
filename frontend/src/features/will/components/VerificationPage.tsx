@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect } from 'react'
 import { useWillStore } from '../store/useWillStore.ts'
 import { useVerification } from '../hooks/useVerification.ts'
-import { acknowledgeWarnings } from '../../../services/api.ts'
+import { useApi } from '../../../contexts/AuthApiContext'
 import type { WillSection } from '../types/will.ts'
 import type {
   VerificationIssue,
@@ -133,6 +133,7 @@ function IssueCard({
 }
 
 export function VerificationPage() {
+  const api = useApi()
   const willId = useWillStore((s) => s.willId)
   const setCurrentSection = useWillStore((s) => s.setCurrentSection)
   const setVerificationResult = useWillStore((s) => s.setVerificationResult)
@@ -146,7 +147,7 @@ export function VerificationPage() {
     result,
     error,
     startVerification,
-  } = useVerification(willId)
+  } = useVerification(willId, api)
 
   // Local state for warning acknowledgment checkboxes
   const [checkedWarnings, setCheckedWarnings] = useState<Set<string>>(
@@ -214,7 +215,7 @@ export function VerificationPage() {
     if (!willId || checkedWarnings.size === 0) return
     setAcknowledging(true)
     try {
-      const response = await acknowledgeWarnings(willId, [...checkedWarnings])
+      const response = await api.acknowledgeWarnings(willId, [...checkedWarnings])
       setAcknowledgedWarnings(response.acknowledged)
       setCanProceed(response.can_proceed)
     } catch (err) {
@@ -222,7 +223,7 @@ export function VerificationPage() {
     } finally {
       setAcknowledging(false)
     }
-  }, [willId, checkedWarnings, setAcknowledgedWarnings])
+  }, [willId, checkedWarnings, setAcknowledgedWarnings, api])
 
   /** Bulk-select all warnings */
   const handleAcknowledgeAll = useCallback(() => {

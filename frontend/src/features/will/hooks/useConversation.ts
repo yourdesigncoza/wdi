@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef, useEffect } from 'react'
-import { getConversationHistory } from '../../../services/api.ts'
+import type { ApiClient } from '../../../services/api'
 import type { WillSection } from '../types/will.ts'
 
 export interface Message {
@@ -11,6 +11,7 @@ interface UseConversationOptions {
   section: WillSection
   willContext: Record<string, unknown>
   willId: string | null
+  api: ApiClient
 }
 
 const API_BASE = '/api'
@@ -23,7 +24,7 @@ const API_BASE = '/api'
  *
  * On section change, loads existing conversation history from the backend.
  */
-export function useConversation({ section, willContext, willId }: UseConversationOptions) {
+export function useConversation({ section, willContext, willId, api }: UseConversationOptions) {
   const [messages, setMessages] = useState<Message[]>([])
   const [isStreaming, setIsStreaming] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -40,7 +41,7 @@ export function useConversation({ section, willContext, willId }: UseConversatio
 
     async function loadHistory() {
       try {
-        const history = await getConversationHistory(willId!, section)
+        const history = await api.getConversationHistory(willId!, section)
         if (!cancelled) {
           setMessages(
             history.messages
@@ -61,7 +62,7 @@ export function useConversation({ section, willContext, willId }: UseConversatio
     return () => {
       cancelled = true
     }
-  }, [willId, section])
+  }, [willId, section, api])
 
   const sendMessage = useCallback(
     async (userMessage: string) => {
@@ -76,9 +77,18 @@ export function useConversation({ section, willContext, willId }: UseConversatio
       abortRef.current = new AbortController()
 
       try {
+        // Get Bearer token for SSE streaming request
+        const token = await api.getToken()
+        const headers: Record<string, string> = {
+          'Content-Type': 'application/json',
+        }
+        if (token) {
+          headers['Authorization'] = `Bearer ${token}`
+        }
+
         const response = await fetch(`${API_BASE}/conversation/stream`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers,
           credentials: 'include',
           body: JSON.stringify({
             will_id: willId,
@@ -178,7 +188,7 @@ export function useConversation({ section, willContext, willId }: UseConversatio
         setIsStreaming(false)
       }
     },
-    [messages, section, willContext, willId],
+    [messages, section, willContext, willId, api],
   )
 
   const stopStreaming = useCallback(() => {

@@ -6,6 +6,7 @@ import {
   SignInButton,
   SignUpButton,
 } from '@clerk/clerk-react'
+import { AuthApiProvider } from './contexts/AuthApiContext'
 import { ConsentProvider } from './components/consent/ConsentProvider'
 import { ConsentModal } from './components/consent/ConsentModal'
 import { PrivacyPolicy } from './components/common/PrivacyPolicy'
@@ -110,10 +111,12 @@ function AuthGatedContent({ children }: { children: React.ReactNode }) {
         <LandingPage />
       </SignedOut>
       <SignedIn>
-        <ConsentProvider>
-          <ConsentModal />
-          {children}
-        </ConsentProvider>
+        <AuthApiProvider>
+          <ConsentProvider>
+            <ConsentModal />
+            {children}
+          </ConsentProvider>
+        </AuthApiProvider>
       </SignedIn>
     </>
   )

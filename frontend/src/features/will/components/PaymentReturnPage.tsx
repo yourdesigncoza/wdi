@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { Link } from 'react-router-dom'
-import { getPaymentStatus } from '../../../services/api.ts'
+import { useApi } from '../../../contexts/AuthApiContext'
 import { ThemeToggle } from '../../../components/ui/ThemeToggle.tsx'
 import { UserButton } from '@clerk/clerk-react'
 
@@ -11,6 +11,7 @@ const MAX_ATTEMPTS = 10
 type PageState = 'polling' | 'completed' | 'timeout' | 'error' | 'no-payment'
 
 export function PaymentReturnPage() {
+  const api = useApi()
   const [pageState, setPageState] = useState<PageState>('polling')
   const [downloadToken, setDownloadToken] = useState<string | null>(null)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
@@ -34,7 +35,7 @@ export function PaymentReturnPage() {
 
     attemptRef.current += 1
     try {
-      const result = await getPaymentStatus(paymentId)
+      const result = await api.getPaymentStatus(paymentId)
       if (result.status === 'completed' && result.download_token) {
         stopPolling()
         setDownloadToken(result.download_token)
@@ -53,7 +54,7 @@ export function PaymentReturnPage() {
       setErrorMessage(err instanceof Error ? err.message : 'Failed to check payment status')
       setPageState('error')
     }
-  }, [paymentId, stopPolling])
+  }, [paymentId, stopPolling, api])
 
   useEffect(() => {
     if (!paymentId) {

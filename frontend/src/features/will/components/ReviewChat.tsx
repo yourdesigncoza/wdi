@@ -4,6 +4,7 @@ import { ChatMessage } from './ChatMessage.tsx'
 import { SectionReview } from './SectionReview.tsx'
 import { useWillStore } from '../store/useWillStore.ts'
 import { useWillProgress } from '../hooks/useWillProgress.ts'
+import { useApi } from '../../../contexts/AuthApiContext'
 import type { WillSection } from '../types/will.ts'
 
 /** Base sections always shown in review cards */
@@ -32,6 +33,7 @@ interface ReviewChatProps {
  * Below the chat: collapsible SectionReview cards for quick-reference data view.
  */
 export function ReviewChat({ willId, onNavigateToSection }: ReviewChatProps) {
+  const api = useApi()
   const [input, setInput] = useState('')
   const [showReviewCards, setShowReviewCards] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
@@ -75,7 +77,7 @@ export function ReviewChat({ willId, onNavigateToSection }: ReviewChatProps) {
   }
 
   const { messages, isStreaming, error, sendMessage, stopStreaming } =
-    useConversation({ section: 'review', willContext, willId })
+    useConversation({ section: 'review', willContext, willId, api })
 
   // On mount, trigger the AI to narrate the complete will
   useEffect(() => {

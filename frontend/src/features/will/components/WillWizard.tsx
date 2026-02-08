@@ -14,14 +14,7 @@ import { JointWillSetup } from './JointWillSetup.tsx'
 import { VerificationPage } from './VerificationPage.tsx'
 import { DocumentPreviewPage } from './DocumentPreviewPage.tsx'
 import { PaymentPage } from './PaymentPage.tsx'
-import {
-  createWill,
-  getWill,
-  updateWillSection,
-  extractConversationData,
-  markSectionComplete as markSectionCompleteApi,
-  updateCurrentSection,
-} from '../../../services/api.ts'
+import { useApi } from '../../../contexts/AuthApiContext'
 import type { WillSection } from '../types/will.ts'
 
 /** Convert camelCase keys to snake_case for backend Pydantic schemas */
@@ -79,6 +72,7 @@ function PersonalSection() {
 
 
 export function WillWizard() {
+  const api = useApi()
   const currentSection = useWillStore((s) => s.currentSection)
   const setCurrentSection = useWillStore((s) => s.setCurrentSection)
   const willId = useWillStore((s) => s.willId)
@@ -98,14 +92,14 @@ export function WillWizard() {
       setIsPaidWill(false)
       return
     }
-    getWill(willId)
+    api.getWill(willId)
       .then((will) => {
         if (will.paid_at) {
           setIsPaidWill(true)
         }
       })
       .catch(() => {})
-  }, [willId])
+  }, [willId, api])
 
   // Track whether will creation is in-flight to prevent duplicate calls
   const creatingRef = useRef(false)
@@ -128,11 +122,11 @@ export function WillWizard() {
       syncedRef.current = true
       try {
         const syncs: Promise<unknown>[] = [
-          updateWillSection(targetWillId, 'testator', toSnakeCase(testator)),
+          api.updateWillSection(targetWillId, 'testator', toSnakeCase(testator)),
         ]
         // Only sync marital if user completed the form (status is required)
         if (marital.status) {
-          syncs.push(updateWillSection(targetWillId, 'marital', toSnakeCase(marital)))
+          syncs.push(api.updateWillSection(targetWillId, 'marital', toSnakeCase(marital)))
         }
         await Promise.all(syncs)
       } catch (err) {
@@ -140,7 +134,7 @@ export function WillWizard() {
         syncedRef.current = false
       }
     },
-    [],
+    [api],
   )
 
   // Auto-create a will when user navigates to an AI section without one
@@ -148,7 +142,7 @@ export function WillWizard() {
     if (willId || creatingRef.current) return
     creatingRef.current = true
     try {
-      const will = await createWill()
+      const will = await api.createWill()
       setWillId(will.id)
       // Sync form data that was collected before will creation
       await syncFormSections(will.id)
@@ -157,7 +151,7 @@ export function WillWizard() {
     } finally {
       creatingRef.current = false
     }
-  }, [willId, setWillId, syncFormSections])
+  }, [willId, setWillId, syncFormSections, api])
 
   // When switching to an AI, complex, review, or verification section, ensure a will exists
   useEffect(() => {
@@ -194,12 +188,12 @@ export function WillWizard() {
     (section: WillSection) => {
       setCurrentSection(section)
       if (willId) {
-        updateCurrentSection(willId, section).catch((err) =>
+        api.updateCurrentSection(willId, section).catch((err) =>
           console.error('Failed to sync current section:', err)
         )
       }
     },
-    [setCurrentSection, willId],
+    [setCurrentSection, willId, api],
   )
 
   /** Handle ScenarioDetector completion */
@@ -218,7 +212,7 @@ export function WillWizard() {
     // Trigger extraction for AI sections before advancing
     if (willId && AI_SECTIONS.has(currentSection)) {
       try {
-        await extractConversationData(willId, currentSection)
+        await api.extractConversationData(willId, currentSection)
       } catch (err) {
         console.error('Extraction failed, continuing anyway:', err)
       }
@@ -226,7 +220,7 @@ export function WillWizard() {
     markSectionCompleteLocal(currentSection)
     // Fire-and-forget backend sync for section completion
     if (willId) {
-      markSectionCompleteApi(willId, currentSection).catch((err) =>
+      api.markSectionComplete(willId, currentSection).catch((err) =>
         console.error('Failed to sync section complete:', err)
       )
     }
@@ -236,12 +230,12 @@ export function WillWizard() {
       const nextSection = sections[nextIndex].key
       setCurrentSection(nextSection)
       if (willId) {
-        updateCurrentSection(willId, nextSection).catch((err) =>
+        api.updateCurrentSection(willId, nextSection).catch((err) =>
           console.error('Failed to sync current section:', err)
         )
       }
     }
-  }, [currentSection, sections, markSectionCompleteLocal, setCurrentSection, willId])
+  }, [currentSection, sections, markSectionCompleteLocal, setCurrentSection, willId, api])
 
   /**
    * Determine if we should show the scenario detection interstitial.
