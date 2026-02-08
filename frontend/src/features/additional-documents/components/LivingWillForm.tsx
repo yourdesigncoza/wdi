@@ -178,62 +178,66 @@ function TreatmentStep({
       </div>
 
       {/* Trigger conditions */}
-      <div className="space-y-2">
+      <div>
         <h4 className="font-semibold text-base-content/80">
           When should this directive apply?
         </h4>
-        <p className="text-xs text-base-content/50">
+        <p className="text-xs text-base-content/50 mb-2">
           Select the conditions under which your treatment preferences take
           effect.
         </p>
 
-        <label className="label cursor-pointer justify-start gap-3">
-          <input type="checkbox" className="toggle" {...register('terminalIllness')} />
-          <span className="label-text">Terminal illness (no reasonable prospect of recovery)</span>
-        </label>
-        <label className="label cursor-pointer justify-start gap-3">
-          <input type="checkbox" className="toggle" {...register('permanentVegetativeState')} />
-          <span className="label-text">Permanent vegetative state</span>
-        </label>
-        <label className="label cursor-pointer justify-start gap-3">
-          <input type="checkbox" className="toggle" {...register('permanentUnconsciousness')} />
-          <span className="label-text">Permanent unconsciousness</span>
-        </label>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+          <label className="label cursor-pointer justify-start gap-3">
+            <input type="checkbox" className="toggle" {...register('terminalIllness')} />
+            <span className="label-text">Terminal illness (no reasonable prospect of recovery)</span>
+          </label>
+          <label className="label cursor-pointer justify-start gap-3">
+            <input type="checkbox" className="toggle" {...register('permanentVegetativeState')} />
+            <span className="label-text">Permanent vegetative state</span>
+          </label>
+          <label className="label cursor-pointer justify-start gap-3">
+            <input type="checkbox" className="toggle" {...register('permanentUnconsciousness')} />
+            <span className="label-text">Permanent unconsciousness</span>
+          </label>
+        </div>
       </div>
 
       {/* Treatment preferences */}
-      <div className="space-y-2">
+      <div>
         <h4 className="font-semibold text-base-content/80">
           Treatment Decisions
         </h4>
-        <p className="text-xs text-base-content/50">
+        <p className="text-xs text-base-content/50 mb-2">
           Toggle ON to accept, OFF to refuse each treatment.
         </p>
 
-        <label className="label cursor-pointer justify-start gap-3">
-          <input type="checkbox" className="toggle" {...register('lifeSupport')} />
-          <span className="label-text">Life support / artificial ventilation</span>
-        </label>
-        <label className="label cursor-pointer justify-start gap-3">
-          <input type="checkbox" className="toggle" {...register('artificialVentilation')} />
-          <span className="label-text">Artificial ventilation (mechanical breathing)</span>
-        </label>
-        <label className="label cursor-pointer justify-start gap-3">
-          <input type="checkbox" className="toggle" {...register('artificialNutrition')} />
-          <span className="label-text">Artificial nutrition (feeding tubes)</span>
-        </label>
-        <label className="label cursor-pointer justify-start gap-3">
-          <input type="checkbox" className="toggle" {...register('resuscitationCpr')} />
-          <span className="label-text">Resuscitation (CPR)</span>
-        </label>
-        <label className="label cursor-pointer justify-start gap-3">
-          <input type="checkbox" className="toggle" {...register('antibioticsTerminal')} />
-          <span className="label-text">Antibiotics when in terminal condition</span>
-        </label>
-        <label className="label cursor-pointer justify-start gap-3">
-          <input type="checkbox" className="toggle toggle-success" {...register('painManagement')} />
-          <span className="label-text">Pain management and palliative care</span>
-        </label>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+          <label className="label cursor-pointer justify-start gap-3">
+            <input type="checkbox" className="toggle" {...register('lifeSupport')} />
+            <span className="label-text">Life support / artificial ventilation</span>
+          </label>
+          <label className="label cursor-pointer justify-start gap-3">
+            <input type="checkbox" className="toggle" {...register('artificialVentilation')} />
+            <span className="label-text">Artificial ventilation (mechanical breathing)</span>
+          </label>
+          <label className="label cursor-pointer justify-start gap-3">
+            <input type="checkbox" className="toggle" {...register('artificialNutrition')} />
+            <span className="label-text">Artificial nutrition (feeding tubes)</span>
+          </label>
+          <label className="label cursor-pointer justify-start gap-3">
+            <input type="checkbox" className="toggle" {...register('resuscitationCpr')} />
+            <span className="label-text">Resuscitation (CPR)</span>
+          </label>
+          <label className="label cursor-pointer justify-start gap-3">
+            <input type="checkbox" className="toggle" {...register('antibioticsTerminal')} />
+            <span className="label-text">Antibiotics when in terminal condition</span>
+          </label>
+          <label className="label cursor-pointer justify-start gap-3">
+            <input type="checkbox" className="toggle toggle-success" {...register('painManagement')} />
+            <span className="label-text">Pain management and palliative care</span>
+          </label>
+        </div>
       </div>
 
       <div className="flex justify-between">
