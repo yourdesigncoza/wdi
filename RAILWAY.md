@@ -96,11 +96,12 @@ The backend `config.py` uses `pydantic-settings` with env var loading. The `DATA
 
 ### Frontend
 
-| Variable       | Source  | Description                              |
-|---------------|---------|------------------------------------------|
-| `VITE_API_URL`| Manual  | Backend public URL (baked in at build time) |
+| Variable                       | Source  | Description                              |
+|-------------------------------|---------|------------------------------------------|
+| `VITE_API_URL`                | Manual  | Backend public URL (baked in at build time) |
+| `VITE_CLERK_PUBLISHABLE_KEY`  | Manual  | Clerk authentication publishable key (baked in at build time) |
 
-`VITE_API_URL` is a **build-time** variable. It's passed as a Docker build ARG in the Dockerfile and embedded into the JS bundle by Vite. Changing it requires a rebuild.
+All `VITE_*` variables are **build-time** variables. They're passed as Docker build ARGs in the Dockerfile and embedded into the JS bundle by Vite. Changing any of them requires a rebuild. If you add a new `VITE_*` env var, you must also add a corresponding `ARG` + `ENV` line in `frontend/Dockerfile`.
 
 ## Dockerfiles
 
