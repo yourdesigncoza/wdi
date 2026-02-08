@@ -13,7 +13,8 @@ import { ConsentProvider } from './components/consent/ConsentProvider'
 import { ConsentModal } from './components/consent/ConsentModal'
 import { PrivacyPolicy } from './components/common/PrivacyPolicy'
 import { InfoOfficerContact } from './components/common/InfoOfficerContact'
-import { ThemeToggle } from './components/ui/ThemeToggle'
+import { Navbar } from './components/ui/Navbar'
+import { Layout } from './components/ui/Layout'
 import { WillWizard } from './features/will/components/WillWizard.tsx'
 import { PaymentReturnPage } from './features/will/components/PaymentReturnPage.tsx'
 import { PaymentCancelPage } from './features/will/components/PaymentCancelPage.tsx'
@@ -38,14 +39,7 @@ const queryClient = new QueryClient({
 function LandingPage() {
   return (
     <div className="min-h-screen bg-base-200 flex flex-col">
-      <div className="navbar bg-base-100 shadow-sm">
-        <div className="navbar-start">
-          <span className="text-xl font-bold">WillCraft SA</span>
-        </div>
-        <div className="navbar-end">
-          <ThemeToggle />
-        </div>
-      </div>
+      <Navbar variant="minimal" />
       <main className="flex-1 flex items-center justify-center px-4">
         <div className="max-w-md w-full text-center space-y-8">
           <div className="space-y-3">
@@ -126,6 +120,14 @@ function AuthGatedContent({ children }: { children: React.ReactNode }) {
         </AuthApiProvider>
       </SignedIn>
     </>
+  )
+}
+
+function AuthenticatedLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <AuthGatedContent>
+      <Layout>{children}</Layout>
+    </AuthGatedContent>
   )
 }
 
@@ -238,13 +240,13 @@ export default function App() {
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/info-officer" element={<InfoOfficerContact />} />
           <Route path="/will" element={<AuthGatedContent><WillPage /></AuthGatedContent>} />
-          <Route path="/payment/return" element={<AuthGatedContent><PaymentReturnPage /></AuthGatedContent>} />
-          <Route path="/payment/cancel" element={<AuthGatedContent><PaymentCancelPage /></AuthGatedContent>} />
-          <Route path="/download/:token" element={<AuthGatedContent><DownloadPage /></AuthGatedContent>} />
-          <Route path="/documents" element={<AuthGatedContent><DocumentsPage /></AuthGatedContent>} />
-          <Route path="/documents/:docId/edit" element={<AuthGatedContent><DocumentEditPage /></AuthGatedContent>} />
-          <Route path="/documents/:docId/preview" element={<AuthGatedContent><DocumentPreviewPage2 /></AuthGatedContent>} />
-          <Route path="*" element={<AuthGatedContent><MainContent /></AuthGatedContent>} />
+          <Route path="/payment/return" element={<AuthenticatedLayout><PaymentReturnPage /></AuthenticatedLayout>} />
+          <Route path="/payment/cancel" element={<AuthenticatedLayout><PaymentCancelPage /></AuthenticatedLayout>} />
+          <Route path="/download/:token" element={<AuthenticatedLayout><DownloadPage /></AuthenticatedLayout>} />
+          <Route path="/documents" element={<AuthenticatedLayout><DocumentsPage /></AuthenticatedLayout>} />
+          <Route path="/documents/:docId/edit" element={<AuthenticatedLayout><DocumentEditPage /></AuthenticatedLayout>} />
+          <Route path="/documents/:docId/preview" element={<AuthenticatedLayout><DocumentPreviewPage2 /></AuthenticatedLayout>} />
+          <Route path="*" element={<AuthenticatedLayout><MainContent /></AuthenticatedLayout>} />
         </Routes>
       </BrowserRouter>
     </QueryClientProvider>

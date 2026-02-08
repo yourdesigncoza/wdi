@@ -1,8 +1,6 @@
 import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { Link, useNavigate } from 'react-router-dom'
-import { UserButton } from '@clerk/clerk-react'
-import { ThemeToggle } from '../../../components/ui/ThemeToggle'
 import type { WillResponse } from '../../../services/api'
 import { useApi } from '../../../contexts/AuthApiContext'
 import { useWillStore } from '../store/useWillStore'
@@ -146,68 +144,26 @@ export function WillDashboard() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-base-200">
-        <div className="navbar bg-base-100 shadow-sm">
-          <div className="navbar-start">
-            <span className="text-xl font-bold">WillCraft SA</span>
-          </div>
-          <div className="navbar-center hidden sm:flex">
-            <p className="text-sm text-base-content/70">
-              Create your legally compliant South African will
-            </p>
-          </div>
-          <div className="navbar-end gap-2">
-            <ThemeToggle />
-            <UserButton />
-          </div>
-        </div>
-        <main className="max-w-4xl mx-auto px-4 py-8 flex justify-center">
-          <span className="loading loading-spinner loading-lg text-primary"></span>
-        </main>
-      </div>
+      <main className="max-w-4xl mx-auto px-4 py-8 flex justify-center">
+        <span className="loading loading-spinner loading-lg text-primary"></span>
+      </main>
     )
   }
 
   if (error) {
     return (
-      <div className="min-h-screen bg-base-200">
-        <div className="navbar bg-base-100 shadow-sm">
-          <div className="navbar-start">
-            <span className="text-xl font-bold">WillCraft SA</span>
-          </div>
-          <div className="navbar-end gap-2">
-            <ThemeToggle />
-            <UserButton />
-          </div>
+      <main className="max-w-4xl mx-auto px-4 py-8">
+        <div className="alert alert-error">
+          <span>Failed to load your wills. Please try again later.</span>
         </div>
-        <main className="max-w-4xl mx-auto px-4 py-8">
-          <div className="alert alert-error">
-            <span>Failed to load your wills. Please try again later.</span>
-          </div>
-        </main>
-      </div>
+      </main>
     )
   }
 
   const hasWills = wills && wills.length > 0
 
   return (
-    <div className="min-h-screen bg-base-200">
-      <div className="navbar bg-base-100 shadow-sm">
-        <div className="navbar-start">
-          <span className="text-xl font-bold">WillCraft SA</span>
-        </div>
-        <div className="navbar-center hidden sm:flex">
-          <p className="text-sm text-base-content/70">
-            Create your legally compliant South African will
-          </p>
-        </div>
-        <div className="navbar-end gap-2">
-          <ThemeToggle />
-          <UserButton />
-        </div>
-      </div>
-      <main className="max-w-4xl mx-auto px-4 py-8">
+    <main className="max-w-4xl mx-auto px-4 py-8">
         {!hasWills ? (
           <div className="card bg-base-100 shadow-sm">
             <div className="card-body items-center text-center space-y-4">
@@ -255,7 +211,6 @@ export function WillDashboard() {
             </div>
           </div>
         </div>
-      </main>
-    </div>
+    </main>
   )
 }

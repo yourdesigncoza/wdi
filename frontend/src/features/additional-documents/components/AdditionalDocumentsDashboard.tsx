@@ -1,8 +1,6 @@
 import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { Link, useNavigate } from 'react-router-dom'
-import { UserButton } from '@clerk/clerk-react'
-import { ThemeToggle } from '../../../components/ui/ThemeToggle'
+import { useNavigate } from 'react-router-dom'
 import { useApi } from '../../../contexts/AuthApiContext'
 import { useAdditionalDocStore } from '../store/useAdditionalDocStore'
 import type { AdditionalDocumentResponse } from '../../../services/api'
@@ -168,57 +166,27 @@ export function AdditionalDocumentsDashboard() {
 
   const hasDocuments = documents && documents.length > 0
 
-  // --- Navbar (shared across all states) ---
-  const navbar = (
-    <div className="navbar bg-base-100 shadow-sm">
-      <div className="navbar-start">
-        <span className="text-xl font-bold">WillCraft SA</span>
-        <span className="text-sm text-base-content/50 ml-2 hidden sm:inline">
-          Additional Documents
-        </span>
-      </div>
-      <div className="navbar-end gap-2">
-        <ThemeToggle />
-        <UserButton />
-      </div>
-    </div>
-  )
-
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-base-200">
-        {navbar}
-        <main className="max-w-4xl mx-auto px-4 py-8 flex justify-center">
-          <span className="loading loading-spinner loading-lg text-primary"></span>
-        </main>
-      </div>
+      <main className="max-w-4xl mx-auto px-4 py-8 flex justify-center">
+        <span className="loading loading-spinner loading-lg text-primary"></span>
+      </main>
     )
   }
 
   if (error) {
     return (
-      <div className="min-h-screen bg-base-200">
-        {navbar}
-        <main className="max-w-4xl mx-auto px-4 py-8">
-          <div className="alert alert-error">
-            <span>Failed to load documents. Please try again later.</span>
-          </div>
-        </main>
-      </div>
+      <main className="max-w-4xl mx-auto px-4 py-8">
+        <div className="alert alert-error">
+          <span>Failed to load documents. Please try again later.</span>
+        </div>
+      </main>
     )
   }
 
   return (
-    <div className="min-h-screen bg-base-200">
-      {navbar}
-      <main className="max-w-4xl mx-auto px-4 py-8">
-        <div className="mb-6">
-          <Link to="/" className="btn btn-soft btn-sm">
-            Back to Dashboard
-          </Link>
-        </div>
-
-        {!hasDocuments ? (
+    <main className="max-w-4xl mx-auto px-4 py-8">
+      {!hasDocuments ? (
           <div className="space-y-6">
             <div className="card bg-base-100 shadow-sm">
               <div className="card-body items-center text-center space-y-4">
@@ -307,7 +275,6 @@ export function AdditionalDocumentsDashboard() {
             </div>
           </div>
         )}
-      </main>
-    </div>
+    </main>
   )
 }
