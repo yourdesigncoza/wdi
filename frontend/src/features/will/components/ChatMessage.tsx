@@ -28,9 +28,9 @@ export function ChatMessage({ message, isStreaming = false }: ChatMessageProps) 
       )}
       <div className={`chat-bubble${isAI ? '' : ' chat-bubble-secondary'}`}>
         {isAI ? (
-          <Markdown className="prose prose-sm max-w-none [&>p]:my-1 [&>p:last-child]:mb-0">
-            {message.content}
-          </Markdown>
+          <div className="prose prose-sm max-w-none [&>p]:my-1 [&>p:last-child]:mb-0">
+            <Markdown>{message.content}</Markdown>
+          </div>
         ) : (
           message.content
         )}
