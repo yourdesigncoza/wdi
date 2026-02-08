@@ -28,7 +28,7 @@ class Payment(SQLModel, table=True):
     will_id: uuid.UUID = Field(
         sa_column=Column(
             UUID(as_uuid=True),
-            ForeignKey("wills.id"),
+            ForeignKey("wills.id", ondelete="CASCADE"),
             nullable=False,
         ),
     )
