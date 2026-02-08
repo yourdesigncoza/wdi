@@ -42,6 +42,38 @@ async function request<T>(
   return response.json()
 }
 
+async function requestBlob(
+  path: string,
+  options?: RequestInit,
+  tokenGetter?: TokenGetter,
+): Promise<Blob> {
+  const headers: Record<string, string> = {
+    ...(options?.headers as Record<string, string>),
+  }
+
+  if (tokenGetter) {
+    const token = await tokenGetter()
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`
+    }
+  }
+
+  const response = await fetch(`${BASE_URL}${path}`, {
+    credentials: 'include',
+    headers,
+    ...options,
+  })
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({ detail: `Request failed: ${response.status}` }))
+    throw new Error(errorData.detail || `API error: ${response.status}`)
+  }
+
+  return response.blob()
+}
+
+// ── Shared Type Exports ──────────────────────────────────────────────
+
 export interface ConsentStatusResponse {
   has_valid_consent: boolean
   consent_version?: string
@@ -86,55 +118,6 @@ export interface DataRequestResponse {
   message: string
 }
 
-function buildApi(tokenGetter?: TokenGetter) {
-  return {
-    checkConsentStatus(): Promise<ConsentStatusResponse> {
-      return request('/consent/status', undefined, tokenGetter)
-    },
-
-    grantConsent(categories: string[]): Promise<ConsentResponse> {
-      return request('/consent', {
-        method: 'POST',
-        body: JSON.stringify({ categories }),
-      }, tokenGetter)
-    },
-
-    withdrawConsent(): Promise<{ status: string; message: string }> {
-      return request('/consent/withdraw', { method: 'POST' }, tokenGetter)
-    },
-
-    getPrivacyPolicy(): Promise<PrivacyPolicyResponse> {
-      return request('/privacy-policy', undefined, tokenGetter)
-    },
-
-    getInfoOfficer(): Promise<InfoOfficerResponse> {
-      return request('/info-officer', undefined, tokenGetter)
-    },
-
-    submitDataRequest(data: {
-      request_type: string
-      details?: string
-    }): Promise<DataRequestResponse> {
-      return request('/data-request', {
-        method: 'POST',
-        body: JSON.stringify(data),
-      }, tokenGetter)
-    },
-  }
-}
-
-export type ApiClient = ReturnType<typeof buildApi>
-
-/** Unauthenticated API client for public endpoints (consent, privacy-policy, info-officer) */
-export const api = buildApi()
-
-/** Create an authenticated API client that injects a Bearer token on each request */
-export function createAuthenticatedApi(tokenGetter: TokenGetter): ApiClient {
-  return buildApi(tokenGetter)
-}
-
-// ── Will & Conversation API ──────────────────────────────────────────
-
 export interface WillResponse {
   id: string
   user_id: string
@@ -173,61 +156,6 @@ export interface ConversationHistoryResponse {
   messages: ConversationHistoryMessage[]
 }
 
-/** Create a new will draft */
-export function createWill(willType = 'basic'): Promise<WillResponse> {
-  return request('/wills', {
-    method: 'POST',
-    body: JSON.stringify({ will_type: willType }),
-  })
-}
-
-/** Retrieve a specific will */
-export function getWill(willId: string): Promise<WillResponse> {
-  return request(`/wills/${willId}`)
-}
-
-/** Update a will section */
-export function updateWillSection(
-  willId: string,
-  section: string,
-  data: unknown,
-): Promise<WillResponse> {
-  return request(`/wills/${willId}/sections/${section}`, {
-    method: 'PATCH',
-    body: JSON.stringify(data),
-  })
-}
-
-/** Mark a section as complete */
-export function markSectionComplete(
-  willId: string,
-  section: string,
-): Promise<WillResponse> {
-  return request(`/wills/${willId}/sections/${section}/complete`, {
-    method: 'POST',
-  })
-}
-
-/** Fetch conversation history for a will section */
-export function getConversationHistory(
-  willId: string,
-  section: string,
-): Promise<ConversationHistoryResponse> {
-  return request(`/conversation/${willId}/${section}`)
-}
-
-/** Trigger AI extraction for a conversation section and save to will JSONB */
-export function extractConversationData(
-  willId: string,
-  section: string,
-): Promise<{ extracted: Record<string, unknown>; has_data: boolean }> {
-  return request(`/conversation/${willId}/${section}/extract`, {
-    method: 'POST',
-  })
-}
-
-// ── Verification API ─────────────────────────────────────────────────
-
 export interface VerificationResponseData {
   overall_status: 'pass' | 'warning' | 'error'
   sections: {
@@ -253,43 +181,6 @@ export interface AcknowledgeWarningsResponseData {
   can_proceed: boolean
 }
 
-/** Retrieve the last verification result for a will */
-export function getVerificationResult(
-  willId: string,
-): Promise<VerificationResponseData> {
-  return request(`/wills/${willId}/verification`)
-}
-
-/** Acknowledge warning-level verification issues */
-export function acknowledgeWarnings(
-  willId: string,
-  warningCodes: string[],
-): Promise<AcknowledgeWarningsResponseData> {
-  return request(`/wills/${willId}/acknowledge-warnings`, {
-    method: 'POST',
-    body: JSON.stringify({ warning_codes: warningCodes }),
-  })
-}
-
-// ── Document Generation API ─────────────────────────────────────────
-
-/** Generate a watermarked preview PDF and return as Blob */
-export async function generatePreview(willId: string): Promise<Blob> {
-  const response = await fetch(`${BASE_URL}/wills/${willId}/preview`, {
-    method: 'POST',
-    credentials: 'include',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ disclaimer_acknowledged: true }),
-  })
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => ({ detail: 'Preview generation failed' }))
-    throw new Error(errorData.detail || `API error: ${response.status}`)
-  }
-  return response.blob()
-}
-
-// ── Payment & Download API ──────────────────────────────────────────
-
 export interface PaymentInitiateResponse {
   payment_id: string
   m_payment_id: string
@@ -303,52 +194,178 @@ export interface PaymentStatusResponse {
   download_token: string | null
 }
 
-export function initiatePayment(willId: string): Promise<PaymentInitiateResponse> {
-  return request('/payment/initiate', {
-    method: 'POST',
-    body: JSON.stringify({ will_id: willId }),
-  })
-}
+// ── buildApi Factory ─────────────────────────────────────────────────
 
-export function getPaymentStatus(paymentId: string): Promise<PaymentStatusResponse> {
-  return request(`/payment/${paymentId}/status`)
-}
+function buildApi(tokenGetter?: TokenGetter) {
+  return {
+    // ── Consent / Privacy (public endpoints) ───────────────────────
 
-/** Download final PDF via token — returns blob */
-export async function downloadWill(token: string): Promise<Blob> {
-  const response = await fetch(`${BASE_URL}/download/${token}`, {
-    credentials: 'include',
-  })
-  if (!response.ok) {
-    const err = await response.json().catch(() => ({ detail: 'Download failed' }))
-    throw new Error(err.detail || `Download error: ${response.status}`)
+    checkConsentStatus(): Promise<ConsentStatusResponse> {
+      return request('/consent/status', undefined, tokenGetter)
+    },
+
+    grantConsent(categories: string[]): Promise<ConsentResponse> {
+      return request('/consent', {
+        method: 'POST',
+        body: JSON.stringify({ categories }),
+      }, tokenGetter)
+    },
+
+    withdrawConsent(): Promise<{ status: string; message: string }> {
+      return request('/consent/withdraw', { method: 'POST' }, tokenGetter)
+    },
+
+    getPrivacyPolicy(): Promise<PrivacyPolicyResponse> {
+      return request('/privacy-policy', undefined, tokenGetter)
+    },
+
+    getInfoOfficer(): Promise<InfoOfficerResponse> {
+      return request('/info-officer', undefined, tokenGetter)
+    },
+
+    submitDataRequest(data: {
+      request_type: string
+      details?: string
+    }): Promise<DataRequestResponse> {
+      return request('/data-request', {
+        method: 'POST',
+        body: JSON.stringify(data),
+      }, tokenGetter)
+    },
+
+    // ── Will CRUD ──────────────────────────────────────────────────
+
+    createWill(willType = 'basic'): Promise<WillResponse> {
+      return request('/wills', {
+        method: 'POST',
+        body: JSON.stringify({ will_type: willType }),
+      }, tokenGetter)
+    },
+
+    getWill(willId: string): Promise<WillResponse> {
+      return request(`/wills/${willId}`, undefined, tokenGetter)
+    },
+
+    listWills(): Promise<WillResponse[]> {
+      return request('/wills', undefined, tokenGetter)
+    },
+
+    updateWillSection(
+      willId: string,
+      section: string,
+      data: unknown,
+    ): Promise<WillResponse> {
+      return request(`/wills/${willId}/sections/${section}`, {
+        method: 'PATCH',
+        body: JSON.stringify(data),
+      }, tokenGetter)
+    },
+
+    markSectionComplete(
+      willId: string,
+      section: string,
+    ): Promise<WillResponse> {
+      return request(`/wills/${willId}/sections/${section}/complete`, {
+        method: 'POST',
+      }, tokenGetter)
+    },
+
+    updateCurrentSection(
+      willId: string,
+      section: string,
+    ): Promise<WillResponse> {
+      return request(`/wills/${willId}/current-section`, {
+        method: 'PATCH',
+        body: JSON.stringify({ current_section: section }),
+      }, tokenGetter)
+    },
+
+    // ── Conversation ───────────────────────────────────────────────
+
+    getConversationHistory(
+      willId: string,
+      section: string,
+    ): Promise<ConversationHistoryResponse> {
+      return request(`/conversation/${willId}/${section}`, undefined, tokenGetter)
+    },
+
+    extractConversationData(
+      willId: string,
+      section: string,
+    ): Promise<{ extracted: Record<string, unknown>; has_data: boolean }> {
+      return request(`/conversation/${willId}/${section}/extract`, {
+        method: 'POST',
+      }, tokenGetter)
+    },
+
+    // ── Verification ───────────────────────────────────────────────
+
+    getVerificationResult(
+      willId: string,
+    ): Promise<VerificationResponseData> {
+      return request(`/wills/${willId}/verification`, undefined, tokenGetter)
+    },
+
+    acknowledgeWarnings(
+      willId: string,
+      warningCodes: string[],
+    ): Promise<AcknowledgeWarningsResponseData> {
+      return request(`/wills/${willId}/acknowledge-warnings`, {
+        method: 'POST',
+        body: JSON.stringify({ warning_codes: warningCodes }),
+      }, tokenGetter)
+    },
+
+    // ── Document Generation ────────────────────────────────────────
+
+    generatePreview(willId: string): Promise<Blob> {
+      return requestBlob(`/wills/${willId}/preview`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ disclaimer_acknowledged: true }),
+      }, tokenGetter)
+    },
+
+    regenerateWill(
+      willId: string,
+    ): Promise<{ download_token: string; version: number }> {
+      return request(`/wills/${willId}/regenerate`, {
+        method: 'POST',
+      }, tokenGetter)
+    },
+
+    // ── Payment & Download ─────────────────────────────────────────
+
+    initiatePayment(willId: string): Promise<PaymentInitiateResponse> {
+      return request('/payment/initiate', {
+        method: 'POST',
+        body: JSON.stringify({ will_id: willId }),
+      }, tokenGetter)
+    },
+
+    getPaymentStatus(paymentId: string): Promise<PaymentStatusResponse> {
+      return request(`/payment/${paymentId}/status`, undefined, tokenGetter)
+    },
+
+    downloadWill(token: string): Promise<Blob> {
+      return requestBlob(`/download/${token}`, undefined, tokenGetter)
+    },
+
+    // ── Token Access (for SSE hooks that need raw fetch) ───────────
+
+    async getToken(): Promise<string | null> {
+      if (!tokenGetter) return null
+      return tokenGetter()
+    },
   }
-  return response.blob()
 }
 
-// ── Will Management API ──────────────────────────────────────────────
+export type ApiClient = ReturnType<typeof buildApi>
 
-/** List all wills for the current user */
-export function listWills(): Promise<WillResponse[]> {
-  return request('/wills')
-}
+/** Unauthenticated API client for public endpoints (consent, privacy-policy, info-officer) */
+export const api = buildApi()
 
-/** Update the current section pointer for a will (resume position) */
-export function updateCurrentSection(
-  willId: string,
-  section: string,
-): Promise<WillResponse> {
-  return request(`/wills/${willId}/current-section`, {
-    method: 'PATCH',
-    body: JSON.stringify({ current_section: section }),
-  })
-}
-
-/** Regenerate a paid and verified will document */
-export function regenerateWill(
-  willId: string,
-): Promise<{ download_token: string; version: number }> {
-  return request(`/wills/${willId}/regenerate`, {
-    method: 'POST',
-  })
+/** Create an authenticated API client that injects a Bearer token on each request */
+export function createAuthenticatedApi(tokenGetter: TokenGetter): ApiClient {
+  return buildApi(tokenGetter)
 }
