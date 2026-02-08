@@ -279,6 +279,10 @@ function buildApi(tokenGetter?: TokenGetter) {
       }
     },
 
+    detectScenarios(willId: string): Promise<{ scenarios: string[] }> {
+      return request(`/wills/${willId}/scenarios`, undefined, tokenGetter)
+    },
+
     updateWillSection(
       willId: string,
       section: string,

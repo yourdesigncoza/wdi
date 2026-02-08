@@ -85,6 +85,7 @@ railway service redeploy --service frontend
 | `SECRET_KEY`        | Manual         | 64-char hex for JWT signing                |
 | `OPENAI_API_KEY`    | Manual         | OpenAI API key for conversation AI         |
 | `GEMINI_API_KEY`    | Manual         | Google Gemini key for verification layer   |
+| `CLERK_JWKS_URL`    | Manual         | Clerk JWKS endpoint for JWT verification   |
 | `ALLOWED_ORIGINS`   | Manual         | CORS origins (comma-separated)             |
 | `DEBUG`             | Manual         | `false` in production                      |
 | `PAYFAST_SANDBOX`   | Manual         | `true` until production PayFast onboarding |
