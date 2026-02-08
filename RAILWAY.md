@@ -165,9 +165,19 @@ TypeScript must compile cleanly (`npx tsc -b --noEmit`) before deploying. Railwa
 
 The backend expects `DATABASE_URL` in `postgresql://` or `postgresql+asyncpg://` format. The `config.py` validator auto-converts. Ensure the variable references `${{Postgres.DATABASE_URL}}` in Railway.
 
-### CORS errors
+### CORS errors / 500 showing as CORS
 
 Update `ALLOWED_ORIGINS` on the backend service to include the frontend URL. Comma-separated, no trailing slashes.
+
+**Note:** When the backend returns a 500 error, CORS headers may not be included in the error response. The browser will report this as a CORS error, but the real problem is a backend crash. Always check `railway service logs --service backend` first.
+
+### 403 "consent_required" on all API calls
+
+The POPIA consent cookie uses `SameSite=None` + `Secure=True` in production for cross-origin requests between Railway subdomains. If consent was granted but the cookie isn't sent, check that `DEBUG=false` is set on the backend (controls the cookie flags).
+
+### 401 "authentication_required" on specific endpoints
+
+All frontend API calls must use the authenticated `useApi()` client (from `AuthApiContext`), never raw `fetch()`. The `useApi()` client automatically includes the Clerk Bearer token. Raw fetch calls will work in dev (when `CLERK_JWKS_URL` is empty and auth is skipped) but fail in production.
 
 ### VITE_API_URL not updating
 
