@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { QueryClient, QueryClientProvider, useQueryClient } from '@tanstack/react-query'
 import { BrowserRouter, Routes, Route, useParams, useNavigate } from 'react-router-dom'
 import {
   SignedIn,
@@ -147,6 +147,7 @@ function DocumentEditPage() {
   const { docId } = useParams<{ docId: string }>()
   const api = useApi()
   const navigate = useNavigate()
+  const queryClient = useQueryClient()
   const loadFromServer = useAdditionalDocStore((s) => s.loadFromServer)
   const resetDoc = useAdditionalDocStore((s) => s.resetDoc)
   const documentType = useAdditionalDocStore((s) => s.documentType)
@@ -187,6 +188,7 @@ function DocumentEditPage() {
   if (!hasConsent) return null
 
   function handleComplete() {
+    queryClient.invalidateQueries({ queryKey: ['additional-documents'] })
     navigate(`/documents/${docId}/preview`)
   }
   function handleBack() {
