@@ -77,11 +77,11 @@ export function ReviewChat({ willId, onNavigateToSection }: ReviewChatProps) {
   }
 
   const { messages, isStreaming, error, sendMessage, stopStreaming } =
-    useConversation({ section: 'review', willContext, willId, api })
+    useConversation({ section: 'review', willContext, willId, api, skipHistory: true })
 
-  // On mount, trigger the AI to narrate the complete will
+  // On mount, trigger fresh AI review of the complete will
   useEffect(() => {
-    if (greetingSentRef.current || messages.length > 0) return
+    if (greetingSentRef.current) return
     greetingSentRef.current = true
 
     // Build a concise summary of all will data for the initial prompt
@@ -166,8 +166,8 @@ export function ReviewChat({ willId, onNavigateToSection }: ReviewChatProps) {
     void sendMessage(
       `Please review my complete will. Here is the current data:\n${summary}`,
     )
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- fire once on mount only
   }, [
-    messages.length,
     sendMessage,
     testator,
     beneficiaries,

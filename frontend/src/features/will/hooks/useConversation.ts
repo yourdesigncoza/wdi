@@ -12,6 +12,7 @@ interface UseConversationOptions {
   willContext: Record<string, unknown>
   willId: string | null
   api: ApiClient
+  skipHistory?: boolean
 }
 
 const API_BASE = '/api'
@@ -24,7 +25,7 @@ const API_BASE = '/api'
  *
  * On section change, loads existing conversation history from the backend.
  */
-export function useConversation({ section, willContext, willId, api }: UseConversationOptions) {
+export function useConversation({ section, willContext, willId, api, skipHistory = false }: UseConversationOptions) {
   const [messages, setMessages] = useState<Message[]>([])
   const [isStreaming, setIsStreaming] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -32,7 +33,7 @@ export function useConversation({ section, willContext, willId, api }: UseConver
 
   /** Load conversation history when section or willId changes */
   useEffect(() => {
-    if (!willId) {
+    if (!willId || skipHistory) {
       setMessages([])
       return
     }
@@ -62,7 +63,7 @@ export function useConversation({ section, willContext, willId, api }: UseConver
     return () => {
       cancelled = true
     }
-  }, [willId, section, api])
+  }, [willId, section, api, skipHistory])
 
   const sendMessage = useCallback(
     async (userMessage: string) => {
