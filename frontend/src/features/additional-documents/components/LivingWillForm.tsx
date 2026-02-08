@@ -602,7 +602,7 @@ export function LivingWillForm({ docId, onComplete, onBack }: LivingWillFormProp
       <div className="card-body">
         <div className="flex items-center justify-between mb-2">
           <h2 className="card-title">Living Will (Advance Healthcare Directive)</h2>
-          <button type="button" className="btn btn-soft btn-sm" onClick={onBack}>
+          <button type="button" className="btn btn-warning btn-sm" onClick={onBack}>
             Cancel
           </button>
         </div>

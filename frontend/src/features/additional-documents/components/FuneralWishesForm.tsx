@@ -623,7 +623,7 @@ export function FuneralWishesForm({ docId, onComplete, onBack }: FuneralWishesFo
       <div className="card-body">
         <div className="flex items-center justify-between mb-2">
           <h2 className="card-title">Funeral Wishes</h2>
-          <button type="button" className="btn btn-soft btn-sm" onClick={onBack}>
+          <button type="button" className="btn btn-warning btn-sm" onClick={onBack}>
             Cancel
           </button>
         </div>
