@@ -13,7 +13,7 @@ WillCraft SA delivers an AI-powered will generation platform for South Africa. T
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Foundation & Compliance** - Database, POPIA infrastructure, UPL prevention architecture, clause library
-- [x] **Phase 2: Authentication** - User registration, email verification, login, password reset via Clerk (completed 2026-02-08)
+- [x] **Phase 2: Authentication** - User registration, email verification, login, password reset via Clerk, Bearer token injection (completed 2026-02-08)
 - [x] **Phase 02.1: DaisyUI Integration** - Install DaisyUI v5, configure themes, migrate existing components (INSERTED)
 - [x] **Phase 3: Core Will Conversation** - Basic will questionnaire with AI guidance, data collection, real-time explanations
 - [x] **Phase 4: Complex Estate Scenarios** - Blended families, trusts, usufruct, business assets, joint wills
@@ -58,7 +58,7 @@ Plans:
 Plans:
 - [x] 02-01-PLAN.md — Clerk React integration (ClerkProvider, auth UI, authenticated API client)
 - [x] 02-02-PLAN.md — FastAPI Clerk middleware (JWKS verification, User model, dual-gate enforcement)
-- [ ] 02-03-PLAN.md — Wire Bearer token injection into all will API calls (gap closure)
+- [x] 02-03-PLAN.md — Wire Bearer token injection into all will API calls (gap closure)
 
 ### Phase 02.1: DaisyUI Integration (INSERTED)
 **Goal**: Install DaisyUI v5 component library and migrate existing frontend components to DaisyUI classes for consistent, themeable UI before building conversation interface
@@ -214,7 +214,7 @@ Note: Phase 9 depends only on Phase 6, can potentially run in parallel with Phas
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation & Compliance | 5/5 | Complete | 2026-02-06 |
-| 2. Authentication | 2/3 | Gap closure | 2026-02-08 |
+| 2. Authentication | 3/3 | Complete | 2026-02-08 |
 | 02.1 DaisyUI Integration | 3/3 | Complete | 2026-02-06 |
 | 3. Core Will Conversation | 8/8 | Complete | 2026-02-06 |
 | 4. Complex Estate Scenarios | 5/5 | Complete | 2026-02-06 |
