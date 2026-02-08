@@ -12,7 +12,7 @@ See: .planning/PROJECT.md (updated 2026-02-05)
 Phase: 09 of 9 (Additional Documents)
 Plan: 3 of 3 in current phase
 Status: Checkpoint pending (human-verify)
-Last activity: 2026-02-08 - Completed quick task 011: Add Edit & Delete buttons to Your Wills section
+Last activity: 2026-02-08 - Completed quick task 012: Update Cancel buttons to btn-warning
 Progress: [██████████████████████████████████████████] 100% (42 of 42 total plans)
 
 ## Performance Metrics
@@ -167,6 +167,7 @@ None yet.
 | 009 | Fix 2-column layout for toggle sections | 2026-02-08 | e21551e | [009-fix-2-column](./quick/009-fix-2-column-layout-for-toggle-sections/) |
 | 010 | Fix document status staying draft | 2026-02-08 | 1a56d38 | [010-fix-status](./quick/010-fix-document-status-staying-draft/) |
 | 011 | Add Edit & Delete buttons to wills | 2026-02-08 | 9d0520d | [011-edit-delete-wills](./quick/011-add-edit-delete-buttons-wills/) |
+| 012 | Update Cancel buttons to btn-warning | 2026-02-08 | b404d9d | [012-cancel-warning](./quick/012-update-cancel-buttons-warning/) |
 
 ### New Blockers
 
