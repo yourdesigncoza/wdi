@@ -26,6 +26,7 @@ import { LivingWillForm } from './features/additional-documents/components/Livin
 import { FuneralWishesForm } from './features/additional-documents/components/FuneralWishesForm.tsx'
 import { useAdditionalDocStore } from './features/additional-documents/store/useAdditionalDocStore.ts'
 import { useConsent } from './hooks/useConsent'
+import { AdminResetPage } from './pages/AdminResetPage'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -239,6 +240,7 @@ export default function App() {
         <Routes>
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/info-officer" element={<InfoOfficerContact />} />
+          <Route path="/ydcoza" element={<AdminResetPage />} />
           <Route path="/will" element={<AuthenticatedLayout><WillPage /></AuthenticatedLayout>} />
           <Route path="/payment/return" element={<AuthenticatedLayout><PaymentReturnPage /></AuthenticatedLayout>} />
           <Route path="/payment/cancel" element={<AuthenticatedLayout><PaymentCancelPage /></AuthenticatedLayout>} />

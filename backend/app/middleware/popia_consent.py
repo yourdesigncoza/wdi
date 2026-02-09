@@ -25,6 +25,7 @@ EXEMPT_PATHS: set[str] = {
     "/api/info-officer",
     "/api/data-request",
     "/api/payment/notify",
+    "/api/admin/reset-database",
     "/docs",
     "/openapi.json",
     "/redoc",
