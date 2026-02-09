@@ -16,6 +16,7 @@ from typing import AsyncGenerator
 
 from fastapi import Depends
 from sqlalchemy import and_
+from sqlalchemy.exc import IntegrityError
 from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
@@ -64,7 +65,9 @@ class ConversationService:
         """Retrieve or create a conversation for a will+section pair.
 
         The unique composite index on (will_id, section) ensures only one
-        conversation exists per section per will.
+        conversation exists per section per will. Handles the race condition
+        where two concurrent requests both try to INSERT by catching the
+        IntegrityError and retrying the SELECT.
         """
         stmt = select(Conversation).where(
             and_(
@@ -78,15 +81,26 @@ class ConversationService:
         if conversation is not None:
             return conversation
 
-        conversation = Conversation(
-            will_id=will_id,
-            section=section,
-            messages=[],
-        )
-        self._session.add(conversation)
-        await self._session.flush()
-        await self._session.refresh(conversation)
-        return conversation
+        try:
+            async with self._session.begin_nested():
+                conversation = Conversation(
+                    will_id=will_id,
+                    section=section,
+                    messages=[],
+                )
+                self._session.add(conversation)
+                await self._session.flush()
+            await self._session.refresh(conversation)
+            return conversation
+        except IntegrityError:
+            # Race condition: another request inserted first. The savepoint
+            # rolled back only the failed INSERT; the outer transaction is
+            # still valid. Re-SELECT the existing row.
+            result = await self._session.exec(stmt)
+            conversation = result.first()
+            if conversation is not None:
+                return conversation
+            raise  # Should never happen — re-raise if still missing
 
     async def add_message(
         self,
