@@ -104,8 +104,8 @@ export function WillWizard() {
         }
       })
       .catch((err) => {
-        if (err instanceof ApiError && err.status === 404) {
-          console.warn('Will no longer exists on server, resetting local state')
+        if (err instanceof ApiError && (err.status === 404 || err.status === 403)) {
+          console.warn('Will not accessible (deleted or belongs to another user), resetting local state')
           resetWill()
           navigate('/', { replace: true })
         }
