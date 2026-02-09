@@ -199,6 +199,22 @@ If deleting a will that has associated payment records fails with `ForeignKeyVio
 
 The clause library must be seeded in the database. The `start.sh` script runs `python -m scripts.seed_clauses` on every deploy (idempotent). If clauses are missing, the document service skips all clause rendering and the will body page is empty. Verify with: `railway connect Postgres` then `SELECT count(*) FROM clause;` (should be 12).
 
+### 403 on will access + consent modal not showing for new users
+
+**Symptom:** User B logs in after User A on the same browser. Consent modal doesn't appear. API calls to `/api/wills/{id}` return 403 ("You do not have permission to access this will"). The will wizard shows "This will no longer exists."
+
+**Root cause:** localStorage is shared across all browser users. Two pieces of stale state leak between Clerk accounts:
+
+1. **`popia_consent_token`** — The POPIA consent JWT has no `user_id` claim. When User B signs in, the old token is still valid → `ConsentProvider` thinks consent exists → modal skipped → User B never actually consents.
+2. **`wdi-will-draft`** (Zustand will store) — Holds User A's `willId`. User B's requests pass POPIA (old token) and Clerk auth (new JWT), but `will_service._get_will_for_user()` checks ownership → `will.user_id != user_id` → 403.
+
+**Fix (commit `9546651`):**
+
+- `ConsentProvider.tsx`: Tracks `willcraft_last_user_id` in localStorage. When Clerk `user.id` changes, clears `popia_consent_token`, `wdi-will-draft`, and `additional-doc-storage`. Re-runs consent check on user change.
+- `WillWizard.tsx`: Catches 403 (wrong owner) in addition to 404 (deleted) when validating willId on mount → resets store + redirects to dashboard.
+
+**Prevention:** Any new Zustand persist store that holds user-specific data must have its localStorage key added to `clearStaleUserState()` in `ConsentProvider.tsx`.
+
 ### VITE_API_URL not updating
 
 `VITE_API_URL` is baked in at build time. After changing it, you must trigger a rebuild (redeploy or push).
