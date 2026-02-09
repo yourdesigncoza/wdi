@@ -1,5 +1,26 @@
 # Bugs Fixed
 
+## BUG-008: Review section CORS error / 500 race condition (2026-02-09)
+
+**Issue:** Navigating to the will review section briefly shows content then disappears. Browser console shows CORS error on `GET /api/conversation/{will_id}/review`.
+
+**Root Cause:** Race condition in `get_or_create_conversation()`. When user enters the review section, two concurrent requests fire simultaneously:
+1. `useConversation` useEffect → `GET /api/conversation/{willId}/review` (load history)
+2. `ReviewChat` useEffect → `POST /api/conversation/stream` (auto-send review greeting)
+
+Both call `get_or_create_conversation(will_id, 'review')`, both SELECT and find no existing row, both try to INSERT. The second one crashes with `UniqueViolationError` on the `ix_conversations_will_section` unique index. The 500 response lacks CORS headers (Starlette CORS middleware doesn't add headers to unhandled exceptions), so the browser reports it as a CORS error.
+
+**Solution:** Wrapped the INSERT in `begin_nested()` (SQLAlchemy savepoint). On `IntegrityError`, the savepoint rolls back only the failed INSERT while keeping the outer transaction valid, then re-SELECTs the existing row that the winning request created.
+
+**Files:** `backend/app/services/conversation_service.py`
+
+**Prevention:**
+- Any `get_or_create` pattern with a unique constraint must handle `IntegrityError` — use savepoint + retry SELECT
+- When debugging CORS errors on Railway, always check backend logs first — 500s masquerade as CORS because error responses lack CORS headers
+- Frontend components that fire multiple requests on mount for the same resource will trigger this race
+
+---
+
 ## BUG-006: Verification false negatives for beneficiaries, executor, residue (2026-02-07)
 
 **Issue:** Verification always reported "No Beneficiaries Nominated", "No Executor Nominated", and "No Residue Clause" even though users had completed AI conversations for those sections.

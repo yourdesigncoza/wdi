@@ -1,5 +1,21 @@
 # Completed Work Log
 
+## 2026-02-09: Fix review section race condition (BUG-008)
+
+**Problem:** Will review section fails to load — content appears briefly then disappears. Browser reports CORS error but actual cause is backend 500 (UniqueViolationError).
+
+**Root cause:** Two concurrent requests on mount both call `get_or_create_conversation(will_id, 'review')`, both find no existing row, both INSERT — second crashes on unique constraint.
+
+**Changes:**
+- `backend/app/services/conversation_service.py` -- savepoint (`begin_nested`) + `IntegrityError` catch + re-SELECT in `get_or_create_conversation()`
+
+**Commits:**
+- `abfad80` fix: handle race condition in get_or_create_conversation
+
+**Verified:** Deployed to Railway, review section loads correctly.
+
+---
+
 ## 2026-02-07: Fix verification false negatives (Quick Fix 006)
 
 **Problem:** Verification reported "No Beneficiaries Nominated", "No Executor Nominated", "No Residue Clause" despite users completing AI conversations for those sections.

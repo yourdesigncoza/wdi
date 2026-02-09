@@ -35,3 +35,9 @@
 - **Decision:** All nested types in extraction schemas must be explicit Pydantic BaseModel classes. Never use `dict`, `list[dict]`, or `Any` in schemas passed to `client.beta.chat.completions.parse()`
 - **Consequence:** Added `ExtractedTrustee`, `ExtractedBareDominiumHolder`, `ExtractedBequest`, `ExtractedResidueData`, `ExtractedResidueBeneficiary` models
 - **Status:** Accepted
+
+## ADR-008: Savepoint pattern for get_or_create race conditions (2026-02-09)
+- **Context:** `get_or_create_conversation()` suffers race conditions when frontend fires concurrent requests on mount (e.g. GET history + POST stream). Both SELECT, find nothing, both INSERT -- second crashes with `UniqueViolationError`
+- **Decision:** Use `begin_nested()` (savepoint) around INSERT + `IntegrityError` catch + re-SELECT. Savepoint isolates the failed INSERT without rolling back the outer transaction
+- **Consequence:** Any future `get_or_create` patterns in the codebase must follow this same savepoint + retry approach
+- **Status:** Accepted
